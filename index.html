@@ -656,14 +656,17 @@
 <!-- CONTATO -->
 <section id="contato">
   <div class="section-label" style="color:var(--gold);">Contato</div>
+
   <div class="contato-grid">
     <div class="contato-left">
       <h2 class="contato-title">
         Vamos conversar<br>sobre o futuro da<br>sua <em>governança</em>?
       </h2>
+
       <p class="contato-text">
-        Cada empresa tem desafios únicos. Nossa conversa começa com escuta — entendemos o contexto, o momento e os objetivos antes de propor qualquer solução.
+        Cada empresa tem desafios únicos. Nossa conversa começa com escuta, entendemos o contexto, o momento e os objetivos antes de propor qualquer solução.
       </p>
+
       <div class="contato-info">
         <div class="contato-item">
           <div class="contato-item-icon" aria-hidden="true">◈</div>
@@ -672,6 +675,7 @@
             <div class="contato-item-val">contato@toledoboard.com.br</div>
           </div>
         </div>
+
         <div class="contato-item">
           <div class="contato-item-icon" aria-hidden="true">◇</div>
           <div>
@@ -679,56 +683,116 @@
             <div class="contato-item-val">Toledo Board Intelligence</div>
           </div>
         </div>
+
         <div class="contato-item">
           <div class="contato-item-icon" aria-hidden="true">◉</div>
           <div>
             <div class="contato-item-label">Localização</div>
-            <div class="contato-item-val">Brasil — Atendimento Nacional & Internacional</div>
+            <div class="contato-item-val">Brasil, Atendimento Nacional & Internacional</div>
           </div>
         </div>
       </div>
     </div>
+
     <div>
-      <form class="contato-form" novalidate>
-        <div style="font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(250,250,248,0.35); margin-bottom:2rem; font-weight:500;">Solicitar Reunião Executiva</div>
+      <form
+        class="contato-form"
+        action="https://formspree.io/f/mjgzqjyy"
+        method="POST"
+      >
+        <input
+          type="hidden"
+          name="_subject"
+          value="Nova Solicitação de Reunião - Toledo Board"
+        >
+
+        <input
+          type="hidden"
+          name="origem"
+          value="Landing Page Toledo Board Intelligence"
+        >
+
+        <div style="font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(250,250,248,0.35); margin-bottom:2rem; font-weight:500;">
+          Solicitar Reunião Executiva
+        </div>
+
         <div class="form-grid">
           <div class="form-row">
             <label for="nome">Nome</label>
-            <input id="nome" type="text" placeholder="Seu nome" required>
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder="Seu nome"
+              required
+            >
           </div>
+
           <div class="form-row">
             <label for="empresa">Empresa</label>
-            <input id="empresa" type="text" placeholder="Nome da empresa" required>
+            <input
+              id="empresa"
+              name="empresa"
+              type="text"
+              placeholder="Nome da empresa"
+              required
+            >
           </div>
         </div>
+
         <div class="form-grid">
           <div class="form-row">
             <label for="cargo">Cargo</label>
-            <input id="cargo" type="text" placeholder="CEO, CFO, Conselheiro...">
+            <input
+              id="cargo"
+              name="cargo"
+              type="text"
+              placeholder="CEO, CFO, Conselheiro..."
+            >
           </div>
+
           <div class="form-row">
             <label for="email">E-mail</label>
-            <input id="email" type="email" placeholder="seu@email.com.br" required>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="seu@email.com.br"
+              required
+            >
           </div>
         </div>
+
         <div class="form-row">
           <label for="interesse">Área de Interesse</label>
-          <select id="interesse">
+          <select
+            id="interesse"
+            name="interesse"
+            required
+          >
             <option value="">Selecione a solução...</option>
-            <option>Conselho & Advisory</option>
-            <option>Inteligência Executiva / Board Dashboard</option>
-            <option>Governança Corporativa</option>
-            <option>Controles Internos & SOX</option>
-            <option>Transformação Financeira</option>
-            <option>M&A / Due Diligence</option>
-            <option>Tecnologia & Dados</option>
+            <option value="Conselho & Advisory">Conselho & Advisory</option>
+            <option value="Inteligência Executiva / Board Dashboard">Inteligência Executiva / Board Dashboard</option>
+            <option value="Governança Corporativa">Governança Corporativa</option>
+            <option value="Controles Internos & SOX">Controles Internos & SOX</option>
+            <option value="Transformação Financeira">Transformação Financeira</option>
+            <option value="M&A / Due Diligence">M&A / Due Diligence</option>
+            <option value="Tecnologia & Dados">Tecnologia & Dados</option>
           </select>
         </div>
+
         <div class="form-row">
           <label for="contexto">Contexto</label>
-          <textarea id="contexto" placeholder="Descreva brevemente o desafio ou oportunidade..."></textarea>
+          <textarea
+            id="contexto"
+            name="contexto"
+            placeholder="Descreva brevemente o desafio ou oportunidade..."
+          ></textarea>
         </div>
-        <button type="submit" class="form-submit">Solicitar Reunião →</button>
+
+        <button type="submit" class="form-submit">
+          Solicitar Reunião →
+        </button>
       </form>
     </div>
   </div>
