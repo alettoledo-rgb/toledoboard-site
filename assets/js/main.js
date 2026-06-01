@@ -41,11 +41,12 @@ document.querySelectorAll('.mvv-card, .sinal-step, .servico-card, .gov-fw-item, 
 
 // Contact form feedback
 const form = document.querySelector('.contato-form');
+
 if (form) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  form.addEventListener('submit', () => {
     const btn = form.querySelector('.form-submit');
-    btn.textContent = 'Mensagem Enviada ✓';
+
+    btn.textContent = 'Enviando...';
     btn.style.background = '#2D6A0F';
     btn.disabled = true;
   });
