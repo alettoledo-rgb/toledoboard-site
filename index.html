@@ -825,6 +825,7 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
         </div>
         <div class="cf-row"><label for="cf-mensagem">Mensagem</label><textarea id="cf-mensagem" name="mensagem" placeholder="Descreva a oportunidade ou o contexto..."></textarea></div>
         <button type="submit" class="cf-submit">Enviar →</button>
+        <div id="cf-note" style="margin-top:12px; font-size:11px; letter-spacing:0.02em; color:rgba(248,246,241,0.6);"></div>
       </form>
     </div>
   </div>
@@ -853,6 +854,31 @@ document.querySelectorAll('.tl-item, .exp-card, .pos-role, .sim-feat, .cred-item
   el.style.transition='opacity 0.5s ease, transform 0.5s ease';
   obs.observe(el);
 });
+
+const form = document.querySelector('.contato-form');
+const note = document.getElementById('cf-note');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = form.querySelector('#cf-nome').value.trim();
+    note.textContent = 'Enviando...';
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        note.textContent = `Obrigada, ${name || 'visitante'}! Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.`;
+        form.reset();
+      } else {
+        note.textContent = 'Não foi possível enviar sua mensagem. Tente novamente.';
+      }
+    } catch (error) {
+      note.textContent = 'Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.';
+    }
+  });
+}
 </script>
 </body>
 </html>
