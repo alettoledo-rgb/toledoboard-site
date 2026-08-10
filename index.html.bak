@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toledo Board Intelligence — Governança, Dados e Decisão.</title>
+<meta name="description" content="Toledo Board Intelligence é uma boutique de inteligência executiva especializada em governança corporativa, dados e decisão para Conselhos e Alta Gestão.">
+<meta property="og:title" content="Toledo Board Intelligence — Governança, Dados e Decisão.">
+<meta property="og:description" content="Transformamos dados operacionais, financeiros e de risco em inteligência para o Conselho e a Alta Gestão. Antes que os problemas apareçam nos resultados.">
+<meta property="og:image" content="assets/logo/logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/logo/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <img src="assets/logo/logo.png" alt="Toledo Board Intelligence" class="nav-logo-img">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Toledo Board</span>
+      <span class="nav-logo-sub">Intelligence</span>
+    </div>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#solucoes">Soluções</a></li>
+    <li><a href="#board">Método S.I.N.A.L.</a></li>
+    <li><a href="#governanca">Governança</a></li>
+    <li><a href="#tecnologia">Tecnologia</a></li>
+    <li><a href="#ma">M&A</a></li>
+    <li><a href="#insights">Insights</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Falar com Especialista</a>
+  <button class="nav-hamburger" aria-label="Abrir menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-circle"></div>
+    <div class="hero-bg-circle2"></div>
+    <div class="hero-bg-line"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Boutique de Inteligência Executiva</div>
+    <h1 class="hero-title fade-up">
+      Governança,<br>Dados<br>e <em>Decisão.</em>
+    </h1>
+    <p class="hero-subtitle fade-up delay-1">
+      Transformamos dados operacionais, financeiros e de risco em inteligência para o Conselho e a Alta Gestão. Antes que os problemas apareçam nos resultados.
+    </p>
+    <div class="hero-actions fade-up delay-2">
+      <a href="#solucoes" class="btn-primary">Conhecer Soluções</a>
+      <a href="#board" class="btn-ghost">Método S.I.N.A.L.</a>
+    </div>
+  </div>
+  <div class="hero-stats" aria-hidden="true">
+    <div class="hero-stat">
+      <div class="hero-stat-num">6+</div>
+      <div class="hero-stat-label">Áreas de Atuação</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">20+</div>
+      <div class="hero-stat-label">Soluções Integradas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">360°</div>
+      <div class="hero-stat-label">Visão Executiva</div>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span class="hero-scroll-line"></span>
+    Scroll
+  </div>
+</section>
+
+<!-- SOBRE / IDENTIDADE DA MARCA -->
+<section id="sobre">
+  <div class="section-label">Sobre a Empresa</div>
+  <div class="sobre-grid">
+    <div class="sobre-left">
+      <h2 class="sobre-tagline">
+        Não vendemos<br>dashboards.<br>Entregamos <em>clareza</em>.
+      </h2>
+      <blockquote class="sobre-manifesto">
+        Toledo Board Intelligence nasceu da convicção de que Conselhos e CEOs não precisam de mais dados — precisam de inteligência acionável, apresentada no momento certo, na linguagem certa.
+      </blockquote>
+      <p style="font-size:13.5px; color:var(--text-mid); line-height:1.8; font-weight:300; margin-bottom:2rem;">
+        Somos uma boutique estratégica que combina experiência profunda em governança corporativa, auditoria, gestão de riscos, business intelligence e transformação financeira. Nosso trabalho acontece na interseção entre estratégia executiva e tecnologia — onde os dados se tornam decisões.
+      </p>
+      <a href="#solucoes" class="btn-ghost" style="color:var(--navy);">Ver Todas as Soluções</a>
+    </div>
+    <div class="sobre-right">
+      <div class="mvv-grid">
+        <div class="mvv-card" data-num="01">
+          <div class="mvv-card-label">Missão</div>
+          <div class="mvv-card-title">Transformar dados em liderança</div>
+          <div class="mvv-card-text">Apoiar Conselhos de Administração, CEOs, CFOs e empresas em crescimento com governança de excelência, inteligência analítica e automação de controles — elevando a qualidade da decisão executiva.</div>
+        </div>
+        <div class="mvv-card" data-num="02">
+          <div class="mvv-card-label">Visão</div>
+          <div class="mvv-card-title">Ser a referência em Board Intelligence</div>
+          <div class="mvv-card-text">Tornar-se a boutique estratégica mais reconhecida do Brasil em governança corporativa e inteligência executiva para médias empresas, grupos e fundos de investimento.</div>
+        </div>
+        <div class="mvv-card" data-num="03">
+          <div class="mvv-card-label">Proposta de Valor</div>
+          <div class="mvv-card-title">O S.I.N.A.L. antes da crise</div>
+          <div class="mvv-card-text">Identificamos deterioração operacional, financeira e de governança antes que ela apareça nos resultados — através do nosso método proprietário S.I.N.A.L.</div>
+        </div>
+      </div>
+      <div class="valores-grid" style="margin-top:1.5rem;">
+        <div class="valor-item">
+          <div class="valor-icon" aria-hidden="true">◈</div>
+          <div class="valor-name">Rigor Analítico</div>
+          <div class="valor-text">Cada recomendação sustentada por dados, evidências e metodologia estruturada</div>
+        </div>
+        <div class="valor-item">
+          <div class="valor-icon" aria-hidden="true">◇</div>
+          <div class="valor-name">Independência</div>
+          <div class="valor-text">Perspectiva externa e imparcial, preservando objetividade nas análises</div>
+        </div>
+        <div class="valor-item">
+          <div class="valor-icon" aria-hidden="true">◉</div>
+          <div class="valor-name">Confidencialidade</div>
+          <div class="valor-text">Discrição absoluta nas informações sensíveis de governança e M&A</div>
+        </div>
+        <div class="valor-item">
+          <div class="valor-icon" aria-hidden="true">◎</div>
+          <div class="valor-name">Excelência</div>
+          <div class="valor-text">Padrão de entrega que rivaliza com as melhores consultorias globais</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MÉTODO SINAL -->
+<section id="board">
+  <div class="section-label" style="justify-content:center;">Método Proprietário</div>
+  <div class="sinal-header">
+    <h2 class="sinal-title">O Método S.I.N.A.L.</h2>
+    <p class="sinal-desc">Um framework proprietário que identifica deterioração operacional, financeira e de governança antes que ela se torne uma crise.</p>
+  </div>
+  <div class="sinal-steps">
+    <div class="sinal-step">
+      <div class="sinal-letter" aria-hidden="true">S</div>
+      <div class="sinal-word">Sinais Operacionais</div>
+      <div class="sinal-text">Identificação precoce de anomalias nos indicadores operacionais e de produtividade</div>
+    </div>
+    <div class="sinal-step">
+      <div class="sinal-letter" aria-hidden="true">I</div>
+      <div class="sinal-word">Indicadores Financeiros</div>
+      <div class="sinal-text">Monitoramento contínuo de métricas financeiras críticas e variações de performance</div>
+    </div>
+    <div class="sinal-step">
+      <div class="sinal-letter" aria-hidden="true">N</div>
+      <div class="sinal-word">Níveis de Risco</div>
+      <div class="sinal-text">Mapeamento e graduação dos riscos estratégicos, operacionais, financeiros e de compliance</div>
+    </div>
+    <div class="sinal-step">
+      <div class="sinal-letter" aria-hidden="true">A</div>
+      <div class="sinal-word">Alertas Preditivos</div>
+      <div class="sinal-text">Modelos preditivos com machine learning para antecipar cenários adversos</div>
+    </div>
+    <div class="sinal-step">
+      <div class="sinal-letter" aria-hidden="true">L</div>
+      <div class="sinal-word">Liderança Estratégica</div>
+      <div class="sinal-text">Inteligência consolidada para subsidiar decisões do Conselho e da Alta Gestão</div>
+    </div>
+  </div>
+  <div class="sinal-proposition">
+    <p class="sinal-quote">
+      O S.I.N.A.L. transforma ruído em sinal, dados em insight, e insight em decisão estratégica — com a antecedência que o Conselho precisa.
+    </p>
+    <div class="sinal-quote-attr">Toledo Board Intelligence — Método Proprietário</div>
+  </div>
+</section>
+
+<!-- SOLUÇÕES -->
+<section id="solucoes">
+  <div class="section-label">Arquitetura de Serviços</div>
+  <div class="solucoes-header">
+    <h2 class="solucoes-title">Soluções Integradas</h2>
+    <p class="solucoes-subtitle">Cada solução é desenhada para criar valor na interseção entre estratégia, dados e governança — com profundidade e precisão.</p>
+  </div>
+  <div class="solucoes-tabs" role="tablist">
+    <button class="solucoes-tab active" onclick="showTab(0)" role="tab" aria-selected="true">Conselho & Advisory</button>
+    <button class="solucoes-tab" onclick="showTab(1)" role="tab" aria-selected="false">Inteligência Executiva</button>
+    <button class="solucoes-tab" onclick="showTab(2)" role="tab" aria-selected="false">Governança & Controles</button>
+    <button class="solucoes-tab" onclick="showTab(3)" role="tab" aria-selected="false">Transformação Financeira</button>
+    <button class="solucoes-tab" onclick="showTab(4)" role="tab" aria-selected="false">Tecnologia & Dados</button>
+    <button class="solucoes-tab" onclick="showTab(5)" role="tab" aria-selected="false">M&A & Performance</button>
+  </div>
+  <div class="solucoes-panels">
+    <div class="solucoes-panel active">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◈</span></div>
+        <div class="servico-name">Conselho Consultivo & de Administração</div>
+        <div class="servico-desc">Participação ou estruturação de Conselhos Consultivos e de Administração com metodologia IBGC, governança estruturada e foco em crescimento sustentável.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Conselho Consultivo</span>
+          <span class="servico-tag">C. de Administração</span>
+          <span class="servico-tag">Comitê de Auditoria</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◇</span></div>
+        <div class="servico-name">Governança Corporativa</div>
+        <div class="servico-desc">Implantação de estruturas robustas de governança alinhadas às melhores práticas do IBGC e reguladores, preparando empresas para crescimento, IPO ou M&A.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Governança IBGC</span>
+          <span class="servico-tag">Planejamento Estratégico</span>
+          <span class="servico-tag">Preparação para Conselho</span>
+        </div>
+      </div>
+    </div>
+    <div class="solucoes-panel">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◉</span></div>
+        <div class="servico-name">Executive & Board Dashboards</div>
+        <div class="servico-desc">Painéis executivos de alta performance desenvolvidos com Power BI e metodologia S.I.N.A.L., entregando inteligência condensada para o Conselho e a diretoria.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Executive Dashboard</span>
+          <span class="servico-tag">Board Dashboard</span>
+          <span class="servico-tag">KPIs Estratégicos</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◎</span></div>
+        <div class="servico-name">Business Intelligence & Forecast</div>
+        <div class="servico-desc">Modelos de cenários, forecast financeiro e monitoramento executivo contínuo — conectando dados operacionais à estratégia da empresa.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Business Intelligence</span>
+          <span class="servico-tag">Forecast</span>
+          <span class="servico-tag">Cenários</span>
+          <span class="servico-tag">Monitoramento</span>
+        </div>
+      </div>
+    </div>
+    <div class="solucoes-panel">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◈</span></div>
+        <div class="servico-name">Controles Internos & SOX</div>
+        <div class="servico-desc">Mapeamento de processos, implementação de controles internos, compliance SOX e auditoria interna — construindo a estrutura de risco e controle da empresa.</div>
+        <div class="servico-items">
+          <span class="servico-tag">SOX</span>
+          <span class="servico-tag">Controles Internos</span>
+          <span class="servico-tag">Auditoria Interna</span>
+          <span class="servico-tag">Compliance</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◇</span></div>
+        <div class="servico-name">Gestão de Riscos & Monitoramento</div>
+        <div class="servico-desc">Framework integrado de gestão de riscos com monitoramento contínuo automatizado, alertas e reporting para o Comitê de Auditoria e Conselho.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Gestão de Riscos</span>
+          <span class="servico-tag">Monitoramento Contínuo</span>
+          <span class="servico-tag">Risk Reporting</span>
+        </div>
+      </div>
+    </div>
+    <div class="solucoes-panel">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◉</span></div>
+        <div class="servico-name">Implementação de Plataformas</div>
+        <div class="servico-desc">Implementação e otimização de Accountfy, Workiva e ERPs corporativos com integração de dados financeiros, consolidação e reporting automatizado.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Accountfy</span>
+          <span class="servico-tag">Workiva</span>
+          <span class="servico-tag">ERP</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◎</span></div>
+        <div class="servico-name">FP&A & Fechamento Financeiro</div>
+        <div class="servico-desc">Transformação dos processos de FP&A, fechamento contábil, consolidação de grupo e financial reporting com automação e qualidade analítica.</div>
+        <div class="servico-items">
+          <span class="servico-tag">FP&A</span>
+          <span class="servico-tag">Fechamento</span>
+          <span class="servico-tag">Consolidação</span>
+          <span class="servico-tag">Reporting</span>
+        </div>
+      </div>
+    </div>
+    <div class="solucoes-panel">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◈</span></div>
+        <div class="servico-name">Power BI & SQL Analytics</div>
+        <div class="servico-desc">Arquitetura de dados com SQL Server, modelagem analítica e dashboards Power BI de nível corporativo com foco em velocidade e precisão executiva.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Power BI</span>
+          <span class="servico-tag">SQL Server</span>
+          <span class="servico-tag">Data Analytics</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◇</span></div>
+        <div class="servico-name">IA, Machine Learning & Automação</div>
+        <div class="servico-desc">Aplicação de inteligência artificial e Python para automação de processos financeiros, modelos preditivos e detecção de anomalias em tempo real.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Inteligência Artificial</span>
+          <span class="servico-tag">Machine Learning</span>
+          <span class="servico-tag">Python</span>
+          <span class="servico-tag">Automação</span>
+        </div>
+      </div>
+    </div>
+    <div class="solucoes-panel">
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◉</span></div>
+        <div class="servico-name">Due Diligence & Valuation</div>
+        <div class="servico-desc">Processos completos de due diligence financeira, contábil e de governança para aquisições, fusões e preparação para venda de empresa.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Due Diligence</span>
+          <span class="servico-tag">Valuation</span>
+          <span class="servico-tag">Preparação para Venda</span>
+        </div>
+      </div>
+      <div class="servico-card">
+        <div class="servico-icon" aria-hidden="true"><span>◎</span></div>
+        <div class="servico-name">Integração Pós-Aquisição & PMO</div>
+        <div class="servico-desc">Gestão da integração pós-M&A com PMO de transformação, unificação de dados, governança integrada e monitoramento de sinergias.</div>
+        <div class="servico-items">
+          <span class="servico-tag">Integração Pós-Aquisição</span>
+          <span class="servico-tag">PMO</span>
+          <span class="servico-tag">Preparação IPO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNANÇA -->
+<section id="governanca">
+  <div class="section-label">Governança Corporativa</div>
+  <div class="gov-grid">
+    <div class="gov-content">
+      <h2 class="gov-title">Estrutura que<br>sustenta <em>crescimento</em></h2>
+      <p class="gov-text">
+        Governança corporativa não é burocracia. É o alicerce sobre o qual empresas duradouras são construídas. Nossa abordagem conecta processos, controles e cultura — criando organizações que crescem com solidez e confiança.
+      </p>
+      <div class="gov-framework">
+        <div class="gov-fw-item">
+          <div class="gov-fw-num" aria-hidden="true">01</div>
+          <div class="gov-fw-info">
+            <div class="gov-fw-name">Diagnóstico de Maturidade</div>
+            <div class="gov-fw-text">Avaliação completa do nível de governança atual e identificação de gaps críticos em processos, controles e estrutura decisória</div>
+          </div>
+        </div>
+        <div class="gov-fw-item">
+          <div class="gov-fw-num" aria-hidden="true">02</div>
+          <div class="gov-fw-info">
+            <div class="gov-fw-name">Desenho Estrutural</div>
+            <div class="gov-fw-text">Arquitetura de governança customizada — Conselho, Comitês, alçadas, políticas e fluxos de informação para o Conselho</div>
+          </div>
+        </div>
+        <div class="gov-fw-item">
+          <div class="gov-fw-num" aria-hidden="true">03</div>
+          <div class="gov-fw-info">
+            <div class="gov-fw-name">Controles & Compliance</div>
+            <div class="gov-fw-text">Implantação de controles internos, monitoramento contínuo e compliance regulatório integrados à rotina operacional</div>
+          </div>
+        </div>
+        <div class="gov-fw-item">
+          <div class="gov-fw-num" aria-hidden="true">04</div>
+          <div class="gov-fw-info">
+            <div class="gov-fw-name">Board Reporting</div>
+            <div class="gov-fw-text">Framework de comunicação executiva com dashboards, relatórios e padrão de informação para o Conselho de Administração</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gov-visual">
+      <div style="margin-bottom:2rem;">
+        <div style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:1.5rem; font-weight:500;">Maturidade de Governança</div>
+      </div>
+      <div class="gov-pillar">
+        <div class="gov-pillar-label">Estrutura de Conselho</div>
+        <div class="gov-pillar-bar"><div class="gov-pillar-fill" style="width:88%"></div></div>
+        <div class="gov-pillar-val">Excelência</div>
+      </div>
+      <div class="gov-pillar">
+        <div class="gov-pillar-label">Controles Internos</div>
+        <div class="gov-pillar-bar"><div class="gov-pillar-fill" style="width:92%"></div></div>
+        <div class="gov-pillar-val">Excelência</div>
+      </div>
+      <div class="gov-pillar">
+        <div class="gov-pillar-label">Gestão de Riscos</div>
+        <div class="gov-pillar-bar"><div class="gov-pillar-fill" style="width:85%"></div></div>
+        <div class="gov-pillar-val">Avançado</div>
+      </div>
+      <div class="gov-pillar">
+        <div class="gov-pillar-label">Board Intelligence</div>
+        <div class="gov-pillar-bar"><div class="gov-pillar-fill" style="width:95%"></div></div>
+        <div class="gov-pillar-val">Excelência</div>
+      </div>
+      <div class="gov-pillar">
+        <div class="gov-pillar-label">Transparência & Disclosure</div>
+        <div class="gov-pillar-bar"><div class="gov-pillar-fill" style="width:80%"></div></div>
+        <div class="gov-pillar-val">Avançado</div>
+      </div>
+      <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-size:11px; color:rgba(250,250,248,0.35); line-height:1.7; font-family:var(--ff-serif); font-weight:300; font-style:italic;">
+          "Governança de excelência é a diferença entre crescer e crescer com segurança."
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGIA -->
+<section id="tecnologia">
+  <div class="section-label">Tecnologia & Dados</div>
+  <div class="tec-header">
+    <h2 class="tec-title">Stack de Alta Performance</h2>
+    <p class="tec-subtitle">Combinamos as melhores ferramentas do mercado com metodologia executiva para entregar inteligência que funciona.</p>
+  </div>
+  <div class="tec-grid">
+    <div class="tec-card">
+      <div class="tec-cat-label">Visualização & Analytics</div>
+      <div class="tec-cat-name">Business Intelligence</div>
+      <div class="tec-tools">
+        <span class="tec-tool">Power BI</span>
+        <span class="tec-tool">DAX</span>
+        <span class="tec-tool">Power Query</span>
+        <span class="tec-tool">Data Modelling</span>
+      </div>
+    </div>
+    <div class="tec-card">
+      <div class="tec-cat-label">Dados & Engenharia</div>
+      <div class="tec-cat-name">Infraestrutura de Dados</div>
+      <div class="tec-tools">
+        <span class="tec-tool">SQL Server</span>
+        <span class="tec-tool">Python</span>
+        <span class="tec-tool">ETL</span>
+        <span class="tec-tool">Data Warehouse</span>
+      </div>
+    </div>
+    <div class="tec-card">
+      <div class="tec-cat-label">Inteligência Artificial</div>
+      <div class="tec-cat-name">IA & Machine Learning</div>
+      <div class="tec-tools">
+        <span class="tec-tool">Machine Learning</span>
+        <span class="tec-tool">Modelos Preditivos</span>
+        <span class="tec-tool">NLP</span>
+        <span class="tec-tool">Anomaly Detection</span>
+      </div>
+    </div>
+    <div class="tec-card">
+      <div class="tec-cat-label">Plataformas Financeiras</div>
+      <div class="tec-cat-name">Financial Performance</div>
+      <div class="tec-tools">
+        <span class="tec-tool">Accountfy</span>
+        <span class="tec-tool">Workiva</span>
+        <span class="tec-tool">SAP</span>
+        <span class="tec-tool">Oracle</span>
+        <span class="tec-tool">Totvs</span>
+      </div>
+    </div>
+    <div class="tec-card">
+      <div class="tec-cat-label">Automação</div>
+      <div class="tec-cat-name">Process Automation</div>
+      <div class="tec-tools">
+        <span class="tec-tool">RPA</span>
+        <span class="tec-tool">Power Automate</span>
+        <span class="tec-tool">Python Scripts</span>
+        <span class="tec-tool">API Integration</span>
+      </div>
+    </div>
+    <div class="tec-card">
+      <div class="tec-cat-label">Compliance Tech</div>
+      <div class="tec-cat-name">GRC & Controles</div>
+      <div class="tec-tools">
+        <span class="tec-tool">GRC Tools</span>
+        <span class="tec-tool">SOX Automation</span>
+        <span class="tec-tool">Risk Monitoring</span>
+        <span class="tec-tool">Audit Tools</span>
+      </div>
+    </div>
+    <div class="tec-highlight">
+      <div class="tec-hl-item">
+        <div class="tec-hl-num">15+</div>
+        <div class="tec-hl-label">Tecnologias Integradas</div>
+      </div>
+      <div class="tec-hl-item">
+        <div class="tec-hl-num">100%</div>
+        <div class="tec-hl-label">Cloud-Ready</div>
+      </div>
+      <div class="tec-hl-item">
+        <div class="tec-hl-num">360°</div>
+        <div class="tec-hl-label">Visão de Dados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- M&A -->
+<section id="ma">
+  <div class="section-label">M&A & Advisory</div>
+  <div class="ma-grid">
+    <div class="ma-content">
+      <h2 class="ma-title">Transações com<br><em>Inteligência</em></h2>
+      <p class="ma-text">
+        Em operações de M&A, a qualidade da informação determina o valor da transação. Nossa abordagem integra due diligence financeira, governança corporativa e inteligência analítica — criando segurança para compradores, vendedores e investidores.
+      </p>
+      <div class="ma-services">
+        <div class="ma-service">
+          <span class="ma-service-name">Due Diligence Financeira & Contábil</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+        <div class="ma-service">
+          <span class="ma-service-name">Due Diligence de Governança</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+        <div class="ma-service">
+          <span class="ma-service-name">Valuation & Modelagem Financeira</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+        <div class="ma-service">
+          <span class="ma-service-name">Integração Pós-Aquisição</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+        <div class="ma-service">
+          <span class="ma-service-name">PMO de Transformação</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+        <div class="ma-service">
+          <span class="ma-service-name">Preparação para Venda & IPO</span>
+          <span class="ma-service-arr" aria-hidden="true">→</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="ma-journey">
+        <div class="ma-journey-title">Jornada Comercial</div>
+        <div class="ma-phase">
+          <div class="ma-phase-num">01</div>
+          <div>
+            <div class="ma-phase-name">Descoberta & Diagnóstico</div>
+            <div class="ma-phase-text">Reunião executiva inicial, mapeamento de necessidades e diagnóstico da maturidade atual de governança e dados</div>
+          </div>
+        </div>
+        <div class="ma-phase">
+          <div class="ma-phase-num">02</div>
+          <div>
+            <div class="ma-phase-name">Proposta Customizada</div>
+            <div class="ma-phase-text">Desenvolvimento de proposta com escopo, metodologia, cronograma e ROI esperado para o cliente</div>
+          </div>
+        </div>
+        <div class="ma-phase">
+          <div class="ma-phase-num">03</div>
+          <div>
+            <div class="ma-phase-name">Kickoff Estratégico</div>
+            <div class="ma-phase-text">Alinhamento com a liderança, acesso a dados e sistemas, definição de rituais de gestão</div>
+          </div>
+        </div>
+        <div class="ma-phase">
+          <div class="ma-phase-num">04</div>
+          <div>
+            <div class="ma-phase-name">Entrega & Implantação</div>
+            <div class="ma-phase-text">Execução com acompanhamento semanal, sprints de entrega e validações com o Conselho ou diretoria</div>
+          </div>
+        </div>
+        <div class="ma-phase">
+          <div class="ma-phase-num">05</div>
+          <div>
+            <div class="ma-phase-name">Advisory Contínuo</div>
+            <div class="ma-phase-text">Relacionamento de longo prazo com monitoramento, evolução da solução e participação nos órgãos de governança</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="insights-header">
+    <div>
+      <div class="section-label" style="color:var(--gold);">Conteúdo Executivo</div>
+      <h2 class="insights-title">Insights & Perspectivas</h2>
+    </div>
+  </div>
+  <div class="insights-grid">
+    <div class="insight-card featured">
+      <div class="insight-tag">Governança Corporativa</div>
+      <div class="insight-title">Como o Board Dashboard transforma a agenda do Conselho de Administração</div>
+      <div class="insight-excerpt">A qualidade das decisões do Conselho é proporcional à qualidade da informação que ele recebe. Conselhos que operam com inteligência analítica estruturada tomam decisões mais rápidas, mais embasadas e com menor exposição ao risco.</div>
+      <div class="insight-meta">
+        <span>Toledo Board Intelligence</span>
+        <span>Leitura: 8 min</span>
+      </div>
+      <div class="insight-badge">Em breve</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">Método S.I.N.A.L.</div>
+      <div class="insight-title">Identificando deterioração financeira 90 dias antes dos resultados</div>
+      <div class="insight-excerpt">Os sinais de uma crise financeira estão sempre presentes antes da crise em si. A questão é saber onde olhar.</div>
+      <div class="insight-meta">
+        <span>Leitura: 5 min</span>
+      </div>
+      <div class="insight-badge">Em breve</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">M&A & Due Diligence</div>
+      <div class="insight-title">Governança como ativo em processos de venda de empresa</div>
+      <div class="insight-excerpt">Empresas com governança estruturada obtêm múltiplos mais altos. O que os compradores realmente avaliam.</div>
+      <div class="insight-meta">
+        <span>Leitura: 6 min</span>
+      </div>
+      <div class="insight-badge">Em breve</div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTITUCIONAL: PITCHES -->
+<section id="institucional">
+  <div class="section-label">Material Institucional</div>
+  <h2 style="font-family:var(--ff-display); font-size:3rem; color:var(--navy); font-weight:400; margin-bottom:3rem;">Apresentação & Pitches</h2>
+  <div class="inst-grid">
+    <div class="pitch-card">
+      <div class="pitch-label">Pitch — 60 Segundos</div>
+      <div class="pitch-title">Toledo Board Intelligence em uma fala</div>
+      <div class="pitch-text">
+        "Somos a Toledo Board Intelligence. Ajudamos Conselhos, CEOs e CFOs a tomar decisões melhores — com dados melhores, na hora certa.<br><br>
+        Nosso método proprietário, o S.I.N.A.L., identifica deterioração operacional, financeira e de governança antes que ela apareça nos resultados. Transformamos dados brutos em inteligência executiva — entregue diretamente para a agenda do Conselho.<br><br>
+        Atuamos com governança corporativa, controles internos, dashboards executivos, transformação financeira, M&A e inteligência artificial.<br><br>
+        Se sua empresa quer crescer com segurança, estrutura e visibilidade — podemos ajudar."
+      </div>
+    </div>
+    <div class="pitch-card">
+      <div class="pitch-label">Pitch — 5 Minutos</div>
+      <div class="pitch-title">Para reuniões com Conselho ou CEO</div>
+      <div class="pitch-text">
+        <strong style="color:var(--navy);">O Problema:</strong> A maioria das empresas de médio porte toma decisões estratégicas com dados fragmentados, processos manuais e sem uma estrutura de governança que suporte o crescimento.<br><br>
+        <strong style="color:var(--navy);">Nossa Solução:</strong> A Toledo Board Intelligence é uma boutique de inteligência executiva. Combinamos governança corporativa, auditoria, dados e inteligência artificial — entregando o que o Conselho precisa ver, quando precisa ver.<br><br>
+        <strong style="color:var(--navy);">O Diferencial:</strong> Nosso método S.I.N.A.L. detecta sinais de deterioração financeira e operacional com até 90 dias de antecedência. Não reagimos a crises — as antecipamos.<br><br>
+        <strong style="color:var(--navy);">Para Quem:</strong> Empresas familiares em transição, grupos empresariais, fundos de investimento, empresas preparando IPO ou M&A.<br><br>
+        <strong style="color:var(--navy);">O Resultado:</strong> Um Conselho mais informado, uma liderança mais confiante e uma empresa que cresce com governança sólida.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-label" style="color:var(--gold);">Contato</div>
+
+  <div class="contato-grid">
+    <div class="contato-left">
+      <h2 class="contato-title">
+        Vamos conversar<br>sobre o futuro da<br>sua <em>governança</em>?
+      </h2>
+
+      <p class="contato-text">
+        Cada empresa tem desafios únicos. Nossa conversa começa com escuta, entendemos o contexto, o momento e os objetivos antes de propor qualquer solução.
+      </p>
+
+      <div class="contato-info">
+        <div class="contato-item">
+          <div class="contato-item-icon" aria-hidden="true">◈</div>
+          <div>
+            <div class="contato-item-label">E-mail</div>
+            <div class="contato-item-val">contato@toledoboard.com.br</div>
+          </div>
+        </div>
+
+        <div class="contato-item">
+          <div class="contato-item-icon" aria-hidden="true">◇</div>
+          <div>
+            <div class="contato-item-label">LinkedIn</div>
+            <div class="contato-item-val">Toledo Board Intelligence</div>
+          </div>
+        </div>
+
+        <div class="contato-item">
+          <div class="contato-item-icon" aria-hidden="true">◉</div>
+          <div>
+            <div class="contato-item-label">Localização</div>
+            <div class="contato-item-val">Brasil, Atendimento Nacional & Internacional</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <form
+        class="contato-form"
+        action="https://formspree.io/f/mjgzqjyy"
+        method="POST"
+      >
+        <input
+          type="hidden"
+          name="_subject"
+          value="Nova Solicitação de Reunião - Toledo Board"
+        >
+
+        <input
+          type="hidden"
+          name="origem"
+          value="Landing Page Toledo Board Intelligence"
+        >
+
+        <div style="font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(250,250,248,0.35); margin-bottom:2rem; font-weight:500;">
+          Solicitar Reunião Executiva
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="nome">Nome</label>
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder="Seu nome"
+              required
+            >
+          </div>
+
+          <div class="form-row">
+            <label for="empresa">Empresa</label>
+            <input
+              id="empresa"
+              name="empresa"
+              type="text"
+              placeholder="Nome da empresa"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="cargo">Cargo</label>
+            <input
+              id="cargo"
+              name="cargo"
+              type="text"
+              placeholder="CEO, CFO, Conselheiro..."
+            >
+          </div>
+
+          <div class="form-row">
+            <label for="email">E-mail</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="seu@email.com.br"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="interesse">Área de Interesse</label>
+          <select
+            id="interesse"
+            name="interesse"
+            required
+          >
+            <option value="">Selecione a solução...</option>
+            <option value="Conselho & Advisory">Conselho & Advisory</option>
+            <option value="Inteligência Executiva / Board Dashboard">Inteligência Executiva / Board Dashboard</option>
+            <option value="Governança Corporativa">Governança Corporativa</option>
+            <option value="Controles Internos & SOX">Controles Internos & SOX</option>
+            <option value="Transformação Financeira">Transformação Financeira</option>
+            <option value="M&A / Due Diligence">M&A / Due Diligence</option>
+            <option value="Tecnologia & Dados">Tecnologia & Dados</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="contexto">Contexto</label>
+          <textarea
+            id="contexto"
+            name="contexto"
+            placeholder="Descreva brevemente o desafio ou oportunidade..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">
+          Solicitar Reunião →
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="footer-logo-name">Toledo Board</div>
+      <div class="footer-logo-sub">Intelligence</div>
+      <p class="footer-tagline">
+        "Transformamos dados em clareza.<br>Clareza em decisão.<br>Decisão em valor."
+      </p>
+    </div>
+    <div>
+      <div class="footer-col-title">Soluções</div>
+      <ul class="footer-links">
+        <li><a href="#solucoes">Conselho & Advisory</a></li>
+        <li><a href="#solucoes">Inteligência Executiva</a></li>
+        <li><a href="#solucoes">Governança & Controles</a></li>
+        <li><a href="#solucoes">Transformação Financeira</a></li>
+        <li><a href="#solucoes">Tecnologia & Dados</a></li>
+        <li><a href="#solucoes">M&A & Performance</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#board">Método S.I.N.A.L.</a></li>
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Público</div>
+      <ul class="footer-links">
+        <li><a href="#contato">Conselhos de Administração</a></li>
+        <li><a href="#contato">CEOs & CFOs</a></li>
+        <li><a href="#contato">Empresas Familiares</a></li>
+        <li><a href="#contato">Fundos de Investimento</a></li>
+        <li><a href="#contato">Preparação para IPO</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Toledo Board Intelligence. Todos os direitos reservados.</div>
+    <div class="footer-slogan">Governança, Dados e Decisão.</div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
