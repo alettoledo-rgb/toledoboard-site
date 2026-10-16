@@ -1,0 +1,1213 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>O que não é medido também governa</title>
+<link rel="icon" type="image/png" href="../assets/logo/favicon.png">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: palco 16:9 fixo (1600×900) escalado para a tela; um slide por vez, efeitos em canvas atrás do conteúdo.
+   Visual único e escuro de propósito: terminal de dados (verde) + dinheiro (ouro) + perda (coral). */
+:root{
+  --bg:#06110E; --panel:#0B1B16; --panel2:#102620; --line:#1D3B31;
+  --ink:#E4F1EA; --muted:#93AFA2; --matrix:#36E07F; --gold:#F3B94D; --loss:#FF6A55;
+  --display:'Bricolage Grotesque', 'Arial Narrow', Arial, sans-serif;
+  --body:'IBM Plex Sans', Arial, sans-serif;
+  --mono:'JetBrains Mono', 'Courier New', monospace;
+  color-scheme:dark;
+}
+html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden}
+body{font-family:var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+#app{position:relative;height:100%;box-sizing:border-box;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#viewport{position:relative;width:100%;height:100%;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:var(--bg);border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+
+.slide{position:absolute;inset:0;padding:80px 110px 96px;display:flex;flex-direction:column;gap:36px;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility 0s linear .55s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .55s ease}
+.slide>*:not(.fx){position:relative;z-index:1}
+.fx{position:absolute;left:0;top:0;width:1600px;height:900px;z-index:0;pointer-events:none}
+
+.eyebrow{font:600 17px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--matrix);display:flex;gap:14px;align-items:center}
+.eyebrow b{color:var(--gold);font-weight:600}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font:800 104px/0.97 var(--display);letter-spacing:-.025em}
+h2{font:700 58px/1.04 var(--display);letter-spacing:-.015em}
+h3{font:600 28px/1.2 var(--display)}
+p{margin:0}
+.lead{font:400 25px/1.5 var(--body);color:var(--muted);max-width:780px}
+.lead strong{color:var(--ink);font-weight:600}
+.hd{display:flex;flex-direction:column;gap:16px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:72px;flex:1;align-items:center;min-height:0}
+.split.wide-r{grid-template-columns:5fr 6fr}
+.split.wide-l{grid-template-columns:6fr 5fr}
+.col{display:flex;flex-direction:column;gap:24px;min-width:0}
+.q{font:500 24px/1.45 var(--body);border-left:3px solid var(--gold);padding:6px 0 6px 22px;color:var(--ink)}
+.q small{display:block;font:600 14px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.qs{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
+.qs li{font:400 22px/1.42 var(--body);padding-left:30px;position:relative;color:var(--ink)}
+.qs li::before{content:"?";position:absolute;left:0;top:0;font:600 20px/1.5 var(--mono);color:var(--gold)}
+.tag{position:absolute!important;left:110px;bottom:38px;font:500 15px/1 var(--mono);letter-spacing:.06em;color:var(--muted)}
+.hyp{color:var(--gold)}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* entrada escalonada: visível em repouso no slide ativo */
+.r{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.active .r{opacity:1;transform:none;transition-delay:calc(var(--d,0) * 140ms + 150ms)}
+
+/* ---------- capa ---------- */
+#s-capa{justify-content:space-between}
+#s-capa .fx{opacity:.5}
+#s-capa .shade{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(6,17,14,.92) 45%,rgba(6,17,14,.35) 100%)}
+#s-capa h1 span{display:block}
+#s-capa h1 .g{color:var(--matrix)}
+#s-capa .sub{font:400 30px/1.4 var(--body);color:var(--muted);max-width:820px}
+#s-capa .who{font:500 20px/1.4 var(--mono);color:var(--ink);display:flex;gap:28px}
+#s-capa .who span{color:var(--muted)}
+
+/* ---------- dados ---------- */
+#s-dados{justify-content:center}
+#s-dados .shade{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 70% at 25% 50%,rgba(6,17,14,.95),rgba(6,17,14,.2))}
+#s-dados h2{font-size:84px;max-width:900px}
+#s-dados h2 em{font-style:normal;color:var(--gold)}
+.legend{display:flex;gap:28px;font:500 17px var(--mono);color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:10px;vertical-align:-1px}
+
+/* ---------- cadeia ---------- */
+.stagebox{position:absolute!important;top:330px;width:250px;height:150px;border:1px solid var(--line);background:rgba(11,27,22,.86);border-radius:10px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box}
+.stagebox b{font:600 15px var(--mono);color:var(--matrix);letter-spacing:.12em}
+.stagebox span{font:600 30px/1.1 var(--display)}
+.stagebox.end{border-color:var(--gold)}
+.stagebox.end b{color:var(--gold)}
+.leak{position:absolute!important;top:560px;width:260px;text-align:center;font:500 18px/1.35 var(--mono);color:var(--loss)}
+#s-cadeia .bottom{position:absolute!important;left:110px;right:110px;bottom:96px;font:400 26px/1.45 var(--body);color:var(--muted)}
+#s-cadeia .bottom strong{color:var(--ink);font-weight:600}
+
+/* ---------- tese ---------- */
+.chain{display:flex;align-items:stretch;gap:0}
+.chain .lk{flex:1;padding:28px 26px;border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;gap:10px;min-width:0}
+.chain .lk+.lk{border-left:none}
+.chain .lk b{font:600 15px var(--mono);color:var(--muted);letter-spacing:.14em}
+.chain .lk span{font:700 32px/1.12 var(--display)}
+.chain .lk.last{background:var(--panel2);border-color:var(--gold)}
+.chain .lk.last span{color:var(--gold)}
+.chain .arrow{width:0}
+.impacts{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.impacts div{border-top:2px solid var(--loss);padding-top:18px;display:flex;flex-direction:column;gap:8px}
+.impacts h3{font-size:30px}
+.impacts p{font:400 21px/1.45 var(--body);color:var(--muted)}
+
+/* ---------- mapa ---------- */
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;flex:1}
+.map3>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:38px 34px;display:flex;flex-direction:column;gap:18px}
+.map3 .ico{height:90px;display:flex;align-items:center}
+.map3 h3{font-size:36px}
+.map3 p{font:400 22px/1.5 var(--body);color:var(--muted)}
+.map3 .ex{margin-top:auto;font:500 17px/1.5 var(--mono);color:var(--ink);border-top:1px solid var(--line);padding-top:16px}
+.dotrow{display:flex;gap:8px;flex-wrap:wrap;width:220px}
+.dotrow i{width:18px;height:18px;border-radius:3px;background:var(--matrix)}
+.dotrow i.off{background:transparent;border:2px dashed var(--loss)}
+.dotrow i.dim{background:var(--line)}
+@keyframes blink{50%{opacity:.15}}
+.blink{animation:blink 1.6s steps(2) infinite}
+
+/* ---------- caso A: base ---------- */
+.grid200{display:grid;grid-template-columns:repeat(20,22px);gap:9px}
+.grid200 i{width:22px;height:22px;border-radius:4px;background:var(--matrix);transition:background .5s,opacity .5s,transform .5s,border-color .5s;border:2px solid transparent;box-sizing:border-box}
+.grid200 i.inat{background:#25443A;opacity:.6}
+.grid200 i.dup{background:transparent;border-color:var(--loss);transform:scale(.85)}
+.grid200 i.free{background:transparent;border-color:var(--gold)}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:6px}
+.stat{display:flex;flex-direction:column;gap:6px}
+.stat b{font:600 15px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.stat span{font:700 38px/1 var(--display);font-variant-numeric:tabular-nums}
+.stat.k span{color:var(--matrix)}
+.stat.l span{color:var(--loss)}
+.stat.g span{color:var(--gold)}
+.big{font:800 96px/0.95 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+
+/* ---------- caso B ---------- */
+.versus{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.vbox{background:rgba(11,27,22,.85);border:1px solid var(--line);border-radius:12px;padding:28px 30px;display:flex;flex-direction:column;gap:10px}
+.vbox b{font:600 15px var(--mono);letter-spacing:.12em;color:var(--muted)}
+.vbox .big{font-size:80px}
+.vbox.rec .big{color:var(--matrix)}
+.gapbox{grid-column:span 2;border:1px dashed var(--loss);border-radius:12px;padding:22px 30px;display:flex;align-items:baseline;gap:22px;background:rgba(6,17,14,.85)}
+.gapbox .big{font-size:64px;color:var(--loss)}
+.gapbox p{font:400 21px/1.4 var(--body);color:var(--muted)}
+
+/* ---------- gráficos svg ---------- */
+svg text{font-family:var(--mono)}
+.wf rect{transform-box:fill-box;transform:scaleY(0);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.wf rect.up{transform-origin:bottom}
+.wf rect.down{transform-origin:top}
+.active .wf rect{transform:scaleY(1);transition-delay:calc(var(--d) * 260ms + 300ms)}
+.wf text{opacity:0;transition:opacity .4s}
+.active .wf text{opacity:1;transition-delay:calc(var(--d) * 260ms + 700ms)}
+.seg{height:64px;width:0;transition:width .8s cubic-bezier(.2,.7,.2,1);display:flex;align-items:center;padding-left:14px;box-sizing:border-box;font:600 18px var(--mono);color:#06110E;overflow:hidden;white-space:nowrap}
+.active .seg{transition-delay:calc(var(--d) * 450ms + 300ms)}
+.cacbar{display:flex;position:relative;height:64px;width:900px;background:var(--panel);border-radius:6px}
+.cacbar .mark{position:absolute;top:-34px;font:600 15px var(--mono);color:var(--muted)}
+.cacbar .mark::after{content:"";position:absolute;left:0;top:26px;width:2px;height:80px;background:var(--muted)}
+.cline{stroke-dasharray:900;stroke-dashoffset:900;transition:stroke-dashoffset 1.8s ease}
+.active .cline{stroke-dashoffset:0;transition-delay:.9s}
+.cbar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);transition:transform .7s ease}
+.active .cbar{transform:scaleY(1);transition-delay:calc(var(--d) * 140ms + 200ms)}
+.cpt,.clbl{opacity:0;transition:opacity .4s}
+.active .cpt,.active .clbl{opacity:1;transition-delay:calc(var(--d) * 300ms + 1000ms)}
+
+/* ---------- supermercado ---------- */
+.shelf{position:relative;background:#0A1713;border:1px solid var(--line);border-radius:12px;padding:22px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px 12px;overflow:hidden}
+.shelf .p{height:64px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font:500 13px/1.2 var(--mono);color:var(--muted);position:relative;overflow:hidden}
+.shelf .p::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,var(--heat,transparent),transparent 70%);opacity:0;animation:heat 5s ease-in-out infinite;animation-delay:var(--hd,0s)}
+@keyframes heat{0%,100%{opacity:0}40%,60%{opacity:.9}}
+.shelf .p span{position:relative}
+.shelf .rail{grid-column:1/-1;height:6px;background:var(--line);border-radius:3px;margin-top:-6px}
+.scan{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--matrix),transparent);box-shadow:0 0 18px var(--matrix);top:0;animation:scan 3.2s linear infinite;z-index:2}
+@keyframes scan{0%{top:2%}100%{top:96%}}
+.cam{position:absolute;right:16px;top:12px;font:600 13px var(--mono);color:var(--loss);z-index:3;display:flex;gap:8px;align-items:center}
+.cam i{width:9px;height:9px;border-radius:50%;background:var(--loss);animation:blink 1.2s steps(2) infinite}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;height:214px;overflow:hidden}
+.split svg{width:100%;height:auto;max-width:100%}
+.log li{font:400 17px/1.35 var(--mono);color:var(--muted);padding:8px 12px;border-left:2px solid var(--line);background:rgba(11,27,22,.6);transition:opacity .4s,transform .4s}
+.log li b{color:var(--ink);font-weight:600}
+.log li.hot{border-left-color:var(--gold)}
+.log li.new{opacity:0;transform:translateX(-14px)}
+.lgpd{border:1px solid var(--loss);border-radius:10px;padding:16px 20px;font:400 19px/1.45 var(--body);color:var(--ink);background:rgba(255,106,85,.07)}
+.lgpd b{color:var(--loss);font:600 14px var(--mono);letter-spacing:.14em;display:block;margin-bottom:6px}
+
+/* ---------- funis ---------- */
+.funnel{display:flex;flex-direction:column;gap:12px}
+.frow{display:grid;grid-template-columns:230px 1fr 70px;align-items:center;gap:16px;font:500 19px var(--body)}
+.frow .bar{height:40px;background:var(--panel);border-radius:4px;position:relative;overflow:hidden}
+.frow .bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--matrix);transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.active .frow .bar i{width:var(--w);transition-delay:calc(var(--d) * 220ms + 300ms)}
+.frow .v{font:600 20px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.frow.zero .bar i{background:var(--loss)}
+.frow.zero .v{color:var(--loss)}
+
+/* ---------- pessoas ---------- */
+.teams{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.team{border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--panel)}
+.team b{font:600 14px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.team .ppl{display:grid;grid-template-columns:repeat(4,26px);gap:10px}
+.team .ppl i{width:26px;height:26px;border-radius:50%;background:var(--matrix);transition:transform 1.4s cubic-bezier(.5,0,.6,1),opacity 1.4s}
+.team .ppl i.star{box-shadow:0 0 0 3px var(--gold)}
+.team .ppl i.gone{transform:translate(260px,-40px);opacity:0}
+.team.hot{border-color:var(--loss)}
+.team.hot b{color:var(--loss)}
+
+/* ---------- pirâmide / silêncio ---------- */
+.pyr text{fill:var(--ink)}
+.quiet{font:800 120px/0.95 var(--display);letter-spacing:-.03em}
+.quiet .cur{display:inline-block;width:.45em;height:.85em;background:var(--matrix);vertical-align:-.08em;margin-left:.08em;animation:blink 1s steps(2) infinite}
+.slist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px 40px}
+.slist li{font:400 23px/1.4 var(--body);color:var(--muted);padding-top:14px;border-top:1px solid var(--line)}
+.slist li b{color:var(--ink);font-weight:600}
+
+/* ---------- ciber ---------- */
+.logbg{position:absolute!important;right:0;top:0;width:760px;height:900px;overflow:hidden;z-index:0!important;opacity:.22;mask-image:linear-gradient(90deg,transparent,#000 30%)}
+.logbg pre{margin:0;font:400 14px/1.6 var(--mono);color:var(--matrix);animation:scroll 22s linear infinite}
+@keyframes scroll{to{transform:translateY(-50%)}}
+.ctrs{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ctr{background:rgba(11,27,22,.88);border:1px solid var(--line);border-radius:12px;padding:24px 26px;display:flex;flex-direction:column;gap:8px}
+.ctr b{font:600 14px var(--mono);letter-spacing:.1em;color:var(--muted)}
+.ctr span{font:800 60px/1 var(--display);font-variant-numeric:tabular-nums}
+.ctr.z{border-color:var(--loss)}
+.ctr.z span{color:var(--loss)}
+
+/* ---------- saúde ---------- */
+.srcs{display:flex;flex-wrap:wrap;gap:10px}
+.srcs span{font:500 17px var(--mono);padding:9px 14px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:all .6s}
+.active .srcs span{border-color:var(--matrix);color:var(--ink);transition-delay:calc(var(--d) * 150ms + 300ms)}
+.mbars{display:flex;flex-direction:column;gap:10px}
+.mb{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:14px;font:500 17px var(--mono);color:var(--muted)}
+.mb .t{position:relative;height:30px}
+.mb .t::before{content:"";position:absolute;left:50%;top:-6px;bottom:-6px;width:1px;background:var(--line)}
+.mb .t i{position:absolute;top:3px;height:24px;width:0;transition:width .9s ease;border-radius:3px}
+.mb .t i.pos{left:50%;background:var(--matrix)}
+.mb .t i.neg{right:50%;background:var(--loss)}
+.active .mb .t i{width:var(--w);transition-delay:calc(var(--d) * 120ms + 600ms)}
+.mb .t em{position:absolute;top:4px;font:600 16px var(--mono);font-style:normal;color:var(--ink)}
+
+/* ---------- síntese ---------- */
+.tbl-wrap{overflow:hidden}
+table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
+.syn th{font:600 14px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+.syn td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.syn td:first-child{font-weight:600}
+.syn td:last-child{font:600 17px var(--mono)}
+.syn .m{color:var(--matrix)}.syn .c{color:var(--gold)}.syn .x{color:var(--loss)}
+
+/* ---------- perguntas ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:10px}
+.tabs button{font:600 17px var(--mono);color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:12px 20px;cursor:pointer;transition:all .2s}
+.tabs button:hover{color:var(--ink);border-color:var(--matrix)}
+.tabs button[aria-selected="true"]{background:var(--matrix);color:#06110E;border-color:var(--matrix)}
+.tabs button:focus-visible,.navbtn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.qpanel{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:20px 50px;align-content:start}
+.qpanel .qcard{border-top:1px solid var(--line);padding-top:22px;font:400 30px/1.4 var(--body);display:flex;gap:18px;animation:qin .45s ease both}
+.qpanel .qcard b{font:600 20px var(--mono);color:var(--gold);flex:none;padding-top:4px}
+@keyframes qin{from{opacity:0;transform:translateY(10px)}}
+
+/* ---------- exercício ---------- */
+.recon{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr 60px 1fr;align-items:stretch}
+.recon .rc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px 22px;display:flex;flex-direction:column;gap:12px}
+.recon .rc b{font:600 14px var(--mono);letter-spacing:.12em;color:var(--matrix)}
+.recon .rc h3{font-size:30px}
+.recon .rc p{font:400 19px/1.45 var(--body);color:var(--muted)}
+.recon .gap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font:600 26px var(--mono);color:var(--loss)}
+.recon .gap small{font:500 12px var(--mono);letter-spacing:.08em;color:var(--loss);writing-mode:vertical-rl;transform:rotate(180deg)}
+
+/* ---------- fecho ---------- */
+#s-fecho{justify-content:space-between}
+#s-fecho .shade{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 35% 50%,rgba(6,17,14,.96),rgba(6,17,14,.3))}
+#s-fecho h2{font-size:76px;max-width:1150px}
+#s-fecho h2 em{font-style:normal;color:var(--gold)}
+
+/* ---------- navegação ---------- */
+#nav{position:absolute;right:14px;bottom:14px;display:flex;gap:8px;align-items:center;z-index:20}
+.navbtn{font:600 13px var(--mono);color:var(--ink);background:rgba(11,27,22,.9);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer;min-width:40px}
+.navbtn:hover{border-color:var(--matrix)}
+#count{font:600 13px var(--mono);color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums}
+#prog{position:absolute;left:0;top:0;height:3px;background:var(--matrix);z-index:20;transition:width .4s}
+#notes{position:absolute;left:14px;right:14px;bottom:62px;max-height:38%;overflow:auto;background:rgba(6,17,14,.96);border:1px solid var(--gold);border-radius:10px;padding:18px 22px;font:400 16px/1.55 var(--body);color:var(--ink);z-index:21}
+#notes b{display:block;font:600 12px var(--mono);letter-spacing:.14em;color:var(--gold);margin-bottom:8px}
+#hint{position:absolute;left:14px;bottom:20px;font:500 12px var(--mono);color:var(--muted);z-index:20}
+#back{position:fixed;left:max(24px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 24px);z-index:30;display:inline-flex;align-items:center;gap:8px;font:600 13px var(--mono);letter-spacing:.06em;color:var(--ink);text-decoration:none;background:rgba(11,27,22,.92);border:1px solid var(--line);border-radius:999px;padding:10px 16px;transition:border-color .2s,color .2s,transform .2s}
+#back:hover{border-color:var(--matrix);color:var(--matrix);transform:translateX(-3px)}
+#back:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media (max-width:700px){#hint{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
+}
+</style>
+
+<a id="back" href="../index.html#palestras" aria-label="Voltar ao site">← Voltar ao site</a>
+<div id="app">
+<div id="viewport">
+<div id="prog"></div>
+<div id="stage">
+
+<!-- 1 CAPA -->
+<section class="slide" id="s-capa" data-fx="matrix" data-notes="[0:00–1:00] Abertura. Agradecer o convite. Provocação: todo conselho governa a partir de relatórios, e todo relatório é o resultado de escolhas sobre o que capturar, o que cruzar e o que deixar de fora. Hoje vamos falar da parte que fica fora, e de quanto ela custa em mercado, capital de giro e caixa.">
+  <canvas class="fx"></canvas>
+  <div class="shade"></div>
+  <div class="eyebrow">Grupo de Inovação <b>·</b> Conselheiros</div>
+  <div class="hd" style="gap:30px">
+    <h1 id="title-scr"><span data-scr>O que não é medido</span><span class="g" data-scr>também governa</span></h1>
+    <p class="sub">Dados descartados, dados nunca capturados e o silêncio como sinal</p>
+  </div>
+  <div class="who">Alexandre Toledo <span>Toledo Board Intelligence</span></div>
+</section>
+
+<!-- 2 DADOS -->
+<section class="slide" id="s-dados" data-fx="particles" data-notes="[1:00–2:30] As empresas nunca tiveram tantos dados: cadastro, faturamento, recebimentos, contabilidade, custos comerciais, operação, atendimento. O problema não é falta de dado. É que ele está espalhado em bases que não conversam, em formatos diferentes, sem dono. Os pontos verdes da tela são o que existe; os dourados, o que de fato chega organizado para uma decisão.">
+  <canvas class="fx"></canvas>
+  <div class="shade"></div>
+  <div class="eyebrow r">O ponto de partida</div>
+  <h2 class="r" style="--d:1">Toda empresa tem dados. <em>Poucas têm informação.</em></h2>
+  <p class="lead r" style="--d:2">Cadastro, faturamento, recebimentos, contabilidade, custos comerciais, operação. Os dados existem. O que falta é <strong>organizar, cruzar e tornar acessível</strong> para quem decide.</p>
+  <div class="legend r" style="--d:3"><span><i style="background:var(--matrix)"></i>dado que existe</span><span><i style="background:var(--gold)"></i>dado que chega organizado à decisão</span></div>
+</section>
+
+<!-- 3 CADEIA -->
+<section class="slide" id="s-cadeia" data-fx="flow" data-notes="[2:30–4:00] A cadeia do dado. Em cada passagem, algo se perde: entre o cadastro e o faturamento ficam os clientes inativos, duplicados e as gratuidades; entre o faturamento e o recebimento, o que foi faturado e não recebido, e as renegociações que não aparecem no aging; entre o gerencial e o contábil, divergências que 'sempre existiram'. O conselho só vê a última ponta.">
+  <canvas class="fx"></canvas>
+  <div class="hd">
+    <div class="eyebrow r">A cadeia do dado</div>
+    <h2 class="r" style="--d:1">Em cada passagem, alguma coisa cai pelo caminho</h2>
+  </div>
+  <div class="stagebox r" style="left:110px;--d:2"><b>01</b><span>Cadastro</span></div>
+  <div class="stagebox r" style="left:490px;--d:3"><b>02</b><span>Faturamento</span></div>
+  <div class="stagebox r" style="left:870px;--d:4"><b>03</b><span>Recebimento</span></div>
+  <div class="stagebox end r" style="left:1250px;--d:5"><b>04</b><span>Contábil e conselho</span></div>
+  <div class="leak r" style="left:300px;--d:6">inativos, duplicados, gratuidades</div>
+  <div class="leak r" style="left:680px;--d:7">faturado e não recebido</div>
+  <div class="leak r" style="left:1060px;--d:8">gerencial ≠ contábil</div>
+  <p class="bottom r" style="--d:9">O conselho só vê a última ponta. <strong>Tudo o que caiu antes também governa a empresa, só que sem ata.</strong></p>
+</section>
+
+<!-- 4 TESE -->
+<section class="slide" id="s-tese" data-notes="[4:00–5:30] A tese da palestra em uma linha. Dado descartado gera indicador distorcido; indicador distorcido gera decisão errada; decisão errada aparece como caixa que não chega. Três lugares onde isso dói: perda de mercado (investimos no cliente e no canal errados), capital de giro (receita que não vira recebimento) e EBITDA que não converte em caixa.">
+  <div class="hd">
+    <div class="eyebrow r">A tese</div>
+    <h2 class="r" style="--d:1">Do dado ao caixa, o erro se acumula</h2>
+  </div>
+  <div class="chain">
+    <div class="lk r" style="--d:2"><b>DADO</b><span>Descartado ou nunca capturado</span></div>
+    <div class="lk r" style="--d:3"><b>INDICADOR</b><span>LTV, churn, CAC, ARPU distorcidos</span></div>
+    <div class="lk r" style="--d:4"><b>DECISÃO</b><span>Cliente, canal e preço errados</span></div>
+    <div class="lk last r" style="--d:5"><b>RESULTADO</b><span>Caixa que não aparece</span></div>
+  </div>
+  <div class="impacts">
+    <div class="r" style="--d:6"><h3>Perda de mercado</h3><p>Investimento no cliente que não fica e no canal que não paga.</p></div>
+    <div class="r" style="--d:7"><h3>Capital de giro</h3><p>Receita faturada que não vira recebimento, e recebíveis que crescem sem explicação.</p></div>
+    <div class="r" style="--d:8"><h3>EBITDA sem caixa</h3><p>O resultado existe no papel, mas não na conta bancária.</p></div>
+  </div>
+</section>
+
+<!-- 5 MAPA -->
+<section class="slide" id="s-mapa" data-notes="[5:30–6:30] Três formas de a informação não chegar. Descartados: o dado existia, mas foi filtrado, agregado ou classificado de forma que some. Nunca capturados: ninguém decidiu medir. Silêncio: a ausência de informação também comunica. Vamos passar por casos de cada tipo, financeiros e não financeiros.">
+  <div class="hd">
+    <div class="eyebrow r">O mapa do não medido</div>
+    <h2 class="r" style="--d:1">Três formas de a informação não chegar</h2>
+  </div>
+  <div class="map3">
+    <div class="r" style="--d:2">
+      <div class="ico"><div class="dotrow"><i></i><i></i><i class="off"></i><i></i><i class="off"></i><i></i><i></i><i class="off"></i><i></i><i></i></div></div>
+      <h3>Dados descartados</h3>
+      <p>Existiam, mas foram filtrados, agregados, reclassificados ou ignorados no caminho.</p>
+      <p class="ex">base inflada · faturado ≠ recebido · entrevistas de desligamento arquivadas</p>
+    </div>
+    <div class="r" style="--d:3">
+      <div class="ico"><div class="dotrow"><i></i><i></i><i></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i></div></div>
+      <h3>Nunca capturados</h3>
+      <p>Ninguém decidiu medir. Não há campo, sensor, indicador ou dono.</p>
+      <p class="ex">CAC incompleto · a venda que não aconteceu · onde o cliente desiste</p>
+    </div>
+    <div class="r" style="--d:4">
+      <div class="ico"><div class="dotrow"><i class="dim blink"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i><i class="dim"></i></div></div>
+      <h3>O silêncio como sinal</h3>
+      <p>A ausência de informação também comunica, e muitas vezes comunica medo ou falta de canal.</p>
+      <p class="ex">zero quase-acidentes · alertas fechados sem análise · cliente que não reclama nem paga</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 CASO A -->
+<section class="slide" id="s-base" data-notes="[6:30–8:30] Caso ilustrativo de uma empresa de assinaturas (pode ser telecom, mídia, educação ou saúde). A gestão reporta 100 mil assinantes. Ao cruzar o cadastro com o faturamento mês a mês, aparecem clientes inativos há meses, duplicados e com gratuidade. O efeito: o plano de negócios e o valuation multiplicam a base reportada pelo tíquete, e superestimam a receita futura. Churn, ARPU e LTV ficam todos distorcidos. A pergunta do conselheiro: qual critério define um cliente ativo, e quem definiu?">
+  <div class="hd">
+    <div class="eyebrow r">01 · Dados descartados <b>·</b> assinaturas</div>
+    <h2 class="r" style="--d:1">A base que não existe</h2>
+  </div>
+  <div class="split wide-l">
+    <div class="col r" style="--d:2">
+      <div class="grid200" id="grid200"></div>
+      <div class="statrow">
+        <div class="stat"><b>REPORTADO</b><span>100.000</span></div>
+        <div class="stat l"><b>INATIVOS</b><span data-count="9000" data-delay="900">0</span></div>
+        <div class="stat l"><b>DUPLICADOS</b><span data-count="4000" data-delay="2000">0</span></div>
+        <div class="stat g"><b>GRATUIDADE</b><span data-count="5000" data-delay="3100">0</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <p class="eyebrow r" style="--d:3">Base que gera receita</p>
+      <div class="big r" style="--d:3;color:var(--matrix)"><span data-count="82000" data-from="100000" data-delay="4100">100.000</span></div>
+      <p class="lead r" style="--d:4">Projeções e valuation multiplicam a base reportada pelo tíquete. Com 18% da base sem receita, <strong>a receita futura nasce superestimada</strong>, e churn, ARPU e LTV ficam distorcidos.</p>
+      <p class="q r" style="--d:5"><small>Pergunta do conselho</small>“Ativo” não é um dado, é um critério. Qual é o nosso, e quem o definiu?</p>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span> · cada quadrado = 500 assinantes</p>
+</section>
+
+<!-- 7 CASO B -->
+<section class="slide" id="s-receb" data-fx="coins" data-notes="[8:30–10:00] Faturou, mas não recebeu. O faturamento cresce; quando cruzamos o faturado com o recebido cliente a cliente, aparece a diferença. Parte são renegociações que não entram no aging porque o registro é impreciso. Parte é divergência entre o número gerencial e o contábil. A receita é uma opinião; o caixa é um fato. Pergunta: qual a diferença entre faturado e recebido, por segmento, e quem reconcilia?">
+  <canvas class="fx"></canvas>
+  <div class="hd">
+    <div class="eyebrow r">01 · Dados descartados <b>·</b> receita × caixa</div>
+    <h2 class="r" style="--d:1">Faturou, mas não recebeu</h2>
+  </div>
+  <div class="split wide-l">
+    <div class="versus r" style="--d:2">
+      <div class="vbox"><b>FATURADO NO ANO</b><div class="big num">R$ <span data-count="120" data-delay="300">0</span> mi</div></div>
+      <div class="vbox rec"><b>RECEBIDO NO ANO</b><div class="big num">R$ <span data-count="104" data-delay="900">0</span> mi</div></div>
+      <div class="gapbox"><div class="big num">R$ <span data-count="16" data-delay="2000">0</span> mi</div><p>faturados e não recebidos, incluindo renegociações que não aparecem no aging</p></div>
+    </div>
+    <div class="col">
+      <p class="lead r" style="--d:3" >A receita cresce no relatório. Cruzando faturado e recebido <strong>cliente a cliente</strong>, aparecem os que geram receita e não geram caixa, e a divergência entre gerencial e contábil.</p>
+      <p class="q r" style="--d:4"><small>Pergunta do conselho</small>Qual a diferença entre faturado e recebido, por segmento? Quem reconcilia o gerencial com o balancete?</p>
+      <p class="r" style="--d:5;font:600 34px/1.25 var(--display)">A receita é uma opinião.<br><span style="color:var(--gold)">O caixa é um fato.</span></p>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 8 PONTE EBITDA -->
+<section class="slide" id="s-ebitda" data-notes="[10:00–11:30] A ponte do EBITDA ao caixa. EBITDA reportado de 50 milhões. Dentro dele, 6 milhões de mensalidades com mais de 60 dias de atraso que não foram recebidas em 3 meses; parte já estava provisionada (2 milhões). Renegociações fora do aging tiram mais 3. O aumento dos recebíveis consome 5. O caixa operacional fica em 38: conversão de 76%. Nada disso aparece no EBITDA, e tudo isso aparece no caixa.">
+  <div class="hd">
+    <div class="eyebrow r">01 · Dados descartados <b>·</b> EBITDA × caixa</div>
+    <h2 class="r" style="--d:1">O EBITDA que não chega ao banco</h2>
+  </div>
+  <div class="split wide-l" style="align-items:end">
+    <svg class="wf r" style="--d:2" viewBox="0 0 900 500" width="900" height="500" role="img" aria-label="Ponte do EBITDA de 50 milhões até caixa operacional de 38 milhões">
+      <line x1="20" y1="400" x2="890" y2="400" stroke="#1D3B31" stroke-width="2"/>
+      <rect class="up" style="--d:0" x="30" y="75" width="115" height="325" fill="#36E07F" rx="3"/>
+      <rect class="down" style="--d:1" x="175" y="75" width="115" height="39" fill="#FF6A55" rx="3"/>
+      <rect class="up" style="--d:2" x="320" y="101" width="115" height="13" fill="#F3B94D" rx="3"/>
+      <rect class="down" style="--d:3" x="465" y="101" width="115" height="19.5" fill="#FF6A55" rx="3"/>
+      <rect class="down" style="--d:4" x="610" y="120.5" width="115" height="32.5" fill="#FF6A55" rx="3"/>
+      <rect class="up" style="--d:5" x="755" y="153" width="115" height="247" fill="#F3B94D" rx="3"/>
+      <g font-size="22" font-weight="600" text-anchor="middle">
+        <text style="--d:0" x="87" y="62" fill="#E4F1EA">50</text>
+        <text style="--d:1" x="232" y="140" fill="#FF6A55">−6</text>
+        <text style="--d:2" x="377" y="90" fill="#F3B94D">+2</text>
+        <text style="--d:3" x="522" y="146" fill="#FF6A55">−3</text>
+        <text style="--d:4" x="667" y="179" fill="#FF6A55">−5</text>
+        <text style="--d:5" x="812" y="140" fill="#F3B94D">38</text>
+      </g>
+      <g font-size="15" fill="#93AFA2" text-anchor="middle">
+        <text style="--d:0" x="87" y="428">EBITDA</text><text style="--d:0" x="87" y="448">reportado</text>
+        <text style="--d:1" x="232" y="428">receita &gt;60d</text><text style="--d:1" x="232" y="448">sem recebimento</text>
+        <text style="--d:2" x="377" y="428">PDD já</text><text style="--d:2" x="377" y="448">constituída</text>
+        <text style="--d:3" x="522" y="428">renegociações</text><text style="--d:3" x="522" y="448">fora do aging</text>
+        <text style="--d:4" x="667" y="428">aumento de</text><text style="--d:4" x="667" y="448">recebíveis</text>
+        <text style="--d:5" x="812" y="428">caixa</text><text style="--d:5" x="812" y="448">operacional</text>
+      </g>
+    </svg>
+    <div class="col">
+      <p class="eyebrow r" style="--d:3">Conversão de EBITDA em caixa</p>
+      <div class="big r" style="--d:3;color:var(--gold)"><span data-count="76" data-delay="1900">0</span>%</div>
+      <p class="lead r" style="--d:4">Nada disso aparece no EBITDA. <strong>Tudo isso aparece no caixa</strong>, e no capital de giro que a empresa precisa financiar.</p>
+      <p class="q r" style="--d:5"><small>Pergunta do conselho</small>Qual seria o EBITDA se excluíssemos a receita que não virou caixa em 90 dias?</p>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">valores hipotéticos em R$ milhões</span></p>
+</section>
+
+<!-- 9 PESSOAS -->
+<section class="slide" id="s-pessoas" data-notes="[11:30–12:45] Fora do financeiro. A empresa mede o turnover geral, que está dentro da meta. Mas não separa quem queria manter de quem queria que saísse. As entrevistas de desligamento são feitas e arquivadas, nunca lidas em conjunto. Um dia descobre-se que os melhores de uma equipe saíram todos depois da troca do mesmo gestor. Impacto: conhecimento que vai embora, sucessão frágil, custo de reposição que ninguém mede.">
+  <div class="hd">
+    <div class="eyebrow r">01 · Dados descartados <b>·</b> pessoas</div>
+    <h2 class="r" style="--d:1">Quem saiu, e por quê</h2>
+  </div>
+  <div class="split">
+    <div class="col r" style="--d:2">
+      <div class="teams" id="teams"></div>
+      <p class="legend"><span><i style="background:var(--matrix);border-radius:50%"></i>colaborador</span><span><i style="background:var(--matrix);border-radius:50%;box-shadow:0 0 0 3px var(--gold)"></i>alto desempenho</span></p>
+    </div>
+    <div class="col">
+      <div class="statrow" style="grid-template-columns:1fr 1fr">
+        <div class="stat k r" style="--d:3"><b>TURNOVER GERAL</b><span>12% <small style="font:500 16px var(--mono);color:var(--muted)">dentro da meta</small></span></div>
+        <div class="stat l r" style="--d:4"><b>EQUIPE D, NOVO GESTOR</b><span>5 de 8</span></div>
+      </div>
+      <p class="lead r" style="--d:5">As entrevistas de desligamento existem, mas são <strong>arquivadas uma a uma</strong>. Ninguém as lê em conjunto, por gestor ou por área.</p>
+      <ul class="qs r" style="--d:6">
+        <li>Qual o turnover de pessoas-chave, separado do geral?</li>
+        <li>O que dizem as entrevistas de desligamento, agrupadas por gestor?</li>
+        <li>Quantas posições críticas têm sucessor pronto?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 10 INOVAÇÃO -->
+<section class="slide" id="s-inov" data-notes="[12:45–14:00] Para o grupo de inovação. Ideias rejeitadas, pilotos que falharam, projetos interrompidos: nada é documentado. O aprendizado sai com a equipe. Três anos depois, outra área testa a mesma ideia e erra no mesmo ponto. O funil de inovação mede o que entrou e o que foi lançado, mas não o que se aprendeu com o que ficou pelo caminho.">
+  <div class="hd">
+    <div class="eyebrow r">01 · Dados descartados <b>·</b> inovação</div>
+    <h2 class="r" style="--d:1">O projeto engavetado</h2>
+  </div>
+  <div class="split">
+    <div class="funnel r" style="--d:2">
+      <div class="frow" style="--d:0"><span>Ideias recebidas</span><div class="bar"><i style="--w:100%"></i></div><span class="v">120</span></div>
+      <div class="frow" style="--d:1"><span>Pilotos testados</span><div class="bar"><i style="--w:23%"></i></div><span class="v">28</span></div>
+      <div class="frow" style="--d:2"><span>Lançamentos</span><div class="bar"><i style="--w:5%"></i></div><span class="v">6</span></div>
+      <div class="frow zero" style="--d:3"><span>Aprendizados registrados</span><div class="bar"><i style="--w:0.6%"></i></div><span class="v blink">0</span></div>
+    </div>
+    <div class="col">
+      <p class="lead r" style="--d:3">O que falhou não deixa rastro. O aprendizado sai com a equipe, e <strong>a empresa paga duas vezes pelo mesmo erro</strong>.</p>
+      <ul class="qs r" style="--d:4">
+        <li>Temos registro dos experimentos que falharam e do que aprendemos com eles?</li>
+        <li>Quantas ideias entraram no funil e com que critério foram descartadas?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 11 CAC -->
+<section class="slide" id="s-cac" data-notes="[14:00–15:45] Nunca capturado: o custo de aquisição completo. Em muitos projetos, a análise de CAC esbarra numa condição: a administração precisa identificar os custos de aquisição. E eles estão espalhados entre marketing, comissões, equipe comercial e descontos de entrada. O CAC reportado costuma ser só mídia. Com o custo completo, a relação LTV/CAC cai de 4,0x para 2,3x. E quase ninguém mede o CAC dos clientes que cancelam antes do payback.">
+  <div class="hd">
+    <div class="eyebrow r">02 · Nunca capturados <b>·</b> CAC e LTV</div>
+    <h2 class="r" style="--d:1">O CAC que ninguém sabe calcular</h2>
+  </div>
+  <div class="col r" style="--d:2;gap:20px;margin-top:30px">
+    <div class="cacbar">
+      <div class="seg" style="--d:0;background:var(--matrix)" data-w="450px">Mídia R$ 300</div>
+      <div class="seg" style="--d:1;background:var(--gold)" data-w="180px">Comissões 120</div>
+      <div class="seg" style="--d:2;background:#E58A4A" data-w="105px">70</div>
+      <div class="seg" style="--d:3;background:var(--loss)" data-w="45px"></div>
+      <div class="mark" style="left:450px">CAC reportado</div>
+    </div>
+    <p class="legend" style="margin-top:8px"><span><i style="background:#E58A4A"></i>equipe comercial R$ 70</span><span><i style="background:var(--loss)"></i>descontos e incentivos de entrada R$ 30</span><span>CAC completo: <b style="color:var(--ink)">R$ 520</b></span></p>
+  </div>
+  <div class="split" style="align-items:start">
+    <div class="statrow r" style="--d:3;grid-template-columns:1fr 1fr 1fr">
+      <div class="stat"><b>LTV</b><span>R$ 1.200</span></div>
+      <div class="stat k"><b>LTV/CAC REPORTADO</b><span>4,0x</span></div>
+      <div class="stat l"><b>LTV/CAC REAL</b><span><span data-count="2.3" data-from="4" data-dec="1" data-delay="2400">4,0</span>x</span></div>
+    </div>
+    <ul class="qs r" style="--d:4">
+      <li>O nosso CAC inclui todos os custos de aquisição ou só a mídia?</li>
+      <li>Qual o payback por canal? Quanto gastamos com quem saiu antes de pagar o próprio CAC?</li>
+    </ul>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">valores hipotéticos por cliente</span></p>
+</section>
+
+<!-- 12 COORTES -->
+<section class="slide" id="s-coorte" data-notes="[15:45–17:00] A média que esconde a coorte. A base total cresce todo ano, e o LTV médio parece estável porque as safras antigas, mais valiosas, sustentam a média. Olhando por safra de aquisição, cada safra nova vale menos que a anterior. A empresa está comprando crescimento cada vez mais caro, e só vai descobrir quando o caixa não acompanhar a receita.">
+  <div class="hd">
+    <div class="eyebrow r">02 · Nunca capturados <b>·</b> churn e coortes</div>
+    <h2 class="r" style="--d:1">A média que esconde a coorte</h2>
+  </div>
+  <div class="split wide-l">
+    <svg class="r" style="--d:2" viewBox="0 0 820 440" width="820" height="440" role="img" aria-label="Base de clientes cresce de 60 mil para 112 mil enquanto o LTV por safra cai de 1.450 para 940 reais">
+      <line x1="60" y1="360" x2="800" y2="360" stroke="#1D3B31" stroke-width="2"/>
+      <g fill="#1D3B31">
+        <rect class="cbar" style="--d:0" x="100" y="210" width="70" height="150" rx="3"/>
+        <rect class="cbar" style="--d:1" x="250" y="180" width="70" height="180" rx="3"/>
+        <rect class="cbar" style="--d:2" x="400" y="147.5" width="70" height="212.5" rx="3"/>
+        <rect class="cbar" style="--d:3" x="550" y="115" width="70" height="245" rx="3"/>
+        <rect class="cbar" style="--d:4" x="700" y="80" width="70" height="280" rx="3"/>
+      </g>
+      <g font-size="15" fill="#93AFA2" text-anchor="middle">
+        <text class="clbl" style="--d:0" x="135" y="345">60 mil</text>
+        <text class="clbl" style="--d:0" x="285" y="345">72 mil</text>
+        <text class="clbl" style="--d:0" x="435" y="345">85 mil</text>
+        <text class="clbl" style="--d:0" x="585" y="345">98 mil</text>
+        <text class="clbl" style="--d:0" x="735" y="345">112 mil</text>
+        <text x="135" y="392">2021</text><text x="285" y="392">2022</text><text x="435" y="392">2023</text><text x="585" y="392">2024</text><text x="735" y="392">2025</text>
+      </g>
+      <polyline class="cline" points="135,88 285,101 435,127.5 585,155.6 735,183.8" fill="none" stroke="#F3B94D" stroke-width="4" stroke-linejoin="round"/>
+      <g fill="#F3B94D">
+        <circle class="cpt" style="--d:0" cx="135" cy="88" r="7"/><circle class="cpt" style="--d:1" cx="285" cy="101" r="7"/><circle class="cpt" style="--d:2" cx="435" cy="127.5" r="7"/><circle class="cpt" style="--d:3" cx="585" cy="155.6" r="7"/><circle class="cpt" style="--d:4" cx="735" cy="183.8" r="9"/>
+      </g>
+      <g font-size="17" font-weight="600" fill="#F3B94D" text-anchor="middle">
+        <text class="cpt" style="--d:0" x="135" y="70">1.450</text><text class="cpt" style="--d:1" x="285" y="83">1.380</text><text class="cpt" style="--d:2" x="435" y="110">1.240</text><text class="cpt" style="--d:3" x="585" y="138">1.090</text><text class="cpt" style="--d:4" x="735" y="164">940</text>
+      </g>
+    </svg>
+    <div class="col">
+      <p class="legend r" style="--d:3"><span><i style="background:#1D3B31"></i>base total</span><span><i style="background:var(--gold)"></i>LTV por safra (R$)</span></p>
+      <p class="lead r" style="--d:3">A base cresce 87% em quatro anos. Por safra de aquisição, <strong>o LTV cai 35%</strong>. A média esconde que o crescimento está ficando mais caro.</p>
+      <ul class="qs r" style="--d:4">
+        <li>O LTV das safras novas é maior ou menor que o das antigas?</li>
+        <li>Quais segmentos entregam o maior retorno, e estamos investindo neles?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 13 SUPERMERCADO -->
+<section class="slide" id="s-super" data-notes="[17:00–19:00] A venda que não aconteceu. O sistema do varejo registra o que passou no caixa. O que não passou desaparece: o cliente que parou diante da gôndola, pegou o produto, leu o preço e devolveu; a ruptura que fez o cliente ir embora. Hoje, com câmeras de visão computacional, sensores de prateleira e leitura de expressão, o supermercado consegue registrar interesse, hesitação e rejeição, e acumular isso para medir a aceitação de um produto, de um preço ou de uma posição na gôndola. Ponto de governança: imagem facial é dado biométrico, sensível pela LGPD. Capturar exige base legal, transparência e governança. O conselho precisa perguntar as duas coisas: estamos capturando? e estamos capturando do jeito certo?">
+  <div class="hd">
+    <div class="eyebrow r">02 · Nunca capturados <b>·</b> varejo</div>
+    <h2 class="r" style="--d:1">A venda que não aconteceu</h2>
+  </div>
+  <div class="split" style="gap:56px;align-items:start">
+    <div class="col r" style="--d:2;gap:18px">
+      <div class="shelf" id="shelf"><div class="scan"></div><div class="cam"><i></i>REC · GÔNDOLA 7</div></div>
+      <ul class="log" id="log" aria-live="off"></ul>
+    </div>
+    <div class="col">
+      <p class="lead r" style="--d:3">O caixa registra o que foi vendido. Com visão computacional, sensores de prateleira e leitura de expressão, o varejo passa a registrar <strong>interesse, hesitação e rejeição</strong>. Acumulado, vira a curva de aceitação do produto, do preço e da posição.</p>
+      <div class="lgpd r" style="--d:4"><b>LGPD</b>Imagem facial é dado biométrico, sensível pela LGPD. Capturar exige base legal, transparência com o cliente e governança.</div>
+      <ul class="qs r" style="--d:5">
+        <li>Medimos a demanda não atendida: ruptura, desistência, item devolvido no caixa?</li>
+        <li>Quanto deixamos de vender por falta de produto, preço ou posição?</li>
+        <li>O que capturamos do cliente tem base legal e alguém responde por isso?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Simulação ilustrativa de eventos de loja</p>
+</section>
+
+<!-- 14 CLIENTE -->
+<section class="slide" id="s-cliente" data-notes="[19:00–20:15] O atrito que não vira reclamação. O SAC mede as reclamações registradas. Boa parte dos problemas é resolvida por telefone, na loja ou pelo vendedor, sem registro. Na jornada digital, ninguém mede em que tela o cliente desiste. E a reclamação de verdade está nas redes sociais e nos sites de avaliação, que não entram em nenhum relatório ao conselho.">
+  <div class="hd">
+    <div class="eyebrow r">02 · Nunca capturados <b>·</b> jornada do cliente</div>
+    <h2 class="r" style="--d:1">O atrito que não vira reclamação</h2>
+  </div>
+  <div class="split">
+    <div class="funnel r" style="--d:2">
+      <div class="frow" style="--d:0"><span>Acessou o app</span><div class="bar"><i style="--w:100%"></i></div><span class="v">100%</span></div>
+      <div class="frow" style="--d:1"><span>Iniciou cadastro</span><div class="bar"><i style="--w:62%"></i></div><span class="v">62%</span></div>
+      <div class="frow" style="--d:2"><span>Enviou documentos</span><div class="bar"><i style="--w:41%"></i></div><span class="v">41%</span></div>
+      <div class="frow" style="--d:3"><span>Foi aprovado</span><div class="bar"><i style="--w:33%"></i></div><span class="v">33%</span></div>
+      <div class="frow" style="--d:4"><span>Primeiro uso</span><div class="bar"><i style="--w:24%"></i></div><span class="v">24%</span></div>
+      <p class="legend" style="margin-top:10px"><span style="color:var(--loss)">76% desistiram em silêncio: nenhuma reclamação registrada</span></p>
+    </div>
+    <div class="col">
+      <p class="lead r" style="--d:3">O SAC conta as reclamações formais. O resto é resolvido no balcão, sem registro, ou <strong>vai para as redes sociais</strong>, que não entram em nenhum relatório.</p>
+      <ul class="qs r" style="--d:4">
+        <li>Em que etapa da jornada perdemos mais clientes?</li>
+        <li>Os dados de redes sociais e sites de reclamação chegam ao conselho?</li>
+        <li>O NPS é medido também com quem cancelou?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 15 SILÊNCIO -->
+<section class="slide" id="s-silencio" data-fx="quiet" data-notes="[20:15–21:15] Mudar o tom, falar mais devagar. O silêncio também é um dado. O cliente que não reclama, mas também não paga. O que não cancela, mas também não usa. A coorte diluída na média. A divergência gerencial × contábil que sempre existiu. A PDD nunca comparada com a curva real de recuperação. Cada um desses silêncios tem duas leituras, uma tranquila e uma preocupante. O papel do conselheiro é pedir a evidência de qual delas é a verdadeira.">
+  <canvas class="fx"></canvas>
+  <div class="eyebrow r">03 · O silêncio como sinal</div>
+  <p class="quiet r" style="--d:1">O silêncio também<br>é um dado.<span class="cur"></span></p>
+  <ul class="slist">
+    <li class="r" style="--d:2"><b>O cliente que não reclama</b>, mas também não paga</li>
+    <li class="r" style="--d:3"><b>O cliente que não cancela</b>, mas também não usa</li>
+    <li class="r" style="--d:4"><b>A coorte</b> diluída na média</li>
+    <li class="r" style="--d:5"><b>A divergência gerencial × contábil</b> que “sempre existiu”</li>
+    <li class="r" style="--d:6"><b>A PDD</b> nunca comparada com a recuperação real</li>
+    <li class="r" style="--d:7"><b>A área</b> sem nenhuma ocorrência registrada</li>
+  </ul>
+</section>
+
+<!-- 16 SEGURANÇA -->
+<section class="slide" id="s-seguranca" data-notes="[21:15–22:30] Segurança do trabalho. A área reporta zero acidentes com afastamento há 18 meses; o indicador está verde. Mas também não há nenhum quase-acidente registrado. Isso não é segurança: é ausência de registro. Os estudos clássicos de Heinrich, dos anos 1930, mostram a lógica da pirâmide: para cada acidente grave há dezenas de leves e centenas de quase-acidentes. Quem não registra a base da pirâmide só descobre o topo.">
+  <div class="hd">
+    <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> segurança</div>
+    <h2 class="r" style="--d:1">O quase-acidente que ninguém anotou</h2>
+  </div>
+  <div class="split">
+    <svg class="pyr r" style="--d:2" viewBox="0 0 640 440" width="640" height="440" role="img" aria-label="Pirâmide de Heinrich: 1 acidente grave, 29 acidentes leves, 300 quase-acidentes">
+      <polygon points="320,20 390,140 250,140" fill="#FF6A55"/>
+      <polygon points="250,150 390,150 460,270 180,270" fill="#E58A4A"/>
+      <polygon points="180,280 460,280 540,410 100,410" fill="none" stroke="#36E07F" stroke-width="2" stroke-dasharray="8 7"/>
+      <text x="320" y="118" text-anchor="middle" font-size="30" font-weight="600" fill="#06110E">1</text>
+      <text x="320" y="225" text-anchor="middle" font-size="30" font-weight="600" fill="#06110E">29</text>
+      <text x="320" y="356" text-anchor="middle" font-size="34" font-weight="600" fill="#36E07F">300</text>
+      <g font-size="15" fill="#93AFA2">
+        <text x="404" y="90">acidente grave</text>
+        <text x="472" y="215">acidentes leves</text>
+        <text x="548" y="350">quase-</text><text x="548" y="370">acidentes</text>
+      </g>
+    </svg>
+    <div class="col">
+      <div class="statrow r" style="--d:3;grid-template-columns:1fr 1fr">
+        <div class="stat k"><b>ACIDENTES · 18 MESES</b><span>0</span></div>
+        <div class="stat l"><b>QUASE-ACIDENTES</b><span class="blink">0</span></div>
+      </div>
+      <p class="lead r" style="--d:4">Zero na base da pirâmide não é segurança. <strong>É falta de registro.</strong> Quem não anota os pequenos sinais só descobre o grande evento.</p>
+      <ul class="qs r" style="--d:5">
+        <li>Em que áreas o número de quase-acidentes registrados é zero?</li>
+        <li>O que acontece com quem registra uma ocorrência: é reconhecido ou cobrado?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Pirâmide: H. W. Heinrich, Industrial Accident Prevention (1931) · indicadores da área <span class="hyp">ilustrativos</span></p>
+</section>
+
+<!-- 17 CIBER -->
+<section class="slide" id="s-ciber" data-notes="[22:30–23:30] Cibersegurança e terceiros. O time recebe milhares de alertas por mês e fecha a maioria automaticamente. O relatório ao conselho diz zero incidentes relevantes. Ninguém sabe quantos fornecedores têm acesso aos sistemas, nem quando esses acessos foram revisados. Zero incidentes pode querer dizer zero ocorrências, ou zero detecções.">
+  <div class="logbg" aria-hidden="true"><pre id="logbg"></pre></div>
+  <div class="hd">
+    <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> cibersegurança</div>
+    <h2 class="r" style="--d:1">O alerta fechado sem análise</h2>
+  </div>
+  <div class="split wide-r">
+    <div class="ctrs r" style="--d:2">
+      <div class="ctr"><b>ALERTAS NO MÊS</b><span data-count="12480" data-delay="300">0</span></div>
+      <div class="ctr"><b>FECHADOS AUTOMATICAMENTE</b><span data-count="11906" data-delay="700">0</span></div>
+      <div class="ctr"><b>INVESTIGADOS</b><span data-count="574" data-delay="1100">0</span></div>
+      <div class="ctr z"><b>INCIDENTES NO RELATÓRIO</b><span>0</span></div>
+    </div>
+    <div class="col">
+      <p class="lead r" style="--d:3">O relatório ao conselho diz “zero incidentes relevantes”. Ninguém sabe <strong>quantos terceiros têm acesso</strong> aos sistemas, nem quando os acessos foram revisados.</p>
+      <ul class="qs r" style="--d:4">
+        <li>Quantos alertas foram fechados sem investigação?</li>
+        <li>Quantos terceiros têm acesso aos nossos sistemas, e quando revisamos?</li>
+        <li>“Zero incidentes” quer dizer zero ocorrências ou zero detecções?</li>
+      </ul>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 18 SAÚDE -->
+<section class="slide" id="s-saude" data-notes="[23:30–24:45] Carteira de saúde. Faturas médicas, histórico de utilização, OPME, medicamentos, perfil etário e região ficam em bases separadas. Cada uma, sozinha, não diz muito. Integradas, mostram padrões ocultos: poucos contratos concentram o custo assistencial com margem negativa, e o envelhecimento da carteira corrói a margem. Sem esse cruzamento, a operadora também não tem evidência para negociar reajuste com o contratante.">
+  <div class="hd">
+    <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> saúde</div>
+    <h2 class="r" style="--d:1">A margem que só aparece quando os dados se cruzam</h2>
+  </div>
+  <div class="split">
+    <div class="col">
+      <div class="srcs r" style="--d:2">
+        <span style="--d:0">faturas médicas</span><span style="--d:1">utilização</span><span style="--d:2">OPME</span><span style="--d:3">medicamentos</span><span style="--d:4">perfil etário</span><span style="--d:5">região</span><span style="--d:6">contratante</span>
+      </div>
+      <p class="lead r" style="--d:3">Separadas, as bases não dizem nada. Integradas, mostram quais contratos <strong>concentram o custo com margem negativa</strong>, e dão evidência para negociar reajuste.</p>
+      <ul class="qs r" style="--d:4">
+        <li>Quais clientes ou contratos concentram o custo e têm margem negativa?</li>
+        <li>Como a mudança de perfil da carteira afeta a margem?</li>
+      </ul>
+    </div>
+    <div class="col r" style="--d:3">
+      <p class="eyebrow">Margem assistencial por contratante</p>
+      <div class="mbars" id="mbars"></div>
+    </div>
+  </div>
+  <p class="tag">Caso ilustrativo · <span class="hyp">números hipotéticos</span></p>
+</section>
+
+<!-- 19 IA -->
+<section class="slide" id="s-ia" data-fx="matrixgaps" data-notes="[24:45–25:45] A ponte com a inovação. Todo modelo de IA, seja de crédito, churn ou preço, aprende só com os dados que foram capturados. Repare nas colunas vazias da tela: os clientes recusados, os inativos, quem desistiu antes de comprar. Se a base está inflada, duplicada ou ignora quem ficou de fora, o modelo automatiza o erro, em escala e com aparência de precisão.">
+  <canvas class="fx"></canvas>
+  <div class="shade" style="position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(6,17,14,.97) 0%,rgba(6,17,14,.9) 50%,rgba(6,17,14,.2) 100%)"></div>
+  <div class="hd" style="max-width:860px">
+    <div class="eyebrow r">Para a inovação</div>
+    <h2 class="r" style="--d:1;font-size:72px">A IA só aprende com o que foi capturado</h2>
+  </div>
+  <p class="lead r" style="--d:2;max-width:800px">Se a base está inflada, duplicada ou ignora quem ficou de fora, <strong>o modelo automatiza o erro</strong>, em escala e com aparência de precisão.</p>
+  <ul class="qs r" style="--d:3;max-width:820px">
+    <li>Com que dados nossos modelos de IA foram treinados, e quem ficou de fora deles?</li>
+    <li>Quem valida a qualidade da base antes de um modelo entrar em produção?</li>
+    <li>Que dado um concorrente digital capturaria da nossa operação que nós ignoramos?</li>
+  </ul>
+</section>
+
+<!-- 20 SÍNTESE -->
+<section class="slide" id="s-sintese" data-notes="[25:45–26:45] Síntese. Cada linha conecta um dado perdido a um indicador e a um impacto. Repare que o impacto não é só financeiro: mercado, capital de giro e caixa, mas também pessoas e risco.">
+  <div class="hd">
+    <div class="eyebrow r">Síntese</div>
+    <h2 class="r" style="--d:1">Do dado perdido ao impacto</h2>
+  </div>
+  <div class="tbl-wrap r" style="--d:2">
+    <table class="syn">
+      <thead><tr><th style="width:34%">Dado perdido</th><th style="width:36%">Indicador afetado</th><th>Onde dói</th></tr></thead>
+      <tbody>
+        <tr><td>Clientes inativos e duplicados na base</td><td>ARPU, churn, LTV, projeção</td><td class="m">Mercado e valuation</td></tr>
+        <tr><td>Faturado e não recebido</td><td>Receita, PDD, aging</td><td class="c">Capital de giro</td></tr>
+        <tr><td>Receita sem caixa em 90 dias</td><td>EBITDA</td><td class="c">Conversão em caixa</td></tr>
+        <tr><td>Custos de aquisição espalhados</td><td>CAC, LTV/CAC, payback</td><td class="m">Crescimento caro</td></tr>
+        <tr><td>A venda que não aconteceu</td><td>Demanda, ruptura, aceitação</td><td class="m">Mercado</td></tr>
+        <tr><td>Quem saiu e por quê</td><td>Turnover de pessoas-chave</td><td class="x">Pessoas e sucessão</td></tr>
+        <tr><td>Quase-acidentes e alertas</td><td>Incidentes</td><td class="x">Risco e reputação</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 21 PERGUNTAS -->
+<section class="slide" id="s-perguntas" data-notes="[26:45–28:30] Perguntas para levar à administração. Clique nos temas para mudar o grupo de perguntas. Tom de curiosidade, não de acusação. Sugestão prática: escolher duas ou três por reunião e registrá-las em ata, com prazo de resposta. O objetivo é que a administração passe a trazer espontaneamente o que hoje fica de fora.">
+  <div class="hd">
+    <div class="eyebrow r">Para levar à administração</div>
+    <h2 class="r" style="--d:1">Perguntas que o conselheiro pode fazer</h2>
+  </div>
+  <div class="tabs r" style="--d:2" role="tablist" id="tabs"></div>
+  <div class="qpanel" id="qpanel" role="tabpanel"></div>
+</section>
+
+<!-- 22 EXERCÍCIO -->
+<section class="slide" id="s-exercicio" data-notes="[28:30–29:15] Ferramenta prática para o próximo comitê: pedir à administração uma reconciliação de ponta a ponta, da base de clientes à contabilidade, com as diferenças de cada passagem explicadas. O mais revelador é quando a administração não consegue montar o quadro: isso mostra exatamente onde o conselho está governando no escuro.">
+  <div class="hd">
+    <div class="eyebrow r">Para o próximo comitê</div>
+    <h2 class="r" style="--d:1">Peça uma reconciliação de ponta a ponta</h2>
+  </div>
+  <div class="recon">
+    <div class="rc r" style="--d:2"><b>BASE</b><h3>Clientes ativos</h3><p>Quantos, por qual critério, quantos sem receita.</p></div>
+    <div class="gap r" style="--d:3">Δ<small>INATIVOS</small></div>
+    <div class="rc r" style="--d:4"><b>RECEITA</b><h3>Faturado por cliente</h3><p>Por segmento, plano e canal, com gratuidades separadas.</p></div>
+    <div class="gap r" style="--d:5">Δ<small>INADIMPLÊNCIA</small></div>
+    <div class="rc r" style="--d:6"><b>CAIXA</b><h3>Recebido por cliente</h3><p>Curva de recuperação após 60 dias e renegociações.</p></div>
+    <div class="gap r" style="--d:7">Δ<small>DIVERGÊNCIAS</small></div>
+    <div class="rc r" style="--d:8"><b>CONTÁBIL</b><h3>Balancete</h3><p>Receita, PDD e recebíveis batendo com o gerencial.</p></div>
+  </div>
+  <p class="lead r" style="--d:9;max-width:1100px">Cada Δ precisa ter <strong>valor, explicação e dono</strong>. Se a administração não consegue montar o quadro, você descobriu onde o conselho governa no escuro.</p>
+</section>
+
+<!-- 23 FECHO -->
+<section class="slide" id="s-fecho" data-fx="money" data-notes="[29:15–30:00] Fechamento. O EBITDA conta a história que a empresa quer contar; o caixa conta a que aconteceu. Convite: na próxima reunião de conselho, faça pelo menos uma pergunta sobre o que não está no relatório. Abrir para perguntas.">
+  <canvas class="fx"></canvas>
+  <div class="shade"></div>
+  <div class="eyebrow r">Para levar</div>
+  <h2 class="r" style="--d:1">O EBITDA conta a história que a empresa quer contar. <em>O caixa conta a que aconteceu.</em></h2>
+  <div class="who r" style="--d:2;font:500 20px/1.5 var(--mono);display:flex;justify-content:space-between;align-items:end">
+    <span>Obrigado · perguntas e conversa</span>
+    <span style="text-align:right">Alexandre Toledo<br><span style="color:var(--muted)">contato@toledoalexandre.com.br</span></span>
+  </div>
+</section>
+
+</div><!-- stage -->
+
+<div id="notes" hidden></div>
+<div id="hint">← → navegar · N notas · F tela cheia</div>
+<div id="nav">
+  <a class="navbtn" href="../index.html" style="text-decoration:none">← Site</a>
+  <button class="navbtn" id="bPrev" aria-label="Slide anterior">←</button>
+  <span id="count">1 / 23</span>
+  <button class="navbtn" id="bNext" aria-label="Próximo slide">→</button>
+  <button class="navbtn" id="bNotes" aria-pressed="false">Notas</button>
+  <button class="navbtn" id="bFull">Tela cheia</button>
+</div>
+</div>
+</div>
+
+<script>
+(() => {
+const W = 1600, H = 900;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage = document.getElementById('stage');
+const viewport = document.getElementById('viewport');
+const slides = [...document.querySelectorAll('.slide')];
+const C = { bg:'#06110E', matrix:'#36E07F', gold:'#F3B94D', loss:'#FF6A55', line:'#1D3B31', ink:'#E4F1EA' };
+
+/* ---------- escala ---------- */
+function fit(){
+  const s = Math.min(viewport.clientWidth / W, viewport.clientHeight / H);
+  stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+
+/* ---------- efeitos ---------- */
+const FX = {
+  matrix(cv, gaps){
+    const ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const fs = 20, cols = Math.floor(W / fs);
+    const drops = Array.from({length: cols}, () => Math.random() * -60);
+    const glyphs = '01R$%∑LTVCACCHURNEBITDAARPU0123456789';
+    const words = ['LTV','CAC','CHURN','EBITDA','R$','ARPU','PDD'];
+    const gapSet = new Set();
+    if (gaps){ for (let i = 0; i < cols; i++) if (i > cols*0.45 && (Math.floor(i/3) % 3 === 0)) gapSet.add(i); }
+    ctx.fillStyle = C.bg; ctx.fillRect(0,0,W,H);
+    let acc = 0;
+    function frame(){
+      ctx.fillStyle = 'rgba(6,17,14,0.10)'; ctx.fillRect(0,0,W,H);
+      ctx.font = '600 18px "JetBrains Mono", monospace';
+      for (let i = 0; i < cols; i++){
+        if (gapSet.has(i)) continue;
+        const y = drops[i] * fs;
+        let ch = glyphs[(Math.random()*glyphs.length)|0];
+        if (Math.random() < 0.004) ch = words[(Math.random()*words.length)|0];
+        const r = Math.random();
+        ctx.fillStyle = r < 0.035 ? C.gold : (r < 0.08 ? '#C9FFE0' : C.matrix);
+        ctx.fillText(ch, i*fs, y);
+        if (y > H && Math.random() > 0.975) drops[i] = 0;
+        drops[i] += 1;
+      }
+      if (gaps){
+        ctx.font = '600 15px "JetBrains Mono", monospace';
+        ctx.fillStyle = 'rgba(255,106,85,0.85)';
+        const labels = ['recusados','inativos','desistentes','não capturados'];
+        let k = 0;
+        for (let i = 0; i < cols; i += 9){ if (gapSet.has(i)) { ctx.save(); ctx.translate(i*fs+16, 120 + (k%4)*170); ctx.rotate(Math.PI/2); ctx.fillText(labels[k%4], 0, 0); ctx.restore(); k++; } }
+      }
+    }
+    if (reduce){ for (let k = 0; k < 120; k++) frame(); }
+    return { step(dt){ acc += dt; if (acc > 55){ acc = 0; frame(); } } };
+  },
+  matrixgaps(cv){ return FX.matrix(cv, true); },
+
+  particles(cv){
+    const ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const pts = [];
+    for (let x = 640; x < W - 30; x += 22) for (let y = 40; y < H - 40; y += 22){
+      if (Math.random() < 0.82) pts.push({x: x + (Math.random()*6-3), y: y + (Math.random()*6-3), p: Math.random()*6.28, lit: Math.random() < 0.06});
+    }
+    let t = 0;
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for (const q of pts){
+        const a = 0.18 + 0.22*Math.sin(t*0.0015 + q.p);
+        if (q.lit){ ctx.fillStyle = C.gold; ctx.globalAlpha = 0.95; ctx.fillRect(q.x-3, q.y-3, 6, 6); }
+        else { ctx.fillStyle = C.matrix; ctx.globalAlpha = a; ctx.fillRect(q.x-2, q.y-2, 4, 4); }
+      }
+      ctx.globalAlpha = 1;
+    }
+    draw();
+    return { step(dt){ if (reduce) return; t += dt; draw(); } };
+  },
+
+  flow(cv){
+    const ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const parts = [];
+    const leaks = [{x:425, p:0.22},{x:805, p:0.16},{x:1185, p:0.12}];
+    function spawn(){ parts.push({x:130, y:405 + (Math.random()*40-20), vx:2.6+Math.random()*1.6, vy:0, fall:false, passed:0}); }
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      for (let k = 0; k < 3; k++) spawn();
+      for (let i = parts.length - 1; i >= 0; i--){
+        const q = parts[i];
+        if (!q.fall){
+          q.x += q.vx;
+          const L = leaks[q.passed];
+          if (L && q.x > L.x){ q.passed++; if (Math.random() < L.p){ q.fall = true; q.vx *= 0.25; } }
+        } else { q.vy += 0.18; q.y += q.vy; q.x += q.vx; }
+        if (q.x > 1500 || q.y > 545){ parts.splice(i,1); continue; }
+        ctx.fillStyle = q.fall ? C.loss : (q.x > 1250 ? C.gold : C.matrix);
+        ctx.globalAlpha = q.fall ? 0.9 : 0.75;
+        ctx.fillRect(q.x, q.y, 4, 4);
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (reduce){ for (let k = 0; k < 400; k++) frame(); }
+    return { step(){ if (!reduce) frame(); } };
+  },
+
+  coins(cv, opts={}){
+    const ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const n = opts.n || 26, bills = opts.bills || false;
+    const items = [];
+    function make(top){
+      const isBill = bills && Math.random() < 0.4;
+      return { x: Math.random()*W, y: top ? Math.random()*H : -60, vy: 0.6 + Math.random()*1.4, rot: Math.random()*6.28, vr: 0.02 + Math.random()*0.05, r: 14 + Math.random()*14, bill: isBill, sway: Math.random()*6.28 };
+    }
+    for (let i = 0; i < n; i++) items.push(make(true));
+    function drawCoin(o){
+      const w = Math.abs(Math.cos(o.rot)) * o.r;
+      ctx.save(); ctx.translate(o.x, o.y);
+      const g = ctx.createLinearGradient(-o.r, -o.r, o.r, o.r);
+      g.addColorStop(0, '#FFE29A'); g.addColorStop(0.5, C.gold); g.addColorStop(1, '#A8741F');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, Math.max(w,1.5), o.r, 0, 0, 6.283); ctx.fill();
+      if (w > o.r*0.55){ ctx.fillStyle = 'rgba(80,50,10,0.75)'; ctx.font = `700 ${Math.round(o.r*0.8)}px "JetBrains Mono", monospace`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('R$', 0, 1); }
+      ctx.restore();
+    }
+    function drawBill(o){
+      ctx.save(); ctx.translate(o.x, o.y); ctx.rotate(Math.sin(o.rot)*0.6);
+      const bw = o.r*3.2, bh = o.r*1.5, sx = 0.35 + Math.abs(Math.cos(o.rot))*0.65;
+      ctx.scale(sx, 1);
+      ctx.fillStyle = '#2E8F5E'; ctx.fillRect(-bw/2, -bh/2, bw, bh);
+      ctx.strokeStyle = '#7FE0A8'; ctx.lineWidth = 2; ctx.strokeRect(-bw/2+4, -bh/2+4, bw-8, bh-8);
+      ctx.fillStyle = '#BFF5D6'; ctx.font = `700 ${Math.round(bh*0.45)}px "JetBrains Mono", monospace`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('R$', 0, 1);
+      ctx.restore();
+    }
+    function frame(){
+      ctx.clearRect(0,0,W,H);
+      for (let i = 0; i < items.length; i++){
+        const o = items[i];
+        o.y += o.vy; o.rot += o.vr; o.sway += 0.01; o.x += Math.sin(o.sway)*0.4;
+        if (o.y > H + 60) items[i] = make(false);
+        ctx.globalAlpha = opts.alpha || 0.55;
+        o.bill ? drawBill(o) : drawCoin(o);
+      }
+      ctx.globalAlpha = 1;
+    }
+    frame();
+    return { step(){ if (!reduce) frame(); } };
+  },
+  money(cv){ return FX.coins(cv, {n: 46, bills: true, alpha: 0.7}); },
+
+  quiet(cv){
+    const ctx = cv.getContext('2d'); cv.width = W; cv.height = H;
+    const pts = [];
+    for (let i = 0; i < 260; i++) pts.push({x: 900 + Math.random()*660, y: 40 + Math.random()*820, life: Math.random()});
+    function frame(dt){
+      ctx.clearRect(0,0,W,H);
+      for (const q of pts){
+        q.life -= dt * 0.00012;
+        if (q.life < 0){ q.life = 1; q.x = 900 + Math.random()*660; q.y = 40 + Math.random()*820; }
+        ctx.globalAlpha = Math.max(0, q.life) * 0.5;
+        ctx.fillStyle = C.matrix; ctx.fillRect(q.x, q.y, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+    }
+    frame(16);
+    return { step(dt){ if (!reduce) frame(dt); } };
+  }
+};
+
+/* ---------- contadores ---------- */
+const fmt = (v, dec) => v.toLocaleString('pt-BR', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+let timers = [];
+function later(fn, ms){ const id = setTimeout(fn, ms); timers.push(id); return id; }
+function runCounters(s){
+  s.querySelectorAll('[data-count]').forEach(el => {
+    const to = parseFloat(el.dataset.count), from = parseFloat(el.dataset.from || 0), dec = parseInt(el.dataset.dec || 0, 10);
+    const delay = parseInt(el.dataset.delay || 0, 10), dur = 1400;
+    el.textContent = fmt(from, dec);
+    if (reduce){ el.textContent = fmt(to, dec); return; }
+    later(() => {
+      const t0 = performance.now();
+      const tick = now => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = fmt(from + (to - from) * e, dec);
+        if (k < 1 && s.classList.contains('active')) requestAnimationFrame(tick); else el.textContent = fmt(to, dec);
+      };
+      requestAnimationFrame(tick);
+    }, delay);
+  });
+}
+
+/* ---------- conteúdo gerado ---------- */
+// Caso A: grade de 200 quadrados
+const grid = document.getElementById('grid200');
+const cells = [];
+for (let i = 0; i < 200; i++){ const c = document.createElement('i'); grid.appendChild(c); cells.push(c); }
+function seeded(seed){ return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
+const rnd = seeded(42);
+const order = cells.map((c, i) => i).sort(() => rnd() - 0.5);
+const groups = { inat: order.slice(0, 18), dup: order.slice(18, 26), free: order.slice(26, 36) };
+
+// Pessoas: 6 equipes
+const teamsEl = document.getElementById('teams');
+const teamDefs = [['A',[1]],['B',[]],['C',[6]],['D',[0,2,3,5,7]],['E',[]],['F',[4]]];
+const stars = {D:[0,2,3,5,7], A:[2], C:[1], E:[3], F:[0], B:[5]};
+teamDefs.forEach(([name, gone]) => {
+  const t = document.createElement('div'); t.className = 'team'; t.dataset.team = name;
+  t.innerHTML = `<b>EQUIPE ${name}</b><div class="ppl">${Array.from({length:8},(_,i)=>`<i class="${(stars[name]||[]).includes(i)?'star':''}" data-g="${gone.includes(i)?1:0}"></i>`).join('')}</div>`;
+  teamsEl.appendChild(t);
+});
+
+// Saúde: margens por contratante
+const margins = [18,14,11,9,6,3,-7,-15];
+document.getElementById('mbars').innerHTML = margins.map((m, i) => {
+  const w = Math.abs(m) / 20 * 50;
+  const em = m >= 0 ? `<em style="left:calc(50% + ${w}% + 8px)">+${m}%</em>` : `<em style="right:calc(50% + ${w}% + 8px);color:var(--loss)">${m}%</em>`;
+  return `<div class="mb"><span>Contrato ${String.fromCharCode(65+i)}</span><div class="t"><i class="${m>=0?'pos':'neg'}" style="--w:${w}%;--d:${i}"></i>${em}</div></div>`;
+}).join('');
+
+// Supermercado: gôndola
+const shelf = document.getElementById('shelf');
+const prods = ['Café 500g','Azeite','Iogurte','Cereal','Molho','Biscoito','Suco 1L','Arroz 5kg','Granola','Chá','Queijo','Pão','Leite','Sabão','Massa','Atum','Mel','Vinho'];
+const heats = ['rgba(243,185,77,.85)','rgba(255,106,85,.8)','rgba(54,224,127,.7)'];
+prods.forEach((p, i) => {
+  if (i > 0 && i % 6 === 0) { const r = document.createElement('div'); r.className = 'rail'; shelf.appendChild(r); }
+  const d = document.createElement('div'); d.className = 'p';
+  if ([1,4,9,12,15].includes(i)) { d.style.setProperty('--heat', heats[i % 3]); d.style.setProperty('--hd', (i*0.37 % 4).toFixed(2) + 's'); }
+  d.innerHTML = `<span>${p}</span>`; shelf.appendChild(d);
+});
+const events = [
+  ['09:14:02','Gôndola 7','<b>pegou e devolveu</b> Azeite · 6 s', true],
+  ['09:14:19','Gôndola 3','<b>parou 14 s</b> · não comprou', false],
+  ['09:14:37','Gôndola 7','<b>expressão de dúvida</b> ao ler o preço', true],
+  ['09:15:01','Gôndola 12','<b>ruptura</b> · 3 tentativas sem produto', true],
+  ['09:15:22','Checkout 4','<b>item removido</b> no caixa · Granola', false],
+  ['09:15:40','Gôndola 7','<b>comparou</b> 2 marcas · levou a mais barata', false],
+  ['09:16:05','Gôndola 9','<b>ponta de gôndola</b> · 41 paradas na última hora', true],
+  ['09:16:31','Gôndola 3','<b>pegou e devolveu</b> Cereal · 4 s', false],
+];
+const logEl = document.getElementById('log');
+let evI = 0;
+function pushEvent(){
+  const [t, g, txt, hot] = events[evI++ % events.length];
+  const li = document.createElement('li'); li.className = 'new' + (hot ? ' hot' : '');
+  li.innerHTML = `${t} · ${g} · ${txt}`;
+  logEl.prepend(li);
+  requestAnimationFrame(() => requestAnimationFrame(() => li.classList.remove('new')));
+  while (logEl.children.length > 5) logEl.lastChild.remove();
+}
+
+// Ciber: log de fundo
+(function(){
+  const lines = [];
+  const types = ['auth.fail','port.scan','geo.anomaly','priv.esc','dlp.match','vpn.newdev','mfa.bypass','api.ratelimit'];
+  for (let i = 0; i < 60; i++){
+    const h = String(8 + (i % 10)).padStart(2,'0'), m = String((i*7)%60).padStart(2,'0');
+    lines.push(`${h}:${m}:${String((i*13)%60).padStart(2,'0')}  ALERT  ${types[i%types.length].padEnd(14)} src=10.4.${i%250}.${(i*17)%250}  status=${i%21===0?'INVESTIGATE':'AUTO-CLOSED'}`);
+  }
+  document.getElementById('logbg').textContent = lines.concat(lines).join('\n');
+})();
+
+// Perguntas por tema
+const Q = {
+  'Base e receita': ['Qual critério define um cliente ativo, e quando foi revisto?','Quantos clientes da base não geraram receita nos últimos 12 meses?','Quantos clientes ganhamos, perdemos e mantivemos, e com que efeito na receita?','O número gerencial bate com o balancete? Quem reconcilia?'],
+  'CAC, LTV e churn': ['O nosso CAC inclui todos os custos de aquisição ou só a mídia?','Qual o payback por canal de aquisição?','Quanto gastamos com clientes que saíram antes de pagar o próprio CAC?','O LTV das safras novas é maior ou menor que o das antigas?'],
+  'Capital de giro e caixa': ['Qual a diferença entre faturado e recebido, por segmento?','Qual a curva de recuperação das parcelas com 60 dias de atraso?','Nossa PDD está aderente à perda que de fato observamos?','Qual seria o EBITDA sem a receita que não virou caixa em 90 dias?'],
+  'Pessoas e operação': ['Qual o turnover de pessoas-chave, separado do geral?','O que dizem as entrevistas de desligamento, agrupadas por gestor?','Medimos a demanda não atendida: ruptura, desistência, item devolvido?','Em que áreas o número de quase-acidentes registrados é zero?'],
+  'Cliente e jornada': ['Em que etapa da jornada perdemos mais clientes?','Os dados de redes sociais e sites de reclamação chegam ao conselho?','O NPS é medido também com quem cancelou?','O que capturamos do cliente tem base legal e um responsável?'],
+  'Risco e silêncio': ['Quantos alertas de segurança foram fechados sem investigação?','Quantos terceiros têm acesso aos nossos sistemas, e quando revisamos?','Que indicador está verde há tempo demais?','Quando vocês nos trouxeram uma má notícia antes de ela virar fato?'],
+  'Inovação e IA': ['Com que dados nossos modelos de IA foram treinados, e quem ficou de fora?','Quem valida a qualidade da base antes de um modelo entrar em produção?','Temos registro dos experimentos que falharam e do que aprendemos?','Quem é o dono dos dados críticos, e quanto investimos para capturá-los?']
+};
+const tabsEl = document.getElementById('tabs'), qpanel = document.getElementById('qpanel');
+Object.keys(Q).forEach((k, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.id = 'tab-' + i; b.setAttribute('role','tab'); b.textContent = k;
+  b.addEventListener('click', () => showQ(k)); tabsEl.appendChild(b);
+});
+function showQ(k){
+  [...tabsEl.children].forEach(b => b.setAttribute('aria-selected', String(b.textContent === k)));
+  qpanel.innerHTML = Q[k].map((q, i) => `<div class="qcard" style="animation-delay:${i*80}ms"><b>${String(i+1).padStart(2,'0')}</b><span>${q}</span></div>`).join('');
+}
+showQ('Base e receita');
+
+/* ---------- ganchos por slide ---------- */
+const hooks = {
+  's-capa': s => {
+    s.querySelectorAll('[data-scr]').forEach((el, li) => {
+      const final = el.dataset.final || (el.dataset.final = el.textContent);
+      if (reduce) { el.textContent = final; return; }
+      const chars = '01ΛΣ$#%R@&*';
+      const t0 = performance.now() + li*350, dur = 1300;
+      const tick = now => {
+        const k = Math.max(0, Math.min(1, (now - t0) / dur));
+        const n = Math.floor(final.length * k);
+        el.textContent = final.slice(0, n) + final.slice(n).replace(/\S/g, () => chars[(Math.random()*chars.length)|0]);
+        if (k < 1 && s.classList.contains('active')) requestAnimationFrame(tick); else el.textContent = final;
+      };
+      requestAnimationFrame(tick);
+    });
+  },
+  's-base': () => {
+    cells.forEach(c => c.className = '');
+    const apply = (list, cls, start) => list.forEach((idx, j) => later(() => cells[idx].classList.add(cls), reduce ? 0 : start + j*45));
+    apply(groups.inat, 'inat', 900); apply(groups.dup, 'dup', 2000); apply(groups.free, 'free', 3100);
+  },
+  's-pessoas': s => {
+    s.querySelectorAll('.ppl i').forEach(i => i.classList.remove('gone'));
+    s.querySelectorAll('.team').forEach(t => t.classList.remove('hot'));
+    const gone = [...s.querySelectorAll('.ppl i[data-g="1"]')];
+    gone.forEach((i, j) => later(() => i.classList.add('gone'), reduce ? 0 : 900 + j*420));
+    later(() => s.querySelector('[data-team="D"]').classList.add('hot'), reduce ? 0 : 900 + gone.length*420);
+  },
+  's-cac': s => {
+    s.querySelectorAll('.seg').forEach(seg => { seg.style.width = '0'; });
+    requestAnimationFrame(() => requestAnimationFrame(() => s.querySelectorAll('.seg').forEach(seg => seg.style.width = seg.dataset.w)));
+  },
+  's-super': () => {
+    logEl.innerHTML = ''; evI = 0;
+    for (let k = 0; k < 3; k++) pushEvent();
+    if (!reduce) timers.push(setInterval(pushEvent, 1700));
+  }
+};
+
+/* ---------- motor ---------- */
+let cur = 0, active = null, last = performance.now();
+function loop(now){
+  const dt = Math.min(64, now - last); last = now;
+  if (active) active.step(dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+const prog = document.getElementById('prog'), count = document.getElementById('count'), notes = document.getElementById('notes');
+function go(n){
+  n = Math.max(0, Math.min(slides.length - 1, n));
+  timers.forEach(id => { clearTimeout(id); clearInterval(id); }); timers = [];
+  slides[cur].classList.remove('active');
+  cur = n;
+  const s = slides[cur];
+  s.classList.add('active');
+  active = null;
+  const kind = s.dataset.fx;
+  if (kind && FX[kind]) active = FX[kind](s.querySelector('canvas.fx'));
+  runCounters(s);
+  if (hooks[s.id]) hooks[s.id](s);
+  prog.style.width = ((cur + 1) / slides.length * 100) + '%';
+  count.textContent = `${cur + 1} / ${slides.length}`;
+  notes.innerHTML = `<b>NOTAS · SLIDE ${cur + 1}</b>${s.dataset.notes || ''}`;
+  try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e) {}
+}
+document.getElementById('bPrev').addEventListener('click', () => go(cur - 1));
+document.getElementById('bNext').addEventListener('click', () => go(cur + 1));
+const bNotes = document.getElementById('bNotes');
+function toggleNotes(){ notes.hidden = !notes.hidden; bNotes.setAttribute('aria-pressed', String(!notes.hidden)); }
+bNotes.addEventListener('click', toggleNotes);
+function toggleFull(){
+  try {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else { const p = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if (p && p.catch) p.catch(() => {}); }
+  } catch(e) {}
+}
+document.getElementById('bFull').addEventListener('click', toggleFull);
+addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('.tabs') && (e.key === ' ' || e.key === 'Enter')) return;
+  if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+  else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key.toLowerCase() === 'n') toggleNotes();
+  else if (e.key.toLowerCase() === 'f') toggleFull();
+});
+let tx = null;
+viewport.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive: true});
+viewport.addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1)); tx = null; });
+addEventListener('resize', fit);
+
+const m = /^#s(\d+)$/.exec(location.hash);
+go(m ? parseInt(m[1], 10) - 1 : 0);
+})();
+</script>
+
+</body></html>

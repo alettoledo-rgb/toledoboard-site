@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="assets/logo/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy:       #0C1B2E;
@@ -26,444 +26,567 @@
   --stone:      #C8C3B8;
   --text:       #2A2A2A;
   --muted:      #6B6560;
+  --green:      #7DC885;
+  --red:        #E07070;
+  --wa:         #25D366;
   --ff-display: 'Cormorant', Georgia, serif;
   --ff-body:    'Crimson Pro', Georgia, serif;
   --ff-ui:      'Inter', system-ui, sans-serif;
+  --ease:       cubic-bezier(.2,.7,.2,1);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: var(--ff-ui); background: var(--white); color: var(--text); overflow-x: hidden; }
+img { max-width: 100%; }
+a { -webkit-tap-highlight-color: transparent; }
+
+/* ── PROGRESSO DE ROLAGEM ── */
+#scroll-prog { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-pale)); z-index: 200; box-shadow: 0 0 10px rgba(196,151,63,.6); }
+
+/* ── REVEAL ── */
+.rv { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: calc(var(--d, 0) * 110ms); }
+.rv.l { transform: translateX(-36px); }
+.rv.r { transform: translateX(36px); }
+.rv.s { transform: scale(.94); }
+.rv.in { opacity: 1; transform: none; }
 
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 3.5rem; height: 68px;
-  background: rgba(7,15,26,0.97); backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(196,151,63,0.18);
+  padding: 0 3.5rem; height: 74px;
+  background: rgba(7,15,26,0); border-bottom: 1px solid rgba(196,151,63,0);
+  transition: background .35s, height .35s, border-color .35s;
 }
-.nav-id { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+nav.scrolled { background: rgba(7,15,26,0.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); height: 64px; border-bottom-color: rgba(196,151,63,0.18); }
+.nav-id { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.nav-id img { height: 34px; width: 34px; object-fit: contain; transition: transform .6s var(--ease); }
+.nav-id:hover img { transform: rotate(-8deg) scale(1.08); }
 .nav-name-main { font-family: var(--ff-display); font-size: 15px; font-weight: 500; color: var(--white); letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.1; }
-.nav-name-sub  { font-family: var(--ff-ui); font-size: 9px; color: var(--gold); letter-spacing: 0.26em; text-transform: uppercase; font-weight: 400; margin-top: 3px; }
-.nav-links { display: flex; gap: 2.2rem; list-style: none; }
-.nav-links a { font-size: 11px; color: rgba(248,246,241,0.5); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; transition: color 0.2s; }
-.nav-links a:hover { color: var(--gold-light); }
-.nav-cta { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; color: var(--gold); border: 1px solid rgba(196,151,63,0.45); padding: 9px 24px; text-decoration: none; transition: all 0.2s; }
-.nav-cta:hover { background: var(--gold); color: var(--navy-deep); }
+.nav-name-sub  { font-size: 9px; color: var(--gold); letter-spacing: 0.26em; text-transform: uppercase; margin-top: 3px; }
+.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.nav-links a { position: relative; font-size: 11px; color: rgba(248,246,241,0.6); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; padding: 6px 0; }
+.nav-links a::after { content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+.nav-links a:hover, .nav-links a.on { color: var(--gold-light); }
+.nav-links a:hover::after, .nav-links a.on::after { transform: scaleX(1); transform-origin: left; }
+.nav-links a.nav-new { color: var(--gold-light); }
+.nav-new .pill { font-size: 8px; background: var(--gold); color: var(--navy-deep); padding: 2px 5px; margin-left: 6px; letter-spacing: .1em; vertical-align: 1px; }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-ico { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid rgba(196,151,63,0.35); color: var(--gold-light); transition: all .25s; }
+.nav-ico svg { width: 16px; height: 16px; fill: currentColor; }
+.nav-ico:hover { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); transform: translateY(-2px); }
+.nav-ico.wa:hover { background: var(--wa); border-color: var(--wa); color: #fff; }
+.nav-burger { display: none; width: 40px; height: 40px; background: none; border: 1px solid rgba(196,151,63,0.35); cursor: pointer; position: relative; }
+.nav-burger span { position: absolute; left: 10px; right: 10px; height: 1px; background: var(--gold-light); transition: transform .3s, opacity .3s; }
+.nav-burger span:nth-child(1) { top: 14px; } .nav-burger span:nth-child(2) { top: 19px; } .nav-burger span:nth-child(3) { top: 24px; }
+nav.open .nav-burger span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+nav.open .nav-burger span:nth-child(2) { opacity: 0; }
+nav.open .nav-burger span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
 
-/* ── PILLAR SVG (reutilizável) ── */
-.pillar-svg { display: block; }
+/* ── BOTÕES ── */
+.btn-gold { position: relative; overflow: hidden; background: var(--gold); color: var(--navy-deep); padding: 15px 30px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; text-decoration: none; transition: transform .25s, box-shadow .25s; display: inline-flex; align-items: center; gap: 10px; }
+.btn-gold::before { content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent); transform: skewX(-20deg); animation: shine 4.5s ease-in-out infinite; }
+@keyframes shine { 0%, 60% { left: -120%; } 85%, 100% { left: 140%; } }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px rgba(196,151,63,.7); }
+.btn-wa { background: var(--wa); color: #fff; padding: 15px 26px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: transform .25s, box-shadow .25s; }
+.btn-wa svg { width: 16px; height: 16px; fill: currentColor; }
+.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -10px rgba(37,211,102,.7); }
+.btn-line { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,246,241,0.75); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border: 1px solid rgba(248,246,241,0.2); transition: all 0.25s; }
+.btn-line svg { width: 14px; height: 14px; fill: currentColor; }
+.btn-line:hover { color: var(--gold-light); border-color: var(--gold); transform: translateY(-2px); }
+.arrow { display: inline-block; transition: transform .25s; }
+a:hover .arrow { transform: translateX(5px); }
 
 /* ── HERO ── */
-#home {
-  min-height: 100vh; background: var(--navy-deep);
-  display: grid; grid-template-columns: 1fr 1fr;
-  position: relative; overflow: hidden;
-}
-.hero-left {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 120px 5rem 80px; position: relative; z-index: 2;
-}
-.hero-eyebrow {
-  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
-  color: var(--gold); font-weight: 400;
-  display: flex; align-items: center; gap: 14px; margin-bottom: 2.5rem;
-}
-.hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
-.hero-name {
-  font-family: var(--ff-display); font-size: clamp(3.4rem, 5vw, 6rem);
-  font-weight: 300; color: var(--white); line-height: 0.95; letter-spacing: -0.01em;
-  margin-bottom: 2rem;
-}
-.hero-name .surname { display: block; font-weight: 500; color: var(--gold-light); }
-.hero-divider { width: 48px; height: 1px; background: rgba(196,151,63,0.35); margin-bottom: 2rem; }
-.hero-title {
-  font-family: var(--ff-body); font-size: 1.25rem; font-weight: 300; font-style: italic;
-  color: rgba(248,246,241,0.6); line-height: 1.7; max-width: 460px; margin-bottom: 3rem;
-}
-.hero-title strong { font-style: normal; font-weight: 400; color: rgba(248,246,241,0.9); }
-.hero-actions { display: flex; gap: 1.5rem; align-items: center; }
-.btn-gold { background: var(--gold); color: var(--navy-deep); padding: 14px 32px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.22s; display: inline-block; }
-.btn-gold:hover { background: var(--gold-light); }
-.btn-line { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,246,241,0.45); text-decoration: none; font-weight: 400; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
-.btn-line:hover { color: var(--gold-light); }
+#home { min-height: 100vh; background: var(--navy-deep); display: grid; grid-template-columns: 1.05fr 1fr; position: relative; overflow: hidden; }
+#hero-fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+#home::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 50% 60% at 20% 50%, rgba(196,151,63,.08), transparent 70%); }
+.hero-left { display: flex; flex-direction: column; justify-content: center; padding: 130px 4rem 90px 5rem; position: relative; z-index: 2; }
+.hero-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 14px; margin-bottom: 2.2rem; }
+.hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold); animation: growLine 1.2s var(--ease) both .2s; transform-origin: left; }
+@keyframes growLine { from { transform: scaleX(0); } }
+.hero-name { font-family: var(--ff-display); font-size: clamp(3.4rem, 6vw, 6.6rem); font-weight: 300; color: var(--white); line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 1.8rem; }
+.hero-name .line { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero-name .surname { font-weight: 500; color: var(--gold-light); }
+.hero-name .surname .ch { background: linear-gradient(100deg, var(--gold) 0%, var(--gold-pale) 45%, var(--gold) 60%, var(--gold-light) 100%); background-size: 600% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: chUp .9s var(--ease) forwards, goldFlow 6s linear infinite; animation-delay: calc(var(--i) * 45ms + 250ms), calc(var(--i) * -0.25s); }
+@keyframes goldFlow { to { background-position: -220% 0; } }
+.hero-name .ch { display: inline-block; transform: translateY(105%); animation: chUp .9s var(--ease) forwards; animation-delay: calc(var(--i) * 45ms + 250ms); }
+@keyframes chUp { to { transform: none; } }
+.hero-rotator { font-family: var(--ff-display); font-size: clamp(1.5rem, 2.3vw, 2.1rem); color: var(--white); font-weight: 400; margin-bottom: 1.6rem; min-height: 1.3em; }
+.hero-rotator em { font-style: italic; color: var(--gold-light); border-right: 2px solid var(--gold); padding-right: 4px; animation: caret 1s steps(2) infinite; }
+@keyframes caret { 50% { border-color: transparent; } }
+.hero-title { font-family: var(--ff-body); font-size: 1.22rem; font-weight: 300; font-style: italic; color: rgba(248,246,241,0.62); line-height: 1.7; max-width: 480px; margin-bottom: 2.6rem; }
+.hero-title strong { font-style: normal; font-weight: 400; color: rgba(248,246,241,0.92); }
+.hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
-.hero-right { position: relative; overflow: hidden; }
-.hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(12%); }
-.hero-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to right, var(--navy-deep) 0%, transparent 28%),
-              linear-gradient(to top, var(--navy-deep) 0%, transparent 18%);
-}
-.hero-stats { position: absolute; bottom: 3rem; left: -1rem; display: flex; gap: 0; z-index: 3; }
-.hero-stat { background: rgba(7,15,26,0.94); backdrop-filter: blur(8px); border: 1px solid rgba(196,151,63,0.18); padding: 1.2rem 1.8rem; text-align: center; }
+.hero-right { position: relative; overflow: hidden; z-index: 1; }
+.hero-photo { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transform: scale(1.12); animation: kenburns 18s ease-in-out infinite alternate; will-change: transform; }
+@keyframes kenburns { from { transform: scale(1.12) translate(0,0); } to { transform: scale(1.02) translate(-1.5%, 1%); } }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, var(--navy-deep) 0%, rgba(7,15,26,.35) 30%, transparent 55%), linear-gradient(to top, var(--navy-deep) 0%, transparent 30%); }
+.hero-frame { position: absolute; top: 120px; right: 3rem; bottom: 160px; left: 30%; border: 1px solid rgba(196,151,63,.35); pointer-events: none; animation: frameIn 1.6s var(--ease) both .6s; }
+@keyframes frameIn { from { clip-path: inset(0 100% 100% 0); } to { clip-path: inset(0 0 0 0); } }
+.hero-stats { position: absolute; bottom: 3rem; left: 2rem; display: flex; z-index: 3; }
+.hero-stat { background: rgba(7,15,26,0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(196,151,63,0.22); padding: 1.1rem 1.6rem; text-align: center; opacity: 0; transform: translateY(20px); animation: statIn .8s var(--ease) forwards; }
+.hero-stat:nth-child(1) { animation-delay: 1.1s; } .hero-stat:nth-child(2) { animation-delay: 1.25s; } .hero-stat:nth-child(3) { animation-delay: 1.4s; }
+@keyframes statIn { to { opacity: 1; transform: none; } }
 .hero-stat:not(:last-child) { border-right: none; }
-.hstat-num { font-family: var(--ff-display); font-size: 2.5rem; color: var(--gold); font-weight: 400; line-height: 1; }
-.hstat-label { font-size: 9px; color: rgba(248,246,241,0.35); letter-spacing: 0.16em; text-transform: uppercase; margin-top: 5px; }
+.hstat-num { font-family: var(--ff-display); font-size: 2.4rem; color: var(--gold); line-height: 1; }
+.hstat-label { font-size: 9px; color: rgba(248,246,241,0.45); letter-spacing: 0.16em; text-transform: uppercase; margin-top: 5px; }
+.scroll-cue { position: absolute; left: 5rem; bottom: 2rem; z-index: 3; font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: rgba(248,246,241,.4); display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.scroll-cue i { width: 1px; height: 38px; background: rgba(196,151,63,.25); position: relative; overflow: hidden; }
+.scroll-cue i::after { content: ''; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--gold); animation: drip 2s ease-in-out infinite; }
+@keyframes drip { to { top: 100%; } }
 
-/* ── SECTION UTIL ── */
-.s-eye { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-weight: 400; margin-bottom: 1rem; display: flex; align-items: center; gap: 12px; }
+/* ── UTIL ── */
+.s-eye { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 12px; }
 .s-eye::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
-.s-title { font-family: var(--ff-display); font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 400; line-height: 1.1; }
+.s-title { font-family: var(--ff-display); font-size: clamp(2.2rem, 3.6vw, 3.4rem); font-weight: 400; line-height: 1.08; }
+.wrap { max-width: 1220px; margin: 0 auto; position: relative; z-index: 1; }
 
-/* ── SOBRE ── */
-#sobre { background: var(--white); padding: 7rem 5rem; }
-.sobre-grid { display: grid; grid-template-columns: 1fr 1.7fr; gap: 7rem; max-width: 1220px; margin: 0 auto; }
-.sobre-left { position: sticky; top: 100px; }
+/* ── SOBRE / TRAJETÓRIA ── */
+#sobre { background: var(--white); padding: 7rem 5rem 6rem; position: relative; overflow: hidden; }
+.sobre-grid { display: grid; grid-template-columns: 1fr 1.7fr; gap: 6rem; }
+.sobre-left { position: sticky; top: 100px; align-self: start; }
 .sobre-heading { color: var(--navy); margin-bottom: 1.5rem; }
 .sobre-heading em { font-style: italic; color: var(--gold); }
-.sobre-lead { font-family: var(--ff-body); font-size: 1.15rem; font-weight: 300; color: var(--muted); line-height: 1.85; }
+.sobre-lead { font-family: var(--ff-body); font-size: 1.15rem; font-weight: 300; color: var(--muted); line-height: 1.85; margin-top: 1.5rem; }
 .sobre-bio { font-family: var(--ff-body); font-size: 1.12rem; font-weight: 300; line-height: 1.9; color: #3A3530; }
 .sobre-bio p { margin-bottom: 1.2rem; }
 .sobre-bio strong { font-weight: 500; color: var(--navy); }
-.credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--stone); margin: 2.5rem 0; }
-.cred-item { background: var(--white); padding: 1.2rem 1.4rem; }
+
+.counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--stone); margin: 2.5rem 0 0; }
+.counter { background: var(--white); padding: 1.5rem 1.2rem; position: relative; overflow: hidden; }
+.counter::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 1.4s var(--ease) .3s; }
+.counter.in::after { transform: scaleX(1); }
+.counter-num { font-family: var(--ff-display); font-size: 2.8rem; color: var(--navy); line-height: 1; font-weight: 500; }
+.counter-num span { color: var(--gold); }
+.counter-lbl { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+/* Jornada (trajetória dinâmica) */
+.journey { margin-top: 4.5rem; background: var(--navy-deep); padding: 2.6rem 2.6rem 2.2rem; position: relative; overflow: hidden; }
+.journey::before { content: 'TRAJETÓRIA'; position: absolute; right: -1rem; bottom: -2.2rem; font-family: var(--ff-display); font-size: 8rem; font-weight: 600; color: rgba(196,151,63,.04); pointer-events: none; white-space: nowrap; }
+.journey-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 2.2rem; flex-wrap: wrap; }
+.journey-title { font-family: var(--ff-display); font-size: 1.9rem; color: var(--white); font-weight: 400; line-height: 1.1; }
+.journey-title em { color: var(--gold-light); }
+.journey-hint { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(248,246,241,.35); }
+.track { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+.track-line { position: absolute; left: 10%; right: 10%; top: 21px; height: 1px; background: rgba(196,151,63,.15); }
+.track-line i { position: absolute; left: 0; top: 0; height: 1px; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-pale)); box-shadow: 0 0 10px var(--gold); transition: width .6s var(--ease); }
+.stop { position: relative; z-index: 1; background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 0 6px; font: inherit; color: inherit; }
+.stop-dot { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(196,151,63,.3); background: var(--navy-deep); display: grid; place-items: center; font-family: var(--ff-display); font-size: 13px; color: rgba(248,246,241,.45); transition: all .4s var(--ease); }
+.stop.lit .stop-dot { border-color: var(--gold); color: var(--gold-light); }
+.stop.cur .stop-dot { background: var(--gold); color: var(--navy-deep); box-shadow: 0 0 0 6px rgba(196,151,63,.15), 0 0 24px rgba(196,151,63,.5); transform: scale(1.1); }
+.stop-name { font-family: var(--ff-display); font-size: 1.15rem; color: rgba(248,246,241,.55); transition: color .3s; text-align: center; line-height: 1.15; }
+.stop-yr { font-size: 10px; letter-spacing: .12em; color: rgba(196,151,63,.6); }
+.stop.cur .stop-name { color: var(--white); }
+.stop:focus-visible { outline: 2px solid var(--gold); outline-offset: 6px; }
+.journey-card { margin-top: 2.2rem; border-top: 1px solid rgba(196,151,63,.15); padding-top: 1.6rem; min-height: 150px; display: grid; grid-template-columns: 220px 1fr; gap: 2rem; }
+.jc-role { font-family: var(--ff-display); font-size: 1.4rem; color: var(--white); line-height: 1.2; }
+.jc-period { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
+.jc-text { font-family: var(--ff-body); font-size: 1.06rem; color: rgba(248,246,241,.62); line-height: 1.75; font-weight: 300; }
+.jc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.jc-tags span { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-light); border: 1px solid rgba(196,151,63,.25); padding: 4px 10px; }
+.journey-card.swap > * { animation: jcIn .55s var(--ease) both; }
+.journey-card.swap > *:nth-child(2) { animation-delay: .08s; }
+@keyframes jcIn { from { opacity: 0; transform: translateY(10px); } }
+
+/* Marquee */
+.marquee { margin-top: 3.5rem; overflow: hidden; border-top: 1px solid var(--stone); border-bottom: 1px solid var(--stone); padding: 1.3rem 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.marquee-track { display: flex; gap: 3rem; width: max-content; animation: marq 38s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marq { to { transform: translateX(-50%); } }
+.marquee-track span { font-family: var(--ff-display); font-size: 1.6rem; color: var(--navy); opacity: .5; white-space: nowrap; display: flex; align-items: center; gap: 3rem; transition: opacity .2s, color .2s; }
+.marquee-track span:hover { opacity: 1; color: var(--gold); }
+.marquee-track span::after { content: '◆'; font-size: .6rem; color: var(--gold); opacity: .8; }
+
+.credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--stone); margin: 2.5rem 0 0; }
+.cred-item { background: var(--white); padding: 1.2rem 1.4rem; transition: background .3s, transform .3s; }
+.cred-item:hover { background: var(--off); }
 .cred-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
-.cred-val { font-size: 13px; color: var(--navy); font-weight: 400; line-height: 1.4; }
+.cred-val { font-size: 13px; color: var(--navy); line-height: 1.45; }
 .tags-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1.5rem; }
-.tag { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--gold); border: 1px solid rgba(196,151,63,0.3); padding: 5px 12px; }
+.tag { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--gold); border: 1px solid rgba(196,151,63,0.3); padding: 5px 12px; transition: all .25s; cursor: default; }
+.tag:hover { background: var(--gold); color: var(--navy-deep); transform: translateY(-2px); }
 
-/* ── BOARD INTELLIGENCE SIMULATOR (DESTAQUE) ── */
-#simulator {
-  background: var(--navy-deep); padding: 7rem 5rem;
-  position: relative; overflow: hidden;
-}
-#simulator::before {
-  content: 'INTELLIGENCE';
-  position: absolute; bottom: -3rem; left: -1rem;
-  font-family: var(--ff-display); font-size: 14rem; font-weight: 600;
-  color: rgba(196,151,63,0.03); line-height: 1; pointer-events: none; white-space: nowrap;
-}
-.sim-inner { max-width: 1220px; margin: 0 auto; }
-.sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
-.sim-content {}
-.sim-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
-  color: var(--navy-deep); background: var(--gold); padding: 6px 14px;
-  margin-bottom: 2rem;
-}
-.sim-title { font-family: var(--ff-display); font-size: clamp(2rem, 3vw, 3rem); color: var(--white); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; }
+/* ── BOARD INTELLIGENCE ── */
+#simulator { background: var(--navy-deep); padding: 7rem 5rem; position: relative; overflow: hidden; }
+#simulator::before { content: 'INTELLIGENCE'; position: absolute; bottom: -3rem; left: -1rem; font-family: var(--ff-display); font-size: 14rem; font-weight: 600; color: rgba(196,151,63,0.035); line-height: 1; pointer-events: none; white-space: nowrap; animation: drift 30s linear infinite alternate; }
+@keyframes drift { to { transform: translateX(-12%); } }
+#simulator .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(196,151,63,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(196,151,63,.05) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: radial-gradient(ellipse 60% 70% at 70% 50%, #000, transparent); mask-image: radial-gradient(ellipse 60% 70% at 70% 50%, #000, transparent); animation: gridMove 12s linear infinite; }
+@keyframes gridMove { to { background-position: 48px 48px; } }
+.sim-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 5rem; align-items: center; }
+.sim-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; color: var(--navy-deep); background: var(--gold); padding: 6px 14px; margin-bottom: 2rem; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--navy-deep); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.sim-title { font-family: var(--ff-display); font-size: clamp(2.2rem, 3.4vw, 3.4rem); color: var(--white); font-weight: 400; line-height: 1.05; margin-bottom: 1.5rem; }
 .sim-title em { font-style: italic; color: var(--gold-light); }
-.sim-text { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.6); line-height: 1.85; font-weight: 300; margin-bottom: 2rem; }
-.sim-features { display: flex; flex-direction: column; gap: 0; margin-bottom: 2.5rem; border: 1px solid rgba(196,151,63,0.15); }
-.sim-feat { display: flex; align-items: start; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid rgba(196,151,63,0.08); }
+.sim-text { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.62); line-height: 1.85; font-weight: 300; margin-bottom: 2rem; }
+.sim-features { display: flex; flex-direction: column; margin-bottom: 2.5rem; border: 1px solid rgba(196,151,63,0.15); }
+.sim-feat { display: flex; align-items: start; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid rgba(196,151,63,0.08); position: relative; transition: background .3s; cursor: default; }
+.sim-feat::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--gold); transform: scaleY(0); transition: transform .4s var(--ease); }
+.sim-feat:hover, .sim-feat.hl { background: rgba(196,151,63,.06); }
+.sim-feat:hover::before, .sim-feat.hl::before { transform: scaleY(1); }
 .sim-feat:last-child { border-bottom: none; }
-.sim-feat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; }
+.sim-feat-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 6px; flex-shrink: 0; box-shadow: 0 0 0 0 rgba(196,151,63,.6); }
+.sim-feat.hl .sim-feat-dot { animation: ring 1.6s ease-out infinite; }
+@keyframes ring { to { box-shadow: 0 0 0 8px rgba(196,151,63,0); } }
 .sim-feat-text { font-size: 13px; color: rgba(248,246,241,0.65); line-height: 1.6; font-weight: 300; }
-.sim-feat-text strong { color: rgba(248,246,241,0.9); font-weight: 400; }
-.sim-cta {
-  display: inline-flex; align-items: center; gap: 12px;
-  background: transparent; color: var(--gold); border: 1px solid rgba(196,151,63,0.45);
-  padding: 14px 28px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-  font-weight: 500; text-decoration: none; transition: all 0.22s;
-}
+.sim-feat-text strong { color: rgba(248,246,241,0.92); font-weight: 500; }
+.sim-cta { display: inline-flex; align-items: center; gap: 12px; color: var(--gold); border: 1px solid rgba(196,151,63,0.45); padding: 14px 28px; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.22s; }
 .sim-cta:hover { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
-.sim-cta-arrow { transition: transform 0.2s; }
-.sim-cta:hover .sim-cta-arrow { transform: translateX(4px); }
 
-.sim-visual { position: relative; }
-.sim-screen {
-  background: var(--navy-mid); border: 1px solid rgba(196,151,63,0.2);
-  padding: 1.5rem; position: relative;
-}
-.sim-screen-bar {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem;
-  padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.06);
-}
+.sim-visual { position: relative; perspective: 1400px; }
+.sim-screen { background: linear-gradient(160deg, #182A42, var(--navy-mid) 60%); border: 1px solid rgba(196,151,63,0.25); padding: 1.4rem; position: relative; overflow: hidden; transform: rotateY(-7deg) rotateX(3deg); transition: transform .6s var(--ease); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), 0 0 60px -20px rgba(196,151,63,.25); }
+.sim-visual:hover .sim-screen { transform: rotateY(0) rotateX(0); }
+.sim-screen::after { content: ''; position: absolute; left: 0; right: 0; height: 80px; top: -80px; background: linear-gradient(180deg, transparent, rgba(196,151,63,.06), transparent); animation: sweep 5s linear infinite; pointer-events: none; }
+@keyframes sweep { to { top: 110%; } }
+.sim-screen-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 1.1rem; padding-bottom: .9rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .sim-screen-dot { width: 8px; height: 8px; border-radius: 50%; }
-.sim-screen-title { font-size: 11px; color: rgba(248,246,241,0.35); letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; font-weight: 400; }
-.sim-metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.sim-metric { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 12px; }
-.sim-metric-label { font-size: 9px; color: rgba(248,246,241,0.3); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
-.sim-metric-val { font-family: var(--ff-display); font-size: 1.6rem; font-weight: 400; line-height: 1; }
-.sim-metric-trend { font-size: 10px; margin-top: 4px; }
-.sim-chart { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; height: 90px; position: relative; overflow: hidden; margin-bottom: 8px; }
-.sim-chart-label { font-size: 9px; color: rgba(248,246,241,0.25); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
-.sim-chart svg { display: block; }
-.sim-alert-row { display: flex; gap: 8px; }
-.sim-alert { flex: 1; padding: 8px 10px; font-size: 10px; font-weight: 500; letter-spacing: 0.06em; }
-.sim-alert.warn { background: rgba(196,151,63,0.12); border: 1px solid rgba(196,151,63,0.25); color: var(--gold-light); }
-.sim-alert.ok { background: rgba(74,150,80,0.1); border: 1px solid rgba(74,150,80,0.2); color: #7DC885; }
-.sim-alert.risk { background: rgba(180,60,60,0.1); border: 1px solid rgba(180,60,60,0.2); color: #E07070; }
+.sim-live { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 9px; letter-spacing: .18em; color: var(--green); text-transform: uppercase; }
+.sim-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.2s infinite; }
+.sim-clock { font-size: 10px; color: rgba(248,246,241,.35); letter-spacing: .08em; font-variant-numeric: tabular-nums; margin-left: 10px; }
+.sim-metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+.sim-metric { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 11px 10px; transition: border-color .4s, background .4s; }
+.sim-metric.flash { border-color: rgba(196,151,63,.5); background: rgba(196,151,63,.07); }
+.sim-metric-label { font-size: 8.5px; color: rgba(248,246,241,0.38); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.sim-metric-val { font-family: var(--ff-display); font-size: 1.55rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.sim-metric-trend { font-size: 9.5px; margin-top: 5px; }
+.sim-row { display: grid; grid-template-columns: 1.7fr 1fr; gap: 8px; margin-bottom: 8px; }
+.sim-chart { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 10px 12px 6px; position: relative; }
+.sim-chart-label { font-size: 9px; color: rgba(248,246,241,0.35); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between; }
+.sim-chart-label b { color: var(--gold-light); font-weight: 500; }
+.sim-chart svg { display: block; width: 100%; height: 120px; }
+.sim-gauge { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.sim-gauge svg { width: 100%; max-width: 140px; height: auto; }
+.gauge-arc { transition: stroke-dashoffset 1.2s var(--ease), stroke .6s; }
+.gauge-lbl { font-size: 9px; color: rgba(248,246,241,.38); letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; text-align: center; }
+.sim-bars { display: flex; align-items: end; gap: 4px; height: 46px; margin-top: 8px; }
+.sim-bars i { flex: 1; background: rgba(196,151,63,.35); transition: height .9s var(--ease), background .4s; }
+.sim-alerts { position: relative; height: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.15); }
+.sim-alert { position: absolute; inset: 0; padding: 0 12px; display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 500; letter-spacing: .03em; transform: translateY(100%); opacity: 0; transition: transform .55s var(--ease), opacity .55s; }
+.sim-alert.show { transform: none; opacity: 1; }
+.sim-alert.out { transform: translateY(-100%); opacity: 0; }
+.sim-alert.warn { color: var(--gold-light); } .sim-alert.ok { color: var(--green); } .sim-alert.risk { color: var(--red); }
+.sim-alert small { margin-left: auto; color: rgba(248,246,241,.3); font-size: 9.5px; font-variant-numeric: tabular-nums; }
 .sim-tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-.sim-tag { font-size: 9px; letter-spacing: 0.1em; color: rgba(196,151,63,0.5); border: 1px solid rgba(196,151,63,0.15); padding: 3px 8px; }
+.sim-tag { font-size: 9px; letter-spacing: 0.1em; color: rgba(196,151,63,0.6); border: 1px solid rgba(196,151,63,0.18); padding: 3px 8px; }
+.sim-float { position: absolute; z-index: 2; background: rgba(7,15,26,.95); border: 1px solid rgba(196,151,63,.4); padding: 10px 14px; font-size: 10px; color: var(--white); letter-spacing: .04em; box-shadow: 0 16px 40px -14px rgba(0,0,0,.8); animation: bob 5s ease-in-out infinite; }
+.sim-float b { display: block; font-family: var(--ff-display); font-size: 1.4rem; color: var(--gold-light); font-weight: 500; letter-spacing: 0; }
+.sim-float.f1 { top: -22px; right: -18px; }
+.sim-float.f2 { bottom: 40px; left: -34px; animation-delay: -2.5s; }
+@keyframes bob { 50% { transform: translateY(-10px); } }
 
-/* ── TRAJETÓRIA ── */
-#trajetoria { background: var(--navy); padding: 7rem 5rem; }
-.traj-inner { max-width: 1220px; margin: 0 auto; }
-.traj-title { color: var(--white); margin-bottom: 4rem; }
-.timeline { position: relative; padding-left: 2rem; }
-.timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(to bottom, var(--gold), rgba(196,151,63,0.08)); }
-.tl-item { position: relative; padding-left: 2.5rem; padding-bottom: 3.5rem; }
-.tl-item:last-child { padding-bottom: 0; }
-.tl-dot { position: absolute; left: -2.3rem; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--navy-deep); box-shadow: 0 0 0 3px rgba(196,151,63,0.2); }
-.tl-period { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-weight: 400; margin-bottom: 0.4rem; }
-.tl-role { font-family: var(--ff-display); font-size: 1.5rem; color: var(--white); font-weight: 400; margin-bottom: 0.25rem; line-height: 1.2; }
-.tl-co { font-size: 11px; color: rgba(248,246,241,0.3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.9rem; }
-.tl-desc { font-family: var(--ff-body); font-size: 1.05rem; color: rgba(248,246,241,0.55); line-height: 1.8; font-weight: 300; max-width: 720px; }
-.tl-highlights { margin-top: 0.8rem; display: flex; flex-direction: column; gap: 4px; }
-.tl-hl { font-size: 12px; color: rgba(196,151,63,0.75); display: flex; align-items: start; gap: 8px; }
-.tl-hl::before { content: '—'; color: rgba(196,151,63,0.4); flex-shrink: 0; }
-.tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
-.tl-tag { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(196,151,63,0.6); border: 1px solid rgba(196,151,63,0.18); padding: 4px 10px; font-weight: 500; }
-
-/* ── EXPERTISE ── */
-#expertise { background: var(--off); padding: 7rem 5rem; }
-.exp-inner { max-width: 1220px; margin: 0 auto; }
-.exp-title { color: var(--navy); margin-bottom: 4rem; }
-.exp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--stone); }
-.exp-card { background: var(--white); padding: 2.4rem; transition: background 0.25s; cursor: default; }
-.exp-card:hover { background: var(--navy); }
-.exp-card:hover .exp-num { color: rgba(196,151,63,0.1); }
-.exp-card:hover .exp-card-title { color: var(--white); }
-.exp-card:hover .exp-card-text { color: rgba(248,246,241,0.5); }
-.exp-num { font-family: var(--ff-display); font-size: 3.5rem; color: var(--off); font-weight: 300; line-height: 1; margin-bottom: 1rem; transition: color 0.25s; }
-.exp-card-title { font-family: var(--ff-display); font-size: 1.35rem; color: var(--navy); font-weight: 500; margin-bottom: 0.7rem; line-height: 1.2; transition: color 0.25s; }
-.exp-card-text { font-size: 12.5px; color: var(--muted); line-height: 1.75; font-weight: 300; transition: color 0.25s; }
-.exp-bar { grid-column: 1 / -1; background: var(--navy-deep); padding: 2.2rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
-.exp-bar-firms { display: flex; gap: 2.5rem; align-items: center; }
-.exp-bar-firm { font-family: var(--ff-display); font-size: 1.2rem; color: rgba(248,246,241,0.25); font-weight: 400; letter-spacing: 0.08em; transition: color 0.2s; }
-.exp-bar-firm:hover { color: var(--gold-light); }
-.exp-bar-sep { width: 1px; height: 24px; background: rgba(196,151,63,0.15); }
-.exp-bar-quote { font-family: var(--ff-body); font-style: italic; font-size: 1rem; color: rgba(248,246,241,0.35); max-width: 480px; line-height: 1.6; }
-
-/* ── POSICIONAMENTO ── */
-#posicao { background: var(--navy); padding: 7rem 5rem; position: relative; overflow: hidden; }
-#posicao::before {
-  content: 'BOARD'; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%);
-  font-family: var(--ff-display); font-size: 18rem; font-weight: 600;
-  color: rgba(196,151,63,0.03); line-height: 1; pointer-events: none; white-space: nowrap;
-}
-.pos-inner { max-width: 1220px; margin: 0 auto; }
-.pos-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6rem; align-items: center; }
-.pos-title { color: var(--white); margin-bottom: 1.5rem; }
-.pos-title em { font-style: italic; color: var(--gold-light); }
-.pos-text { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.55); line-height: 1.85; font-weight: 300; margin-bottom: 2.5rem; }
-.pos-roles { display: grid; gap: 1px; background: rgba(255,255,255,0.05); }
-.pos-role { background: var(--navy); padding: 1.3rem 1.8rem; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-.pos-role:hover { background: rgba(196,151,63,0.07); }
-.pos-role-name { font-size: 14px; font-weight: 400; color: var(--white); }
-.pos-role-type { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; }
-.pos-visual { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
-.pos-quote { font-family: var(--ff-body); font-size: 1.05rem; font-style: italic; color: rgba(248,246,241,0.35); line-height: 1.7; text-align: center; max-width: 300px; }
-
-/* ── CONTATO ── */
-#contato { background: var(--white); padding: 7rem 5rem; }
-.contato-inner { max-width: 1220px; margin: 0 auto; }
-.contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
-.contato-title { color: var(--navy); margin-bottom: 1.5rem; }
-.contato-title em { font-style: italic; color: var(--gold); }
-.contato-text { font-family: var(--ff-body); font-size: 1.1rem; color: var(--muted); line-height: 1.85; font-weight: 300; margin-bottom: 2.5rem; }
-.contato-items { display: flex; flex-direction: column; gap: 1.5rem; }
-.ci-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 3px; }
-.ci-val { font-size: 14px; color: var(--navy); font-weight: 400; }
-.contato-form { background: var(--navy-deep); padding: 3rem; }
-.cf-title { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,246,241,0.25); margin-bottom: 2rem; font-weight: 400; }
-.cf-row { margin-bottom: 1.2rem; }
-.cf-row label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,246,241,0.3); margin-bottom: 6px; font-weight: 400; }
-.cf-row input, .cf-row textarea, .cf-row select { width: 100%; background: rgba(255,255,255,0.04); border: none; border-bottom: 1px solid rgba(196,151,63,0.2); padding: 11px 0; font-family: var(--ff-ui); font-size: 13px; color: var(--white); outline: none; transition: border-color 0.2s; font-weight: 300; }
-.cf-row input:focus, .cf-row textarea:focus, .cf-row select:focus { border-bottom-color: var(--gold); }
-.cf-row textarea { resize: vertical; min-height: 90px; }
-.cf-row select option { background: var(--navy-deep); }
-.cf-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.cf-submit { width: 100%; background: var(--gold); color: var(--navy-deep); border: none; padding: 14px; font-family: var(--ff-ui); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 1rem; }
-.cf-submit:hover { background: var(--gold-light); }
-
-/* ── LIVRO ── */
-#livro { background: var(--off); padding: 7rem 5rem; }
-.livro-inner { max-width: 1220px; margin: 0 auto; }
-.livro-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 6rem; align-items: center; }
-.livro-cover-wrap { position: relative; }
-.livro-cover { width: 100%; display: block; box-shadow: -12px 16px 48px rgba(10,18,30,0.22), 4px 4px 0 rgba(196,151,63,0.15); }
-.livro-spine-label { position: absolute; top: 12px; right: -12px; background: var(--gold); color: var(--navy-deep); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; padding: 5px 10px; }
-.livro-content {}
-.livro-title { font-family: var(--ff-display); font-size: clamp(2rem, 3vw, 3rem); color: var(--navy); font-weight: 400; line-height: 1.1; margin-bottom: 0.5rem; }
-.livro-subtitle { font-family: var(--ff-body); font-size: 1.1rem; font-style: italic; color: var(--gold); font-weight: 300; margin-bottom: 2rem; line-height: 1.4; }
+/* ── LIVRO 3D ── */
+#livro { background: radial-gradient(ellipse 55% 70% at 28% 50%, #FFFDF8 0%, var(--off) 60%); padding: 7rem 5rem; position: relative; overflow: hidden; }
+.livro-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6rem; align-items: center; }
+.book-stage { position: relative; display: flex; justify-content: center; align-items: center; padding: 40px 0 70px; perspective: 1800px; }
+.book-glow { position: absolute; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(196,151,63,.28), transparent 65%); filter: blur(10px); animation: glow 6s ease-in-out infinite; }
+@keyframes glow { 50% { transform: scale(1.12); opacity: .7; } }
+.book-float { animation: float 6s ease-in-out infinite; position: relative; z-index: 1; transform-style: preserve-3d; }
+@keyframes float { 50% { transform: translateY(-16px); } }
+.book { --w: 300px; --h: 437px; --d: 46px; position: relative; width: var(--w); height: var(--h); transform-style: preserve-3d; transform: rotateY(26deg) rotateX(4deg); transition: transform .25s ease-out; cursor: grab; }
+.book > div { position: absolute; }
+.book-front { inset: 0; transform: translateZ(calc(var(--d) / 2)); background: #20263A url('assets/images/Capa1.png') center / cover no-repeat; border-radius: 2px 5px 5px 2px; overflow: hidden; box-shadow: inset 6px 0 12px -4px rgba(0,0,0,.6); }
+.book-front::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.12)); }
+.book-front::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.22) 45%, transparent 58%); background-size: 250% 100%; background-position: 120% 0; animation: gloss 7s ease-in-out infinite; }
+@keyframes gloss { 0%, 55% { background-position: 120% 0; } 100% { background-position: -60% 0; } }
+.book-back { inset: 0; transform: rotateY(180deg) translateZ(calc(var(--d) / 2)); background: #1E2436; border-radius: 5px 2px 2px 5px; }
+.book-spine { top: 0; height: var(--h); width: var(--d); left: calc((var(--w) - var(--d)) / 2); transform: rotateY(-90deg) translateZ(calc(var(--w) / 2)); background: linear-gradient(90deg, #171C2B, #262D44 45%, #1B2133); display: flex; align-items: center; justify-content: center; border-radius: 3px 0 0 3px; }
+.book-spine span { writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--ff-display); font-size: 13px; letter-spacing: .22em; color: var(--gold-light); text-transform: uppercase; white-space: nowrap; }
+.book-spine span b { font-weight: 500; color: var(--gold); margin-left: 18px; }
+.book-pages { top: 5px; height: calc(var(--h) - 10px); width: calc(var(--d) - 4px); left: calc((var(--w) - var(--d)) / 2 + 2px); transform: rotateY(90deg) translateZ(calc(var(--w) / 2 - 4px)); background: repeating-linear-gradient(90deg, #F6F1E4 0 2px, #DCD4C0 2px 3px); }
+.book-top { left: 0; width: calc(var(--w) - 4px); height: calc(var(--d) - 4px); top: calc((var(--h) - var(--d)) / 2 + 2px); transform: rotateX(90deg) translateZ(calc(var(--h) / 2 - 4px)); background: repeating-linear-gradient(0deg, #F6F1E4 0 2px, #DCD4C0 2px 3px); }
+.book-shadow { position: absolute; bottom: 18px; left: 50%; width: 300px; height: 34px; margin-left: -150px; background: radial-gradient(ellipse, rgba(10,18,30,.42), transparent 70%); filter: blur(6px); animation: shadowPulse 6s ease-in-out infinite; }
+@keyframes shadowPulse { 50% { transform: scale(.82); opacity: .65; } }
+.book-ribbon { position: absolute; top: 34px; right: 6%; z-index: 3; background: var(--gold); color: var(--navy-deep); font-size: 9px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; padding: 7px 14px; box-shadow: 0 10px 24px -10px rgba(196,151,63,.9); transform: rotate(6deg); }
+.livro-title { font-family: var(--ff-display); font-size: clamp(2.4rem, 3.6vw, 3.6rem); color: var(--navy); font-weight: 400; line-height: 1.02; margin-bottom: .6rem; }
+.livro-subtitle { font-family: var(--ff-body); font-size: 1.15rem; font-style: italic; color: var(--gold); font-weight: 300; margin-bottom: 2rem; line-height: 1.4; }
 .livro-text { font-family: var(--ff-body); font-size: 1.12rem; color: #3A3530; line-height: 1.9; font-weight: 300; margin-bottom: 2rem; }
 .livro-text p { margin-bottom: 1rem; }
 .livro-text strong { font-weight: 500; color: var(--navy); }
-.livro-quotes { display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 2rem; border-left: 2px solid rgba(196,151,63,0.3); padding-left: 1.5rem; }
-.livro-quote { font-family: var(--ff-body); font-size: 1rem; font-style: italic; color: var(--muted); line-height: 1.65; font-weight: 300; }
-.livro-quote-attr { font-size: 11px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-top: 4px; }
-.livro-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--navy); color: var(--gold); padding: 13px 28px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.22s; }
-.livro-cta:hover { background: var(--navy-mid); }
+.livro-quotes { position: relative; min-height: 120px; margin-bottom: 2rem; border-left: 2px solid var(--gold); padding-left: 1.5rem; }
+.livro-quote-item { position: absolute; inset: 0 0 auto 1.5rem; opacity: 0; transform: translateY(10px); transition: opacity .7s, transform .7s var(--ease); }
+.livro-quote-item.on { opacity: 1; transform: none; position: relative; inset: auto; }
+.livro-quote { font-family: var(--ff-body); font-size: 1.15rem; font-style: italic; color: var(--navy); line-height: 1.6; font-weight: 300; }
+.livro-quote-attr { font-size: 10px; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; margin-top: 8px; }
+.livro-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--navy); color: var(--gold-light); padding: 14px 28px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.25s; }
+.livro-cta:hover { background: var(--navy-mid); transform: translateY(-2px); box-shadow: 0 12px 26px -12px rgba(12,27,46,.7); }
 
-/* ── PALESTRAS & DOCÊNCIA ── */
+/* ── PALESTRAS ── */
 #palestras { background: var(--navy-deep); padding: 7rem 5rem; position: relative; overflow: hidden; }
-#palestras::before {
-  content: 'SPEAKING'; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%);
-  font-family: var(--ff-display); font-size: 16rem; font-weight: 600;
-  color: rgba(196,151,63,0.03); line-height: 1; pointer-events: none; white-space: nowrap;
-}
-.pal-inner { max-width: 1220px; margin: 0 auto; position: relative; z-index: 1; }
+#palestras::before { content: 'SPEAKING'; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%); font-family: var(--ff-display); font-size: 16rem; font-weight: 600; color: rgba(196,151,63,0.03); line-height: 1; pointer-events: none; white-space: nowrap; }
 .pal-title { color: var(--white); margin-bottom: 1rem; }
 .pal-title em { font-style: italic; color: var(--gold-light); }
-.pal-subtitle { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.55); font-weight: 300; max-width: 640px; line-height: 1.8; margin-bottom: 3.5rem; }
-.pal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(196,151,63,0.15); }
-.pal-card { background: var(--navy); padding: 2.2rem 2.4rem; display: flex; gap: 1.4rem; transition: background 0.25s; }
-.pal-card:hover { background: rgba(196,151,63,0.06); }
-.pal-num { font-family: var(--ff-display); font-size: 2rem; color: var(--gold); font-weight: 400; line-height: 1; flex-shrink: 0; }
-.pal-card-title { font-family: var(--ff-display); font-size: 1.3rem; color: var(--white); font-weight: 500; margin-bottom: 0.5rem; line-height: 1.25; }
-.pal-card-text { font-size: 13px; color: rgba(248,246,241,0.5); line-height: 1.7; font-weight: 300; }
+.pal-subtitle { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.58); font-weight: 300; max-width: 640px; line-height: 1.8; margin-bottom: 3.5rem; }
+.pal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.pal-card { --mx: 50%; --my: 50%; background: var(--navy); border: 1px solid rgba(196,151,63,.12); padding: 2.2rem 2.4rem; display: flex; gap: 1.4rem; position: relative; overflow: hidden; transition: border-color .3s, transform .3s; }
+.pal-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(360px circle at var(--mx) var(--my), rgba(196,151,63,.14), transparent 60%); opacity: 0; transition: opacity .3s; }
+.pal-card:hover { border-color: rgba(196,151,63,.45); transform: translateY(-4px); }
+.pal-card:hover::before { opacity: 1; }
+.pal-card > * { position: relative; }
+.pal-num { font-family: var(--ff-display); font-size: 2.4rem; color: var(--gold); line-height: 1; flex-shrink: 0; transition: transform .4s var(--ease); }
+.pal-card:hover .pal-num { transform: scale(1.15) rotate(-6deg); }
+.pal-card-title { font-family: var(--ff-display); font-size: 1.35rem; color: var(--white); font-weight: 500; margin-bottom: 0.5rem; line-height: 1.25; }
+.pal-card-text { font-size: 13px; color: rgba(248,246,241,0.55); line-height: 1.7; font-weight: 300; }
+.pal-card.wide { grid-column: 1 / -1; }
 .pal-cta-row { display: flex; justify-content: center; margin-top: 3rem; }
-.pal-cta { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); border: 1px solid rgba(196,151,63,0.45); padding: 13px 28px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.22s; }
-.pal-cta:hover { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
 
-/* ── YOUTUBE ── */
-#youtube { background: var(--navy); padding: 7rem 5rem; position: relative; overflow: hidden; }
-#youtube::before {
-  content: 'WATCH'; position: absolute; left: -2rem; top: 50%; transform: translateY(-50%);
-  font-family: var(--ff-display); font-size: 16rem; font-weight: 600;
-  color: rgba(196,151,63,0.03); line-height: 1; pointer-events: none; white-space: nowrap;
-}
-.yt-inner { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
-.yt-header { text-align: center; margin-bottom: 3rem; }
-.yt-header .s-eye { justify-content: center; }
-.yt-title { font-family: var(--ff-display); font-size: clamp(2rem, 3vw, 3rem); color: var(--white); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; }
-.yt-title em { font-style: italic; color: var(--gold-light); }
-.yt-subtitle { font-family: var(--ff-body); font-size: 1.1rem; color: rgba(248,246,241,0.55); font-weight: 300; max-width: 560px; margin: 0 auto; line-height: 1.7; }
-.yt-frame-wrap { position: relative; width: 100%; padding-top: 56.25%; border: 1px solid rgba(196,151,63,0.25); background: var(--navy-deep); margin-top: 3rem; }
-.yt-frame-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.yt-footer { display: flex; justify-content: center; margin-top: 2rem; }
-.yt-cta { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); border: 1px solid rgba(196,151,63,0.45); padding: 13px 28px; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; transition: all 0.22s; }
-.yt-cta:hover { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
+/* Apresentação em destaque */
+.deck { margin-top: 4.5rem; display: grid; grid-template-columns: 1.1fr 1fr; border: 1px solid rgba(54,224,127,.25); background: #06110E; position: relative; overflow: hidden; text-decoration: none; transition: border-color .3s, transform .3s; }
+.deck:hover { border-color: rgba(54,224,127,.6); transform: translateY(-4px); }
+.deck-info { padding: 2.6rem; display: flex; flex-direction: column; gap: 1rem; position: relative; z-index: 1; }
+.deck-eye { font: 600 10px/1 'Courier New', monospace; letter-spacing: .22em; text-transform: uppercase; color: #36E07F; display: flex; align-items: center; gap: 10px; }
+.deck-eye i { width: 7px; height: 7px; border-radius: 50%; background: #36E07F; animation: pulse 1.2s infinite; }
+.deck-title { font-family: var(--ff-display); font-size: clamp(1.9rem, 3vw, 2.7rem); color: #E4F1EA; line-height: 1.05; font-weight: 500; }
+.deck-title span { color: #36E07F; }
+.deck-meta { font-size: 12px; color: #93AFA2; line-height: 1.7; }
+.deck-meta b { color: #F3B94D; font-weight: 500; }
+.deck-btn { margin-top: .6rem; align-self: start; display: inline-flex; align-items: center; gap: 10px; background: #36E07F; color: #06110E; padding: 13px 24px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; }
+.deck-screen { position: relative; min-height: 260px; border-left: 1px solid rgba(54,224,127,.15); }
+#deck-fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+.deck-screen::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #06110E 0%, transparent 40%); }
+
+/* ── CONTATO ── */
+#contato { background: var(--white); padding: 7rem 5rem; }
+.contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+.contato-title { color: var(--navy); margin-bottom: 1.5rem; }
+.contato-title em { font-style: italic; color: var(--gold); }
+.contato-text { font-family: var(--ff-body); font-size: 1.1rem; color: var(--muted); line-height: 1.85; font-weight: 300; margin-bottom: 2.2rem; }
+.contato-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2.4rem; }
+.cq { display: flex; align-items: center; gap: 14px; padding: 1.1rem 1.2rem; text-decoration: none; border: 1px solid var(--stone); transition: all .3s var(--ease); position: relative; overflow: hidden; }
+.cq svg { width: 26px; height: 26px; flex-shrink: 0; fill: currentColor; position: relative; }
+.cq div { position: relative; }
+.cq-lbl { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; }
+.cq-val { font-size: 13px; color: var(--navy); margin-top: 2px; }
+.cq::before { content: ''; position: absolute; inset: 0; transform: translateY(101%); transition: transform .4s var(--ease); }
+.cq:hover::before { transform: none; }
+.cq:hover .cq-val, .cq:hover .cq-lbl, .cq:hover svg { color: #fff; }
+.cq.wa { color: #1DA851; } .cq.wa::before { background: var(--wa); }
+.cq.li { color: #0A66C2; } .cq.li::before { background: #0A66C2; }
+.contato-items { display: flex; flex-direction: column; gap: 1.3rem; }
+.ci-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 3px; }
+.ci-val { font-size: 14px; color: var(--navy); }
+.ci-val a { color: var(--navy); text-decoration: none; border-bottom: 1px solid rgba(196,151,63,.4); transition: color .2s, border-color .2s; }
+.ci-val a:hover { color: var(--gold); border-color: var(--gold); }
+.contato-form { background: var(--navy-deep); padding: 3rem; position: relative; overflow: hidden; }
+.contato-form::before { content: ''; position: absolute; top: -1px; left: 0; height: 2px; width: 100%; background: linear-gradient(90deg, transparent, var(--gold), transparent); animation: formLine 4s linear infinite; }
+@keyframes formLine { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.cf-title { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,246,241,0.35); margin-bottom: 2rem; }
+.cf-row { margin-bottom: 1.2rem; }
+.cf-row label { display: block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,246,241,0.4); margin-bottom: 6px; }
+.cf-row input, .cf-row textarea, .cf-row select { width: 100%; background: rgba(255,255,255,0.04); border: none; border-bottom: 1px solid rgba(196,151,63,0.2); padding: 11px 10px; font-family: var(--ff-ui); font-size: 13px; color: var(--white); outline: none; transition: border-color 0.2s, background .2s; font-weight: 300; }
+.cf-row input:focus, .cf-row textarea:focus, .cf-row select:focus { border-bottom-color: var(--gold); background: rgba(196,151,63,.06); }
+.cf-row textarea { resize: vertical; min-height: 90px; }
+.cf-row select option { background: var(--navy-deep); }
+.cf-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.cf-submit { width: 100%; background: var(--gold); color: var(--navy-deep); border: none; padding: 15px; font-family: var(--ff-ui); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: background 0.2s, transform .2s; margin-top: 1rem; }
+.cf-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+/* ── WHATSAPP FLUTUANTE ── */
+.wa-float { position: fixed; right: 22px; bottom: 22px; z-index: 150; width: 58px; height: 58px; border-radius: 50%; background: var(--wa); display: grid; place-items: center; box-shadow: 0 10px 30px -6px rgba(37,211,102,.6); transition: transform .3s var(--ease); text-decoration: none; }
+.wa-float svg { width: 30px; height: 30px; fill: #fff; }
+.wa-float::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--wa); animation: waRing 2.2s ease-out infinite; }
+@keyframes waRing { to { transform: scale(1.6); opacity: 0; } }
+.wa-float:hover { transform: scale(1.08); }
+.wa-float .wa-tip { position: absolute; right: 70px; white-space: nowrap; background: var(--navy-deep); color: var(--white); font-size: 11px; padding: 8px 12px; border: 1px solid rgba(196,151,63,.3); opacity: 0; transform: translateX(8px); transition: all .3s; pointer-events: none; }
+.wa-float:hover .wa-tip { opacity: 1; transform: none; }
 
 /* ── FOOTER ── */
 footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1px solid rgba(196,151,63,0.1); }
-.footer-inner { max-width: 1220px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-.footer-name { font-family: var(--ff-display); font-size: 1.1rem; color: var(--white); font-weight: 400; display: flex; align-items: center; gap: 14px; }
-.footer-slogan { font-family: var(--ff-body); font-style: italic; font-size: 13px; color: rgba(248,246,241,0.25); }
-.footer-copy { font-size: 11px; color: rgba(248,246,241,0.18); }
+.footer-inner { max-width: 1220px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+.footer-name { font-family: var(--ff-display); font-size: 1.1rem; color: var(--white); display: flex; align-items: center; gap: 14px; }
+.footer-name img { width: 22px; height: 22px; object-fit: contain; }
+.footer-slogan { font-family: var(--ff-body); font-style: italic; font-size: 13px; color: rgba(248,246,241,0.35); }
+.footer-links { display: flex; gap: 10px; }
+.footer-copy { font-size: 11px; color: rgba(248,246,241,0.25); }
 
-/* ── RESPONSIVE ── */
+/* ── RESPONSIVO ── */
+@media (max-width: 1100px) {
+  .nav-links { gap: 1.3rem; }
+  .sim-metric-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 960px) {
-  nav { padding: 0 1.5rem; }
-  .nav-links { display: none; }
+  nav { padding: 0 1rem; }
+  .nav-burger { display: block; }
+  .nav-links { position: fixed; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(7,15,26,.98); padding: .5rem 1.5rem 1.5rem; border-bottom: 1px solid rgba(196,151,63,.2); transform: translateY(-120%); transition: transform .4s var(--ease); z-index: -1; }
+  nav.open .nav-links { transform: none; }
+  nav.open { background: rgba(7,15,26,.98); }
+  .nav-links li { width: 100%; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .nav-links a { display: block; padding: 14px 0; font-size: 12px; }
+  .nav-name-sub { display: none; }
   #home { grid-template-columns: 1fr; }
-  .hero-right { display: none; }
-  .hero-left { padding: 120px 2rem 80px; }
-  #sobre, #simulator, #trajetoria, #expertise, #posicao, #livro, #palestras, #youtube, #contato { padding: 5rem 1.5rem; }
-  .sobre-grid, .sim-grid, .pos-grid, .livro-grid, .contato-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .exp-grid { grid-template-columns: 1fr 1fr; }
-  .pal-grid { grid-template-columns: 1fr; }
+  .hero-right { order: -1; height: 62vh; }
+  .hero-overlay { background: linear-gradient(to top, var(--navy-deep) 0%, transparent 45%); }
+  .hero-frame, .scroll-cue { display: none; }
+  .hero-stats { left: 1rem; right: 1rem; bottom: 1rem; }
+  .hero-stat { flex: 1; padding: .8rem .5rem; }
+  .hstat-num { font-size: 1.7rem; }
+  .hero-left { padding: 2rem 1rem 4rem; }
+  #sobre, #simulator, #livro, #palestras, #contato { padding: 5rem 1rem; }
+  .sobre-grid, .sim-grid, .livro-grid, .contato-grid { grid-template-columns: 1fr; gap: 3rem; }
   .sobre-left { position: static; }
-  .exp-bar { flex-direction: column; gap: 1.5rem; }
-  .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
+  .counters { grid-template-columns: 1fr 1fr; }
+  .journey { padding: 2rem 1.2rem; }
+  .track { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .stop-name { font-size: .85rem; }
+  .stop-dot { width: 34px; height: 34px; font-size: 11px; }
+  .track-line { top: 17px; }
+  .journey-card { grid-template-columns: 1fr; gap: .8rem; }
+  .sim-screen { transform: none; }
+  .sim-float { display: none; }
+  .sim-row { grid-template-columns: 1fr; }
+  .pal-grid { grid-template-columns: 1fr; }
+  .deck { grid-template-columns: 1fr; }
+  .deck-screen { min-height: 160px; border-left: none; border-top: 1px solid rgba(54,224,127,.15); order: -1; }
+  .deck-info { padding: 1.8rem 1.4rem; }
+  .contato-quick, .cf-2col, .credentials { grid-template-columns: 1fr; }
+  .contato-form { padding: 2rem 1.4rem; }
+  .book { --w: 230px; --h: 335px; --d: 36px; }
+  .book-glow { width: 300px; height: 300px; }
+  footer { padding: 2.5rem 1rem 6rem; }
+  .footer-inner { flex-direction: column; text-align: center; gap: 1rem; }
+  .marquee-track span { font-size: 1.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; transition-delay: 0s !important; }
+  .rv { opacity: 1; transform: none; }
+  .marquee-track { animation: none; }
 }
 </style>
 </head>
 <body>
 
+<div id="scroll-prog"></div>
+
 <!-- NAV -->
-<nav>
+<nav id="nav">
   <a href="#home" class="nav-id">
-    <img src="assets/logo/logo.png" alt="Alexandre Toledo" style="height:34px; width:34px; object-fit:contain;">
+    <img src="assets/logo/logo.png" alt="Alexandre Toledo">
     <div>
       <div class="nav-name-main">Alexandre Toledo</div>
       <div class="nav-name-sub">Board · Governança · Dados</div>
     </div>
   </a>
-  <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#sobre">Trajetória</a></li>
     <li><a href="#simulator">Board Intelligence</a></li>
-    <li><a href="#trajetoria">Trajetória</a></li>
-    <li><a href="#expertise">Expertise</a></li>
-    <li><a href="#posicao">Posicionamento</a></li>
     <li><a href="#livro">Livro</a></li>
     <li><a href="#palestras">Palestras</a></li>
-    <li><a href="#youtube">YouTube</a></li>
+    <li><a href="apresentacao/o-que-nao-e-medido.html" class="nav-new">Apresentação<span class="pill">NOVA</span></a></li>
+    <li><a href="#contato">Contato</a></li>
   </ul>
-  <a href="#contato" class="nav-cta">Conectar</a>
+  <div class="nav-right">
+    <a class="nav-ico" href="https://www.linkedin.com/in/alexandre-toledo" target="_blank" rel="noopener" aria-label="LinkedIn de Alexandre Toledo">
+      <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+    </a>
+    <a class="nav-ico wa" href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>
+    </a>
+    <button class="nav-burger" id="nav-burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section id="home">
+  <canvas id="hero-fx" aria-hidden="true"></canvas>
   <div class="hero-left">
     <div class="hero-eyebrow">Sócio Diretor KPMG · 24 anos Big Four · IBGC</div>
-    <h1 class="hero-name">
-      Alexandre
-      <span class="surname">Toledo</span>
+    <h1 class="hero-name" aria-label="Alexandre Toledo">
+      <span class="line" data-split>Alexandre</span>
+      <span class="line surname" data-split>Toledo</span>
     </h1>
-    <div class="hero-divider"></div>
+    <p class="hero-rotator" aria-live="polite">Governança que <em id="rotator">transforma dados em decisão</em></p>
     <p class="hero-title">
-      <strong>24 anos</strong> liderando governança, controles e inteligência de dados para instituições financeiras — do Brasil aos Estados Unidos.<br><br>
-      A combinação rara de <strong>Big Four, tecnologia e Conselho</strong>.
+      <strong>24 anos</strong> liderando governança, controles e inteligência de dados para instituições financeiras — do Brasil aos Estados Unidos. A combinação rara de <strong>Big Four, tecnologia e Conselho</strong>.
     </p>
     <div class="hero-actions">
-      <a href="#trajetoria" class="btn-gold">Ver Trajetória</a>
-      <a href="#contato" class="btn-line">Falar sobre oportunidades →</a>
+      <a href="#contato" class="btn-gold">Falar sobre oportunidades <span class="arrow">→</span></a>
+      <a href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" class="btn-wa">
+        <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://www.linkedin.com/in/alexandre-toledo" target="_blank" rel="noopener" class="btn-line">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+        LinkedIn
+      </a>
     </div>
   </div>
   <div class="hero-right">
-    <img src="assets/images/Alexandre.png" alt="Alexandre Toledo" class="hero-photo">
+    <img src="assets/images/alexandre-toledo.jpg" alt="Alexandre Toledo" class="hero-photo">
     <div class="hero-overlay"></div>
+    <div class="hero-frame"></div>
     <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hstat-num">24+</div>
-        <div class="hstat-label">Anos Big Four</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hstat-num">3</div>
-        <div class="hstat-label">Firmas Globais</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hstat-num">BR·US</div>
-        <div class="hstat-label">Atuação Global</div>
-      </div>
+      <div class="hero-stat"><div class="hstat-num"><span data-count="24">0</span>+</div><div class="hstat-label">Anos Big Four</div></div>
+      <div class="hero-stat"><div class="hstat-num"><span data-count="3">0</span></div><div class="hstat-label">Firmas Globais</div></div>
+      <div class="hero-stat"><div class="hstat-num">BR·US</div><div class="hstat-label">Atuação Global</div></div>
     </div>
   </div>
+  <a href="#sobre" class="scroll-cue"><i></i>Role para conhecer</a>
 </section>
 
-<!-- SOBRE -->
+<!-- SOBRE / TRAJETÓRIA -->
 <section id="sobre">
-  <div class="sobre-grid">
-    <div class="sobre-left">
-      <div class="s-eye">Perfil</div>
-      <h2 class="s-title sobre-heading">Uma trajetória<br>construída em<br><em>profundidade</em></h2>
-      <p class="sobre-lead" style="margin-top:1.5rem;">Governança não é burocracia — é o alicerce sobre o qual decisões de alto impacto são sustentadas com confiança.</p>
+  <div class="wrap">
+    <div class="sobre-grid">
+      <div class="sobre-left">
+        <div class="s-eye rv">Perfil</div>
+        <h2 class="s-title sobre-heading rv" style="--d:1">Uma trajetória<br>construída em<br><em>profundidade</em></h2>
+        <p class="sobre-lead rv" style="--d:2">Governança não é burocracia — é o alicerce sobre o qual decisões de alto impacto são sustentadas com confiança.</p>
+      </div>
+      <div>
+        <div class="sobre-bio">
+          <p class="rv"><strong>Sócio Diretor da KPMG Brasil e na KPMG US</strong> (Rotation Assignment), Alexandre Toledo acumula <strong>mais de 24 anos</strong> liderando iniciativas de governança, controles internos, gestão de riscos e inteligência financeira em ambientes altamente regulados.</p>
+          <p class="rv">Sua trajetória atravessa as maiores firmas globais — <strong>Deloitte, EY e KPMG</strong> — com atuação direta em bancos, fintechs, fundos de investimento e empresas industriais no Brasil e nos Estados Unidos. Clientes como <strong>Bradesco, China Construction Bank, Haitong (BES) e UPL</strong> fazem parte de sua carteira.</p>
+          <p class="rv">Na KPMG US, atua como <strong>Team Captain para revisões de inspeção LATAM</strong>, liderando equipes multiculturais em iniciativas de qualidade de auditoria para instituições financeiras e setores regulados. Participou de inspeções PCAOB e revisões QPR com resultados <strong>sem ressalvas</strong>.</p>
+          <p class="rv">Nos últimos anos tem integrado <strong>analytics, automação e inteligência artificial</strong> nos processos de governança e inspeção — desenvolvendo o Board Intelligence Simulator, uma plataforma preditiva que antecipa deterioração financeira e operacional para o Conselho.</p>
+        </div>
+        <div class="counters">
+          <div class="counter rv" style="--d:0"><div class="counter-num"><b data-count="24">0</b><span>+</span></div><div class="counter-lbl">Anos de carreira</div></div>
+          <div class="counter rv" style="--d:1"><div class="counter-num"><b data-count="3">0</b></div><div class="counter-lbl">Firmas Big Four</div></div>
+          <div class="counter rv" style="--d:2"><div class="counter-num"><b data-count="2">0</b></div><div class="counter-lbl">Países · BR e US</div></div>
+          <div class="counter rv" style="--d:3"><div class="counter-num"><b data-count="6">0</b></div><div class="counter-lbl">Padrões de auditoria</div></div>
+        </div>
+        <div class="credentials">
+          <div class="cred-item rv"><div class="cred-label">Graduação</div><div class="cred-val">Ciências Contábeis — FECAP</div></div>
+          <div class="cred-item rv" style="--d:1"><div class="cred-label">Pós-Graduação</div><div class="cred-val">MBA Finanças Corporativas · MBA Business · MBA Valuation — SaintPaul</div></div>
+          <div class="cred-item rv"><div class="cred-label">Certificações</div><div class="cred-val">CRC · CNAI · IBRACON · IBGC (em processo)</div></div>
+          <div class="cred-item rv" style="--d:1"><div class="cred-label">Padrões de Auditoria</div><div class="cred-val">PCAOB · ISA · IFRS · US GAAP · BACEN GAAP · BR GAAP</div></div>
+          <div class="cred-item rv"><div class="cred-label">Idiomas</div><div class="cred-val">Português nativo · Inglês fluente</div></div>
+          <div class="cred-item rv" style="--d:1"><div class="cred-label">Associações</div><div class="cred-val">IBRACON · ABBI (Comitês de Contabilidade, Risco e Capital Regulatório)</div></div>
+        </div>
+        <div class="tags-row rv">
+          <span class="tag">Governança</span><span class="tag">Controles Internos</span>
+          <span class="tag">PCAOB</span><span class="tag">SOX</span>
+          <span class="tag">Inst. Financeiras</span><span class="tag">Bancos</span>
+          <span class="tag">Fintechs</span><span class="tag">Auditoria</span>
+          <span class="tag">Due Diligence</span><span class="tag">M&amp;A</span>
+          <span class="tag">Valuation</span><span class="tag">IA</span>
+          <span class="tag">IBGC</span><span class="tag">Risk Management</span>
+        </div>
+      </div>
     </div>
-    <div>
-      <div class="sobre-bio">
-        <p><strong>Sócio Diretor da KPMG Brasil e na KPMG US</strong> (Rotation Assignment), Alexandre Toledo acumula <strong>mais de 24 anos</strong> liderando iniciativas de governança, controles internos, gestão de riscos e inteligência financeira em ambientes altamente regulados.</p>
-        <p>Sua trajetória atravessa as maiores firmas globais — <strong>Deloitte, EY e KPMG</strong> — com atuação direta em bancos, fintechs, fundos de investimento e empresas industriais no Brasil e nos Estados Unidos. Clientes como <strong>Bradesco, China Construction Bank, Haitong (BES) e UPL</strong> fazem parte de sua carteira.</p>
-        <p>Na KPMG US, atua como <strong>Team Captain para revisões de inspeção LATAM</strong>, liderando equipes multiculturais em iniciativas de qualidade de auditoria para instituições financeiras e setores regulados. Participou de inspeções PCAOB e revisões QPR com resultados <strong>sem ressalvas</strong>.</p>
-        <p>Nos últimos anos tem integrado <strong>analytics, automação e inteligência artificial</strong> nos processos de governança e inspeção — desenvolvendo o Board Intelligence Simulator, uma plataforma preditiva que antecipa deterioração financeira e operacional para o Conselho.</p>
+
+    <!-- Jornada interativa -->
+    <div class="journey rv s" id="journey">
+      <div class="journey-head">
+        <h3 class="journey-title">24 anos nas maiores <em>firmas do mundo</em></h3>
+        <span class="journey-hint">Clique em cada etapa</span>
       </div>
-      <div class="credentials">
-        <div class="cred-item">
-          <div class="cred-label">Graduação</div>
-          <div class="cred-val">Ciências Contábeis — FECAP</div>
-        </div>
-        <div class="cred-item">
-          <div class="cred-label">Pós-Graduação</div>
-          <div class="cred-val">MBA Finanças Corporativas · MBA Business · MBA Valuation — SaintPaul</div>
-        </div>
-        <div class="cred-item">
-          <div class="cred-label">Certificações</div>
-          <div class="cred-val">CRC · CNAI · IBRACON · IBGC (em processo)</div>
-        </div>
-        <div class="cred-item">
-          <div class="cred-label">Padrões de Auditoria</div>
-          <div class="cred-val">PCAOB · ISA · IFRS · US GAAP · BACEN GAAP · BR GAAP</div>
-        </div>
-        <div class="cred-item">
-          <div class="cred-label">Idiomas</div>
-          <div class="cred-val">Português nativo · Inglês fluente</div>
-        </div>
-        <div class="cred-item">
-          <div class="cred-label">Associações</div>
-          <div class="cred-val">IBRACON · ABBI (Comitês de Contabilidade, Risco e Capital Regulatório)</div>
-        </div>
+      <div class="track">
+        <div class="track-line"><i id="track-fill"></i></div>
+        <button class="stop" data-i="0"><span class="stop-dot">02</span><span class="stop-name">Deloitte</span><span class="stop-yr">2002</span></button>
+        <button class="stop" data-i="1"><span class="stop-dot">05</span><span class="stop-name">ABN AMRO</span><span class="stop-yr">2005</span></button>
+        <button class="stop" data-i="2"><span class="stop-dot">08</span><span class="stop-name">EY</span><span class="stop-yr">2008</span></button>
+        <button class="stop" data-i="3"><span class="stop-dot">10</span><span class="stop-name">KPMG Brasil</span><span class="stop-yr">2010</span></button>
+        <button class="stop" data-i="4"><span class="stop-dot">24</span><span class="stop-name">KPMG US</span><span class="stop-yr">2024</span></button>
       </div>
-      <div class="tags-row">
-        <span class="tag">Governança</span><span class="tag">Controles Internos</span>
-        <span class="tag">PCAOB</span><span class="tag">SOX</span>
-        <span class="tag">Inst. Financeiras</span><span class="tag">Bancos</span>
-        <span class="tag">Fintechs</span><span class="tag">Auditoria</span>
-        <span class="tag">Due Diligence</span><span class="tag">M&amp;A</span>
-        <span class="tag">Business Intelligence</span><span class="tag">IA</span>
-        <span class="tag">IBGC</span><span class="tag">Risk Management</span>
+      <div class="journey-card" id="journey-card"></div>
+    </div>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Deloitte</span><span>ABN AMRO Bank</span><span>Ernst &amp; Young</span><span>KPMG Brasil</span><span>KPMG US</span><span>Bradesco</span><span>China Construction Bank</span><span>Haitong</span><span>Industry Bank</span><span>UPL</span><span>IBRACON</span><span>ABBI</span>
+        <span>Deloitte</span><span>ABN AMRO Bank</span><span>Ernst &amp; Young</span><span>KPMG Brasil</span><span>KPMG US</span><span>Bradesco</span><span>China Construction Bank</span><span>Haitong</span><span>Industry Bank</span><span>UPL</span><span>IBRACON</span><span>ABBI</span>
       </div>
     </div>
   </div>
@@ -471,282 +594,71 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
 
 <!-- BOARD INTELLIGENCE SIMULATOR -->
 <section id="simulator">
-  <div class="sim-inner">
+  <div class="grid-bg"></div>
+  <div class="wrap">
     <div class="sim-grid">
       <div class="sim-content">
-        <div class="sim-badge">● Projeto em Destaque</div>
-        <h2 class="sim-title">Board Intelligence<br><em>Simulator</em></h2>
-        <p class="sim-text">
-          Uma plataforma preditiva de governança desenvolvida para transformar dados operacionais e financeiros em inteligência acionável para o Conselho de Administração, antes que os problemas apareçam nos resultados.
-        </p>
-        <div class="sim-features">
-          <div class="sim-feat">
-            <div class="sim-feat-dot"></div>
-            <div class="sim-feat-text"><strong>Modelos preditivos com Prophet e scikit-learn</strong> — forecast de LTV, churn, CAC, MRR e EBITDA com antecedência de 60–90 dias</div>
-          </div>
-          <div class="sim-feat">
-            <div class="sim-feat-dot"></div>
-            <div class="sim-feat-text"><strong>Dashboards interativos com Plotly</strong> — visualização executiva de indicadores críticos para o Conselho e a Alta Gestão</div>
-          </div>
-          <div class="sim-feat">
-            <div class="sim-feat-dot"></div>
-            <div class="sim-feat-text"><strong>Alertas preditivos de deterioração</strong> — identificação precoce de sinais operacionais, financeiros e de risco antes da crise</div>
-          </div>
-          <div class="sim-feat">
-            <div class="sim-feat-dot"></div>
-            <div class="sim-feat-text"><strong>Pipeline de dados automatizado</strong> — integração SQL Server → Parquet → Cloud com atualização contínua</div>
-          </div>
-          <div class="sim-feat">
-            <div class="sim-feat-dot"></div>
-            <div class="sim-feat-text"><strong>Piloto validado com empresa SaaS</strong> — métricas simuladas como Microsoft Contoso e reais de clientes</div>
-          </div>
+        <div class="sim-badge rv"><span class="live-dot"></span> Projeto em Destaque</div>
+        <h2 class="sim-title rv" style="--d:1">Board Intelligence<br><em>Simulator</em></h2>
+        <p class="sim-text rv" style="--d:2">Uma plataforma preditiva de governança desenvolvida para transformar dados operacionais e financeiros em inteligência acionável para o Conselho de Administração, antes que os problemas apareçam nos resultados.</p>
+        <div class="sim-features" id="sim-features">
+          <div class="sim-feat rv l"><div class="sim-feat-dot"></div><div class="sim-feat-text"><strong>Modelos preditivos com Prophet e scikit-learn</strong> — forecast de LTV, churn, CAC, MRR e EBITDA com antecedência de 60–90 dias</div></div>
+          <div class="sim-feat rv l" style="--d:1"><div class="sim-feat-dot"></div><div class="sim-feat-text"><strong>Dashboards interativos com Plotly</strong> — visualização executiva de indicadores críticos para o Conselho e a Alta Gestão</div></div>
+          <div class="sim-feat rv l" style="--d:2"><div class="sim-feat-dot"></div><div class="sim-feat-text"><strong>Alertas preditivos de deterioração</strong> — identificação precoce de sinais operacionais, financeiros e de risco antes da crise</div></div>
+          <div class="sim-feat rv l" style="--d:3"><div class="sim-feat-dot"></div><div class="sim-feat-text"><strong>Pipeline de dados automatizado</strong> — integração SQL Server → Parquet → Cloud com atualização contínua</div></div>
+          <div class="sim-feat rv l" style="--d:4"><div class="sim-feat-dot"></div><div class="sim-feat-text"><strong>Piloto validado com empresa SaaS</strong> — métricas simuladas como Microsoft Contoso e reais de clientes</div></div>
         </div>
-        <a href="#contato" class="sim-cta">
-          Explorar o Projeto <span class="sim-cta-arrow">→</span>
-        </a>
+        <a href="#contato" class="sim-cta rv">Explorar o Projeto <span class="arrow">→</span></a>
       </div>
-      <div class="sim-visual">
+      <div class="sim-visual rv r" style="--d:2">
+        <div class="sim-float f1">Antecedência<b>60–90 dias</b></div>
+        <div class="sim-float f2">Health Score<b id="float-score">82</b></div>
         <div class="sim-screen">
           <div class="sim-screen-bar">
             <div class="sim-screen-dot" style="background:#E07070;"></div>
             <div class="sim-screen-dot" style="background:#C4973F;"></div>
             <div class="sim-screen-dot" style="background:#7DC885;"></div>
-            <span class="sim-screen-title">Board Intelligence — Dashboard</span>
+            <span class="sim-live"><i></i>Ao vivo</span>
+            <span class="sim-clock" id="sim-clock">--:--:--</span>
           </div>
           <div class="sim-metric-grid">
-            <div class="sim-metric">
-              <div class="sim-metric-label">MRR Forecast</div>
-              <div class="sim-metric-val" style="color:#7DC885;">R$2.4M</div>
-              <div class="sim-metric-trend" style="color:#7DC885;">↑ +12% vs anterior</div>
+            <div class="sim-metric" data-m="mrr"><div class="sim-metric-label">MRR Forecast</div><div class="sim-metric-val" style="color:var(--green);">R$2.40M</div><div class="sim-metric-trend" style="color:var(--green);">↑ +12% vs anterior</div></div>
+            <div class="sim-metric" data-m="churn"><div class="sim-metric-label">Churn Rate</div><div class="sim-metric-val" style="color:var(--red);">3.8%</div><div class="sim-metric-trend" style="color:var(--red);">↑ Alerta ativo</div></div>
+            <div class="sim-metric" data-m="ltv"><div class="sim-metric-label">LTV / CAC</div><div class="sim-metric-val" style="color:var(--gold-light);">4.2x</div><div class="sim-metric-trend" style="color:rgba(248,246,241,0.4);">↔ Estável</div></div>
+            <div class="sim-metric" data-m="ebitda"><div class="sim-metric-label">EBITDA Margin</div><div class="sim-metric-val" style="color:var(--green);">18.3%</div><div class="sim-metric-trend" style="color:var(--green);">↑ Meta atingida</div></div>
+          </div>
+          <div class="sim-row">
+            <div class="sim-chart">
+              <div class="sim-chart-label"><span>Forecast 90 dias — MRR preditivo</span><b id="chart-val">R$2.40M</b></div>
+              <svg viewBox="0 0 340 120" preserveAspectRatio="none" id="sim-svg">
+                <defs>
+                  <linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C4973F" stop-opacity=".35"/><stop offset="1" stop-color="#C4973F" stop-opacity="0"/></linearGradient>
+                </defs>
+                <g stroke="rgba(255,255,255,.05)"><line x1="0" y1="30" x2="340" y2="30"/><line x1="0" y1="60" x2="340" y2="60"/><line x1="0" y1="90" x2="340" y2="90"/></g>
+                <path id="band" fill="rgba(196,151,63,.1)" d=""/>
+                <path id="area" fill="url(#areaG)" d=""/>
+                <polyline id="hist" fill="none" stroke="#D4AF6A" stroke-width="2" stroke-linejoin="round" points=""/>
+                <polyline id="fcst" fill="none" stroke="#C4973F" stroke-width="2" stroke-dasharray="5,4" points=""/>
+                <line id="today" y1="0" y2="120" stroke="rgba(196,151,63,.35)" stroke-dasharray="2,3"/>
+                <circle id="dot" r="4" fill="#EDD99A"/>
+                <circle id="dot-ring" r="4" fill="none" stroke="#EDD99A"><animate attributeName="r" from="4" to="13" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" from="1" to="0" dur="1.6s" repeatCount="indefinite"/></circle>
+              </svg>
             </div>
-            <div class="sim-metric">
-              <div class="sim-metric-label">Churn Rate</div>
-              <div class="sim-metric-val" style="color:#E07070;">3.8%</div>
-              <div class="sim-metric-trend" style="color:#E07070;">↑ Alerta ativo</div>
-            </div>
-            <div class="sim-metric">
-              <div class="sim-metric-label">LTV / CAC</div>
-              <div class="sim-metric-val" style="color:var(--gold-light);">4.2x</div>
-              <div class="sim-metric-trend" style="color:rgba(248,246,241,0.35);">↔ Estável</div>
-            </div>
-            <div class="sim-metric">
-              <div class="sim-metric-label">EBITDA Margin</div>
-              <div class="sim-metric-val" style="color:#7DC885;">18.3%</div>
-              <div class="sim-metric-trend" style="color:#7DC885;">↑ Meta atingida</div>
+            <div class="sim-gauge">
+              <svg viewBox="0 0 120 80">
+                <path d="M15 70 A45 45 0 0 1 105 70" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9" stroke-linecap="round"/>
+                <path id="gauge" class="gauge-arc" d="M15 70 A45 45 0 0 1 105 70" fill="none" stroke="#7DC885" stroke-width="9" stroke-linecap="round" stroke-dasharray="141.4" stroke-dashoffset="141.4"/>
+                <text id="gauge-txt" x="60" y="66" text-anchor="middle" fill="#F8F6F1" font-family="Cormorant, serif" font-size="26">0</text>
+              </svg>
+              <div class="gauge-lbl">Health Score</div>
+              <div class="sim-bars" id="sim-bars"></div>
             </div>
           </div>
-          <div class="sim-chart">
-            <div class="sim-chart-label">Forecast 90 dias — MRR Preditivo</div>
-            <svg width="100%" height="52" viewBox="0 0 340 52">
-              <polyline points="0,40 40,36 80,30 120,28 160,22 200,20 240,16" fill="none" stroke="rgba(196,151,63,0.4)" stroke-width="1.5"/>
-              <polyline points="200,20 240,16 280,12 320,10" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="4,3"/>
-              <circle cx="200" cy="20" r="3" fill="var(--gold)"/>
-              <line x1="200" y1="0" x2="200" y2="52" stroke="rgba(196,151,63,0.2)" stroke-width="1" stroke-dasharray="2,2"/>
-              <text x="202" y="10" font-size="8" fill="rgba(196,151,63,0.5)" font-family="Inter,sans-serif">hoje</text>
-            </svg>
-          </div>
-          <div class="sim-alert-row">
-            <div class="sim-alert warn">⚠ Churn acelerado — Q3</div>
-            <div class="sim-alert ok">✓ MRR on track</div>
-            <div class="sim-alert risk">↓ CAC +8% MoM</div>
-          </div>
+          <div class="sim-alerts" id="sim-alerts"></div>
           <div class="sim-tag-row">
-            <span class="sim-tag">Prophet</span>
-            <span class="sim-tag">scikit-learn</span>
-            <span class="sim-tag">Plotly</span>
-            <span class="sim-tag">Python</span>
-            <span class="sim-tag">SQL Server</span>
-            <span class="sim-tag">Streamlit</span>
+            <span class="sim-tag">Prophet</span><span class="sim-tag">scikit-learn</span><span class="sim-tag">Plotly</span><span class="sim-tag">Python</span><span class="sim-tag">SQL Server</span><span class="sim-tag">Streamlit</span>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TRAJETÓRIA -->
-<section id="trajetoria">
-  <div class="traj-inner">
-    <div class="s-eye">Trajetória</div>
-    <h2 class="s-title traj-title">24 anos nas maiores<br>firmas do mundo</h2>
-    <div class="timeline">
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Abr 2024 — Presente · Estados Unidos</div>
-        <div class="tl-role">Sócio Diretor — KPMG US (Rotation)</div>
-        <div class="tl-co">KPMG · Estados Unidos · Team Captain LATAM</div>
-        <div class="tl-desc">Liderança de equipes multiculturais em iniciativas de qualidade de auditoria, governança e integridade do reporting financeiro em ambientes altamente regulados. Atuação como Team Captain para revisões de inspeção LATAM, integrando analytics, automação e IA aos processos de governança e inspeção de instituições financeiras, fintechs e empresas industriais.</div>
-        <div class="tl-highlights">
-          <div class="tl-hl">Team Captain para inspeções LATAM na KPMG US Inspection Team</div>
-          <div class="tl-hl">Integração de IA e automação em processos de auditoria e governança</div>
-          <div class="tl-hl">Cobertura de Financial Institutions, Fintechs, Fundos e Industriais</div>
-        </div>
-        <div class="tl-tags">
-          <span class="tl-tag">KPMG US</span><span class="tl-tag">Inspeção</span><span class="tl-tag">LATAM</span>
-          <span class="tl-tag">IA & Analytics</span><span class="tl-tag">Inst. Financeiras</span>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Out 2018 — Presente · Brasil</div>
-        <div class="tl-role">Sócio Diretor — KPMG Brasil</div>
-        <div class="tl-co">KPMG · São Paulo · Risk Management Partner · 7+ anos</div>
-        <div class="tl-desc">Partner na área de Risk Management, suportando instituições financeiras e clientes industriais em programas de Segunda Linha de Defesa, Horizontal Reviews e iniciativas de qualidade e risco. Experiência extensiva em investigações, forensic, due diligence e operações complexas, combinando profundidade técnica com forte entendimento de frameworks de governança, risco e controle.</div>
-        <div class="tl-highlights">
-          <div class="tl-hl">Responsável por PCAOB audit engagements (2020–2022)</div>
-          <div class="tl-hl">Projetos de Risk Management  (2019–2021)</div>
-          <div class="tl-hl">Representação da KPMG em Comitês de Contabilidade, Risco e Capital Regulatório</div>
-        </div>
-        <div class="tl-tags">
-          <span class="tl-tag">Risk Management</span><span class="tl-tag">PCAOB</span>
-          <span class="tl-tag">Segunda Linha</span><span class="tl-tag">Forensic</span><span class="tl-tag">Governança</span>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Dez 2010 — Out 2018 · Brasil</div>
-        <div class="tl-role">Gerente Sênior — KPMG Brasil</div>
-        <div class="tl-co">KPMG · São Paulo · Auditoria de Instituições Financeiras · 7 anos 10 meses</div>
-        <div class="tl-desc">Auditoria extensiva de grandes instituições financeiras, incluindo Bradesco, Haitong (BES), Industry Bank (BIB) e China Construction Bank (CCB). Expertise consolidada em clientes SEC, requisitos PCAOB e SOX. Participação em Quality Review Process (QPR) em 2015 e 2016 para BES e BIB com ratings satisfatórios, e inspeção PCAOB em 2019 para o Bradesco sem ressalvas nas áreas sob responsabilidade direta.</div>
-        <div class="tl-highlights">
-          <div class="tl-hl">PCAOB Inspection 2019 — Bradesco: sem issues nas áreas de responsabilidade direta</div>
-          <div class="tl-hl">QPR 2015 e 2016 — BES e BIB: ratings satisfatórios</div>
-          <div class="tl-hl">Clientes: Bradesco, CCB, Haitong (BES), Industry Bank</div>
-        </div>
-        <div class="tl-tags">
-          <span class="tl-tag">Bradesco</span><span class="tl-tag">CCB</span><span class="tl-tag">Haitong</span>
-          <span class="tl-tag">PCAOB</span><span class="tl-tag">SOX</span><span class="tl-tag">SEC</span>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Set 2008 — Out 2010 · Brasil</div>
-        <div class="tl-role">Consultor Sênior — EY</div>
-        <div class="tl-co">Ernst & Young · Consultoria para Inst. Financeiras · Due Diligence & Valuation · 2 anos</div>
-        <div class="tl-desc">Consultoria estratégica e financeira com apoio a transformação, reestruturação e melhoria de performance. Projetos de alto impacto em diagnósticos financeiros, valuation, M&A, Due Diligence e implementação de IFRS no setor bancário.</div>
-        <div class="tl-tags">
-          <span class="tl-tag">M&A</span><span class="tl-tag">Due Diligence</span>
-          <span class="tl-tag">Valuation</span><span class="tl-tag">IFRS</span><span class="tl-tag">Setor Bancário</span>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Mai 2005 — Set 2008 · Brasil</div>
-        <div class="tl-role">Analista de Controles Internos — ABN AMRO Bank</div>
-        <div class="tl-co">ABN AMRO Bank N.V. · 3 anos 5 meses</div>
-        <div class="tl-desc">Estruturação de controles internos do Banco nas áreas de Tesouraria, ALM, M&A, Crédito, Tecnologia e Contábil. Experiência direta no ambiente de banco multinacional de grande porte, base prática que moldou a visão integrada de controles e governança.</div>
-        <div class="tl-tags">
-          <span class="tl-tag">Controles Internos</span><span class="tl-tag">Tesouraria</span>
-          <span class="tl-tag">ALM</span><span class="tl-tag">Banco Multinacional</span>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Ago 2002 — Mai 2005 · Brasil</div>
-        <div class="tl-role">Sênior de Auditoria — Deloitte</div>
-        <div class="tl-co">Deloitte Brasil · São Paulo · 2 anos 10 meses</div>
-        <div class="tl-desc">Início de carreira em auditoria no Big Four — formação sólida em técnicas de auditoria, controles e reporting financeiro que sustenta mais de 24 anos de trajetória nas maiores firmas globais.</div>
-        <div class="tl-tags">
-          <span class="tl-tag">Auditoria</span><span class="tl-tag">Big Four</span><span class="tl-tag">Controles</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- EXPERTISE -->
-<section id="expertise">
-  <div class="exp-inner">
-    <div class="s-eye">Expertise</div>
-    <h2 class="s-title exp-title">O que trago<br>para um Conselho</h2>
-    <div class="exp-grid">
-      <div class="exp-card">
-        <div class="exp-num">01</div>
-        <div class="exp-card-title">Automação de Controles</div>
-        <div class="exp-card-text">Transformação de controles manuais em processos automatizados, reduzindo risco operacional e aumentando velocidade e confiabilidade do monitoramento contínuo em bancos e fintechs.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-num">02</div>
-        <div class="exp-card-title">Dashboards de Governança</div>
-        <div class="exp-card-text">Painéis executivos que entregam ao Conselho visão integrada de risco, compliance e performance em tempo real, com a linguagem e profundidade que a tomada de decisão exige.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-num">03</div>
-        <div class="exp-card-title">Inteligência Preditiva</div>
-        <div class="exp-card-text">Uso de analytics e IA para identificar deterioração financeira e operacional com 60–90 dias de antecedência, transformando dados em alertas acionáveis para o Comitê de Auditoria.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-num">04</div>
-        <div class="exp-card-title">Governança em Bancos</div>
-        <div class="exp-card-text">24 anos de experiência direta com bancos, fintechs e reguladores, incluindo PCAOB, BACEN, SEC e SOX. Profundo conhecimento do ambiente regulatório e das expectativas do Conselho.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-num">05</div>
-        <div class="exp-card-title">Due Diligence & M&A</div>
-        <div class="exp-card-text">Participação em processos de due diligence financeira, valuation e integração pós-M&A, com visão integrada de governança, risco e oportunidade que o Conselho precisa nas transações.</div>
-      </div>
-      <div class="exp-card">
-        <div class="exp-num">06</div>
-        <div class="exp-card-title">Perspectiva Global</div>
-        <div class="exp-card-text">Atuação como Sócio Diretor no Brasil e nos Estados Unidos, liderando equipes multiculturais e alinhando práticas aos padrões PCAOB, IFRS, SOX e US GAAP em ambientes de alta exigência regulatória.</div>
-      </div>
-      <div class="exp-bar">
-        <div class="exp-bar-firms">
-          <span class="exp-bar-firm">Deloitte</span>
-          <div class="exp-bar-sep"></div>
-          <span class="exp-bar-firm">Ernst & Young</span>
-          <div class="exp-bar-sep"></div>
-          <span class="exp-bar-firm">KPMG Brasil</span>
-          <div class="exp-bar-sep"></div>
-          <span class="exp-bar-firm">KPMG US</span>
-        </div>
-        <p class="exp-bar-quote">Uma carreira construída nos três maiores nomes da auditoria e consultoria global, com profundidade rara em governança, dados e instituições financeiras.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- POSICIONAMENTO -->
-<section id="posicao">
-  <div class="pos-inner">
-    <div class="pos-grid">
-      <div>
-        <div class="s-eye">Posicionamento</div>
-        <h2 class="s-title pos-title">Onde posso<br>contribuir <em>agora</em></h2>
-        <p class="pos-text">Após mais de duas décadas construindo e liderando estruturas de governança, controles e inteligência analítica nas maiores firmas globais, busco traduzir essa experiência em contribuição direta como Conselheiro, membro de Comitê ou executivo C-Level.</p>
-        <div class="pos-roles">
-          <div class="pos-role">
-            <span class="pos-role-name">Conselho de Administração</span>
-            <span class="pos-role-type">Independente</span>
-          </div>
-          <div class="pos-role">
-            <span class="pos-role-name">Comitê de Auditoria</span>
-            <span class="pos-role-type">Membro / Coordenador</span>
-          </div>
-          <div class="pos-role">
-            <span class="pos-role-name">Comitê de Riscos</span>
-            <span class="pos-role-type">Membro · Gestão de Riscos & Controles</span>
-          </div>
-          <div class="pos-role">
-            <span class="pos-role-name">Comitê de Inovação</span>
-            <span class="pos-role-type">Membro · Dados, IA & Tecnologia</span>
-          </div>
-          <div class="pos-role">
-            <span class="pos-role-name">Conselho Consultivo</span>
-            <span class="pos-role-type">Governança & Dados</span>
-          </div>
-        </div>
-      </div>
-      <div class="pos-visual">
-        <img src="assets/logo/logo.png" alt="Alexandre Toledo" style="width:96px; height:96px; object-fit:contain;">
-        <p class="pos-quote">"Big Four + tecnologia + Conselho — uma combinação que o mercado raramente encontra em um único perfil."</p>
       </div>
     </div>
   </div>
@@ -754,32 +666,42 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
 
 <!-- LIVRO -->
 <section id="livro">
-  <div class="livro-inner">
+  <div class="wrap">
     <div class="livro-grid">
-      <div class="livro-cover-wrap">
-        <img src="assets/images/Capa.png" alt="Chamado ao Caráter — Alexandre Toledo" class="livro-cover" style="filter:none; object-fit:cover; height:580px;">
-        <span class="livro-spine-label">Publicado</span>
+      <div class="book-stage rv s" id="book-stage">
+        <div class="book-glow"></div>
+        <span class="book-ribbon">Publicado</span>
+        <div class="book-float">
+          <div class="book" id="book" role="img" aria-label="Livro Chamado ao Caráter, de Alexandre Toledo">
+            <div class="book-back"></div>
+            <div class="book-pages"></div>
+            <div class="book-top"></div>
+            <div class="book-spine"><span>Chamado ao Caráter <b>A. Toledo</b></span></div>
+            <div class="book-front"></div>
+          </div>
+        </div>
+        <div class="book-shadow"></div>
       </div>
       <div class="livro-content">
-        <div class="s-eye">Livro</div>
-        <h2 class="livro-title">Chamado ao Caráter</h2>
-        <p class="livro-subtitle">O Padrão Bíblico para o Líder Corporativo e Ministerial</p>
+        <div class="s-eye rv">Livro</div>
+        <h2 class="livro-title rv" style="--d:1">Chamado ao Caráter</h2>
+        <p class="livro-subtitle rv" style="--d:2">O Padrão Bíblico para o Líder Corporativo e Ministerial</p>
         <div class="livro-text">
-          <p>Em <strong>Chamado ao Caráter</strong>, Alexandre Toledo apresenta um panorama sobre a credibilidade do líder intencional, conectando com profundidade e rigor os padrões de liderança bíblica ao ambiente corporativo moderno.</p>
-          <p>O livro aborda a liderança não como uma questão de competência técnica, mas de caráter. Toledo argumenta que a crise de governança nas organizações é, em sua raiz, uma crise de integridade e que líderes verdadeiramente eficazes constroem autoridade sobre o fundamento do caráter, não apenas da habilidade.</p>
-          <p>Uma obra indispensável para executivos, conselheiros e líderes que desejam unir excelência profissional e integridade pessoal.</p>
+          <p class="rv">Em <strong>Chamado ao Caráter</strong>, Alexandre Toledo apresenta um panorama sobre a credibilidade do líder intencional, conectando com profundidade e rigor os padrões de liderança bíblica ao ambiente corporativo moderno.</p>
+          <p class="rv">O livro aborda a liderança não como uma questão de competência técnica, mas de caráter. Toledo argumenta que a crise de governança nas organizações é, em sua raiz, uma crise de integridade e que líderes verdadeiramente eficazes constroem autoridade sobre o fundamento do caráter, não apenas da habilidade.</p>
+          <p class="rv">Uma obra indispensável para executivos, conselheiros e líderes que desejam unir excelência profissional e integridade pessoal.</p>
         </div>
-        <div class="livro-quotes">
-          <div>
+        <div class="livro-quotes rv" id="livro-quotes">
+          <div class="livro-quote-item on">
             <div class="livro-quote">"Vivemos uma crise de liderança disfarçada de crise de competência. Alexandre Toledo desmascara essa ilusão com rigor teológico e aplicação prática."</div>
             <div class="livro-quote-attr">Edgard Falcão · Mentor e pesquisador do comportamento humano</div>
           </div>
-          <div>
+          <div class="livro-quote-item">
             <div class="livro-quote">"O líder intencional impacta gerações e transforma vidas."</div>
             <div class="livro-quote-attr">Alexandre Toledo</div>
           </div>
         </div>
-        <a href="#contato" class="livro-cta">Falar sobre o livro →</a>
+        <a href="#contato" class="livro-cta rv">Falar sobre o livro <span class="arrow">→</span></a>
       </div>
     </div>
   </div>
@@ -787,98 +709,60 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
 
 <!-- PALESTRAS & DOCÊNCIA -->
 <section id="palestras">
-  <div class="pal-inner">
-    <div class="s-eye">Palestras & Docência</div>
-    <h2 class="s-title pal-title">Temas que ministro para<br><em>Conselhos, executivos e instituições de ensino</em></h2>
-    <p class="pal-subtitle">Conteúdos construídos a partir de 24 anos de experiência prática em Big Four, governança e instituições financeiras, traduzidos em linguagem acessível para Conselhos, times executivos e salas de aula.</p>
+  <div class="wrap">
+    <div class="s-eye rv">Palestras &amp; Docência</div>
+    <h2 class="s-title pal-title rv" style="--d:1">Temas que ministro para<br><em>Conselhos, executivos e instituições de ensino</em></h2>
+    <p class="pal-subtitle rv" style="--d:2">Conteúdos construídos a partir de 24 anos de experiência prática em Big Four, governança e instituições financeiras, traduzidos em linguagem acessível para Conselhos, times executivos e salas de aula.</p>
     <div class="pal-grid">
-      <div class="pal-card">
-        <div class="pal-num">①</div>
-        <div>
-          <div class="pal-card-title">Governança Corporativa para o Século XXI</div>
-          <div class="pal-card-text">Como dados e automação estão redefinindo o papel do Conselho.</div>
-        </div>
-      </div>
-      <div class="pal-card">
-        <div class="pal-num">②</div>
-        <div>
-          <div class="pal-card-title">Demonstrações Financeiras para Conselheiros</div>
-          <div class="pal-card-text">O que o Comitê de Auditoria precisa ler antes de assinar.</div>
-        </div>
-      </div>
-      <div class="pal-card">
-        <div class="pal-num">③</div>
-        <div>
-          <div class="pal-card-title">Gestão de Riscos e Controles Internos</div>
-          <div class="pal-card-text">Da Segunda Linha ao Conselho — como estruturar a defesa.</div>
-        </div>
-      </div>
-      <div class="pal-card">
-        <div class="pal-num">④</div>
-        <div>
-          <div class="pal-card-title">Inteligência de Dados para a Alta Gestão</div>
-          <div class="pal-card-text">IA, automação e dashboards que o Conselho realmente usa.</div>
-        </div>
-      </div>
-      <div class="pal-card" style="grid-column: 1 / -1;">
-        <div class="pal-num">⑤</div>
-        <div>
-          <div class="pal-card-title">Liderança com Caráter no Ambiente Corporativo</div>
-          <div class="pal-card-text">O que "Chamado ao Caráter" ensina para executivos e conselheiros.</div>
-        </div>
-      </div>
+      <div class="pal-card rv"><div class="pal-num">①</div><div><div class="pal-card-title">Governança Corporativa para o Século XXI</div><div class="pal-card-text">Como dados e automação estão redefinindo o papel do Conselho.</div></div></div>
+      <div class="pal-card rv" style="--d:1"><div class="pal-num">②</div><div><div class="pal-card-title">Valuation</div><div class="pal-card-text">Como o Conselho avalia premissas, riscos e geração de valor em investimentos, M&amp;A e planos de negócio.</div></div></div>
+      <div class="pal-card rv"><div class="pal-num">③</div><div><div class="pal-card-title">Gestão de Riscos e Controles Internos</div><div class="pal-card-text">Da Segunda Linha ao Conselho — como estruturar a defesa.</div></div></div>
+      <div class="pal-card rv" style="--d:1"><div class="pal-num">④</div><div><div class="pal-card-title">Inteligência de Dados para a Alta Gestão</div><div class="pal-card-text">IA, automação e dashboards que o Conselho realmente usa.</div></div></div>
+      <div class="pal-card wide rv"><div class="pal-num">⑤</div><div><div class="pal-card-title">Liderança com Caráter no Ambiente Corporativo</div><div class="pal-card-text">O que "Chamado ao Caráter" ensina para executivos e conselheiros.</div></div></div>
     </div>
-    <div class="pal-cta-row">
-      <a href="#contato" class="pal-cta">Convidar para Palestra →</a>
-    </div>
-  </div>
-</section>
 
-<!-- YOUTUBE -->
-<section id="youtube">
-  <div class="yt-inner">
-    <div class="yt-header">
-      <div class="s-eye">Vídeo</div>
-      <h2 class="yt-title">Governança e <em>Decisão</em><br>na prática</h2>
-      <p class="yt-subtitle">Um recorte direto de como aplico governança, controles e inteligência de dados no dia a dia de Conselhos e Alta Gestão.</p>
-    </div>
-    <div class="yt-frame-wrap">
-      <iframe src="https://www.youtube.com/embed/zc3TjLLD4uk" title="Alexandre Toledo — YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-    </div>
-    <div class="yt-footer">
-      <a href="https://youtu.be/zc3TjLLD4uk?si=9VcBFXVjg9-vj_VG" target="_blank" rel="noopener" class="yt-cta">Assistir no YouTube →</a>
+    <!-- Apresentação em destaque -->
+    <a class="deck rv s" href="apresentacao/o-que-nao-e-medido.html" id="apresentacao">
+      <div class="deck-info">
+        <div class="deck-eye"><i></i>Apresentação</div>
+        <div class="deck-title">O que não é medido<br><span>também governa</span></div>
+        <div class="deck-meta">Apresentação para <b>Squad de Inovação</b> · 19/10/2026<br>Dados descartados, dados nunca capturados e o silêncio como sinal.</div>
+        <span class="deck-btn">Ver apresentação <span class="arrow">→</span></span>
+      </div>
+      <div class="deck-screen"><canvas id="deck-fx" aria-hidden="true"></canvas></div>
+    </a>
+
+    <div class="pal-cta-row">
+      <a href="#contato" class="sim-cta rv">Convidar para Palestra <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
 
 <!-- CONTATO -->
 <section id="contato">
-  <div class="contato-inner">
+  <div class="wrap">
     <div class="contato-grid">
       <div>
-        <div class="s-eye">Contato</div>
-        <h2 class="s-title contato-title">Vamos conversar<br>sobre a <em>oportunidade</em>?</h2>
-        <p class="contato-text">Estou disponível para conversas sobre posições em Conselhos, Comitês de Auditoria e oportunidades C-Level em bancos e fintechs no Brasil e internacionalmente.</p>
+        <div class="s-eye rv">Contato</div>
+        <h2 class="s-title contato-title rv" style="--d:1">Vamos conversar<br>sobre a <em>oportunidade</em>?</h2>
+        <p class="contato-text rv" style="--d:2">Estou disponível para conversas sobre posições em Conselhos, Comitês de Auditoria e oportunidades C-Level em bancos e fintechs no Brasil e internacionalmente.</p>
+        <div class="contato-quick">
+          <a class="cq wa rv" href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>
+            <div><div class="cq-lbl">WhatsApp</div><div class="cq-val">+55 11 96473-7231</div></div>
+          </a>
+          <a class="cq li rv" style="--d:1" href="https://www.linkedin.com/in/alexandre-toledo" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            <div><div class="cq-lbl">LinkedIn</div><div class="cq-val">alexandre-toledo</div></div>
+          </a>
+        </div>
         <div class="contato-items">
-          <div>
-            <div class="ci-label">E-mail</div>
-            <div class="ci-val">contato@toledoalexandre.com.br</div>
-          </div>
-          <div>
-            <div class="ci-label">LinkedIn</div>
-            <div class="ci-val">linkedin.com/in/alexandre-toledo</div>
-          </div>
-          <div>
-            <div class="ci-label">Localização</div>
-            <div class="ci-val">Brasil · Estados Unidos · Global</div>
-          </div>
-          <div>
-            <div class="ci-label">Certificação</div>
-            <div class="ci-val">IBGC — Em processo de certificação</div>
-          </div>
+          <div class="rv"><div class="ci-label">E-mail</div><div class="ci-val"><a href="mailto:contato@toledoalexandre.com.br">contato@toledoalexandre.com.br</a></div></div>
+          <div class="rv"><div class="ci-label">Localização</div><div class="ci-val">Brasil · Estados Unidos · Global</div></div>
+          <div class="rv"><div class="ci-label">Certificação</div><div class="ci-val">IBGC — Em processo de certificação</div></div>
         </div>
       </div>
-      <form class="contato-form" action="https://formspree.io/f/mjgzqjyy" method="POST">
+      <form class="contato-form rv r" action="https://formspree.io/f/mjgzqjyy" method="POST">
         <input type="hidden" name="_subject" value="Nova Mensagem - Site Alexandre Toledo">
         <input type="hidden" name="origem" value="Landing Page Alexandre Toledo">
         <div class="cf-title">Enviar mensagem</div>
@@ -911,51 +795,286 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-name">
-      <img src="assets/logo/logo.png" alt="Alexandre Toledo" style="width:22px; height:22px; object-fit:contain;">
-      Alexandre Toledo
-    </div>
+    <div class="footer-name"><img src="assets/logo/logo.png" alt="">Alexandre Toledo</div>
     <span class="footer-slogan">Governança, Dados e Decisão.</span>
+    <div class="footer-links">
+      <a class="nav-ico" href="https://www.linkedin.com/in/alexandre-toledo" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.370 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+      <a class="nav-ico wa" href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.070-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg></a>
+    </div>
     <span class="footer-copy">© 2026 Alexandre Toledo</span>
   </div>
 </footer>
 
+<!-- WHATSAPP FLUTUANTE -->
+<a class="wa-float" href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
+  <span class="wa-tip">Fale comigo no WhatsApp</span>
+  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.440-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>
+</a>
+
 <script>
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
-  });
-}, { threshold: 0.08 });
-document.querySelectorAll('.tl-item, .exp-card, .pos-role, .sim-feat, .cred-item').forEach(el => {
-  el.style.opacity='0'; el.style.transform='translateY(12px)';
-  el.style.transition='opacity 0.5s ease, transform 0.5s ease';
-  obs.observe(el);
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+/* ── Nav: fundo ao rolar, barra de progresso, link ativo, menu mobile ── */
+const nav = $('#nav'), prog = $('#scroll-prog');
+const sections = $$('section[id]');
+const navLinks = $$('#nav-links a[href^="#"]');
+function onScroll() {
+  const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  nav.classList.toggle('scrolled', y > 30);
+  prog.style.width = (h > 0 ? y / h * 100 : 0) + '%';
+  let cur = '';
+  sections.forEach(s => { if (s.offsetTop - 120 <= y) cur = s.id; });
+  navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + cur));
+}
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+const burger = $('#nav-burger');
+burger.addEventListener('click', () => { const o = nav.classList.toggle('open'); burger.setAttribute('aria-expanded', o); });
+$$('#nav-links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); burger.setAttribute('aria-expanded', false); }));
+
+/* ── Nome do hero letra a letra ── */
+$$('[data-split]').forEach((el, li) => {
+  const txt = el.textContent.trim(); el.textContent = '';
+  [...txt].forEach((c, i) => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; s.style.setProperty('--i', i + li * 9); el.appendChild(s); });
 });
 
-const form = document.querySelector('.contato-form');
-const note = document.getElementById('cf-note');
-if (form) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = form.querySelector('#cf-nome').value.trim();
-    note.textContent = 'Enviando...';
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) {
-        note.textContent = `Obrigada, ${name || 'visitante'}! Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.`;
-        form.reset();
-      } else {
-        note.textContent = 'Não foi possível enviar sua mensagem. Tente novamente.';
-      }
-    } catch (error) {
-      note.textContent = 'Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.';
-    }
-  });
+/* ── Frase rotativa (efeito digitação) ── */
+const phrases = ['transforma dados em decisão', 'antecipa riscos', 'protege o caixa', 'fortalece o Conselho', 'gera confiança'];
+const rot = $('#rotator');
+if (!reduce) {
+  let pi = 0, ci = phrases[0].length, del = true;
+  setTimeout(function type() {
+    const p = phrases[pi];
+    if (del) { ci--; if (ci <= 0) { del = false; pi = (pi + 1) % phrases.length; } }
+    else { ci++; if (ci >= phrases[pi].length) { del = true; rot.textContent = phrases[pi]; return setTimeout(type, 2200); } }
+    rot.textContent = phrases[pi].slice(0, ci) || '​';
+    setTimeout(type, del ? 35 : 70);
+  }, 3200);
 }
+
+/* ── Contadores ── */
+function countUp(el) {
+  const to = +el.dataset.count; if (reduce) { el.textContent = to; return; }
+  const t0 = performance.now(), dur = 1600;
+  (function tick(now) { const k = Math.min(1, (now - t0) / dur); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); })(t0);
+}
+setTimeout(() => $$('.hero-stat [data-count]').forEach(countUp), 1200);
+
+/* ── Reveal ao rolar ── */
+const io = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('in');
+  $$('[data-count]', e.target).forEach(countUp);
+  io.unobserve(e.target);
+}), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+$$('.rv').forEach(el => io.observe(el));
+
+/* ── Hero: rede de partículas douradas ── */
+(function () {
+  const cv = $('#hero-fx'), ctx = cv.getContext('2d'); let W, H, pts = [], mouse = { x: -999, y: -999 };
+  function size() { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+    const n = Math.min(90, Math.floor(W * H / 16000)); pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35, r: Math.random() * 1.6 + .4 })); }
+  size(); addEventListener('resize', size);
+  $('#home').addEventListener('mousemove', e => { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+  $('#home').addEventListener('mouseleave', () => { mouse.x = mouse.y = -999; });
+  let visible = true; new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(cv);
+  function frame() {
+    if (visible) {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of pts) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
+        const dx = mouse.x - p.x, dy = mouse.y - p.y, dm = Math.hypot(dx, dy);
+        if (dm < 160) { p.x -= dx / dm * .6; p.y -= dy / dm * .6; }
+        ctx.fillStyle = 'rgba(212,175,106,.7)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
+      }
+      for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+        const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 120) { ctx.strokeStyle = `rgba(196,151,63,${(1 - d / 120) * .22})`; ctx.lineWidth = .6; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      }
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── Jornada interativa ── */
+const steps = [
+  { role: 'Sênior de Auditoria — Deloitte', period: 'Ago 2002 — Mai 2005 · Brasil', text: 'Início de carreira em auditoria no Big Four — formação sólida em técnicas de auditoria, controles e reporting financeiro que sustenta toda a trajetória nas maiores firmas globais.', tags: ['Auditoria', 'Big Four', 'Controles'] },
+  { role: 'Analista de Controles Internos — ABN AMRO Bank', period: 'Mai 2005 — Set 2008 · Brasil', text: 'Estruturação de controles internos nas áreas de Tesouraria, ALM, M&A, Crédito, Tecnologia e Contábil de um banco multinacional — base prática que moldou a visão integrada de controles e governança.', tags: ['Controles Internos', 'Tesouraria', 'ALM'] },
+  { role: 'Consultor Sênior — EY', period: 'Set 2008 — Out 2010 · Brasil', text: 'Consultoria estratégica e financeira para instituições financeiras: diagnósticos, valuation, M&A, due diligence e implementação de IFRS no setor bancário.', tags: ['M&A', 'Due Diligence', 'Valuation', 'IFRS'] },
+  { role: 'Gerente Sênior → Sócio Diretor — KPMG Brasil', period: 'Dez 2010 — Presente · Brasil', text: 'Auditoria de grandes instituições financeiras (Bradesco, CCB, Haitong, Industry Bank), clientes SEC, PCAOB e SOX. Como Partner de Risk Management: Segunda Linha de Defesa, forensic e due diligence. Inspeção PCAOB 2019 sem ressalvas nas áreas sob sua responsabilidade.', tags: ['PCAOB', 'SOX', 'Risk Management', 'Forensic'] },
+  { role: 'Sócio Diretor — KPMG US (Rotation)', period: 'Abr 2024 — Presente · Estados Unidos', text: 'Team Captain para revisões de inspeção LATAM, liderando equipes multiculturais em qualidade de auditoria e integridade do reporting financeiro — integrando analytics, automação e IA aos processos de governança.', tags: ['KPMG US', 'Inspeção', 'LATAM', 'IA & Analytics'] }
+];
+const stops = $$('.stop'), card = $('#journey-card'), fill = $('#track-fill');
+let jIdx = 0, jTimer = null, jUser = false;
+function showStep(i) {
+  jIdx = i;
+  stops.forEach((s, k) => { s.classList.toggle('lit', k <= i); s.classList.toggle('cur', k === i); });
+  fill.style.width = (i / (stops.length - 1) * 100) + '%';
+  const s = steps[i];
+  card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
+  card.innerHTML = `<div><div class="jc-role">${s.role}</div><div class="jc-period">${s.period}</div></div><div><p class="jc-text">${s.text}</p><div class="jc-tags">${s.tags.map(t => `<span>${t}</span>`).join('')}</div></div>`;
+}
+stops.forEach(s => s.addEventListener('click', () => { jUser = true; clearInterval(jTimer); showStep(+s.dataset.i); }));
+showStep(0);
+new IntersectionObserver(([e]) => {
+  clearInterval(jTimer);
+  if (e.isIntersecting && !jUser && !reduce) jTimer = setInterval(() => showStep((jIdx + 1) % steps.length), 4200);
+}, { threshold: .4 }).observe($('#journey'));
+
+/* ── Board Intelligence: painel ao vivo ── */
+(function () {
+  const clock = $('#sim-clock');
+  setInterval(() => { clock.textContent = new Date().toLocaleTimeString('pt-BR'); }, 1000);
+
+  // gráfico
+  const N = 26, hist = [], H = 120, Wd = 340, split = 17;
+  let v = 1.9; for (let i = 0; i < N; i++) { v += (Math.random() - .35) * .06; hist.push(v); }
+  const xs = i => i / (N - 1) * Wd;
+  function ys(val) { const mn = Math.min(...hist) - .1, mx = Math.max(...hist) + .15; return H - 10 - (val - mn) / (mx - mn) * (H - 24); }
+  function draw() {
+    const pts = hist.map((val, i) => [xs(i), ys(val)]);
+    const hp = pts.slice(0, split + 1), fp = pts.slice(split);
+    $('#hist').setAttribute('points', hp.map(p => p.join(',')).join(' '));
+    $('#fcst').setAttribute('points', fp.map(p => p.join(',')).join(' '));
+    $('#area').setAttribute('d', `M0,${H} L` + hp.map(p => p.join(',')).join(' L') + ` L${hp[hp.length - 1][0]},${H} Z`);
+    const up = fp.map(([x, y], k) => [x, y - k * 2.2]), dn = fp.map(([x, y], k) => [x, y + k * 2.2]).reverse();
+    $('#band').setAttribute('d', 'M' + up.map(p => p.join(',')).join(' L') + ' L' + dn.map(p => p.join(',')).join(' L') + ' Z');
+    const [tx, ty] = pts[split];
+    $('#today').setAttribute('x1', tx); $('#today').setAttribute('x2', tx);
+    $('#dot').setAttribute('cx', tx); $('#dot').setAttribute('cy', ty);
+    $('#dot-ring').setAttribute('cx', tx); $('#dot-ring').setAttribute('cy', ty);
+    $('#chart-val').textContent = 'R$' + (hist[split] * 1.26).toFixed(2) + 'M';
+  }
+  draw();
+
+  // métricas
+  const M = {
+    mrr:    { v: 2.40, f: x => 'R$' + x.toFixed(2) + 'M', step: .03, min: 2.2, max: 2.7, tr: x => x >= 2.4 ? ['↑ +' + Math.round((x / 2.14 - 1) * 100) + '% vs anterior', 'var(--green)'] : ['↓ abaixo do plano', 'var(--red)'] },
+    churn:  { v: 3.8,  f: x => x.toFixed(1) + '%', step: .15, min: 2.6, max: 4.4, tr: x => x > 3.5 ? ['↑ Alerta ativo', 'var(--red)'] : ['↓ Sob controle', 'var(--green)'] },
+    ltv:    { v: 4.2,  f: x => x.toFixed(1) + 'x', step: .1, min: 3.6, max: 4.8, tr: x => x >= 4 ? ['↔ Estável', 'rgba(248,246,241,.4)'] : ['↓ Atenção CAC', 'var(--gold-light)'] },
+    ebitda: { v: 18.3, f: x => x.toFixed(1) + '%', step: .3, min: 16.5, max: 20, tr: x => x >= 18 ? ['↑ Meta atingida', 'var(--green)'] : ['↓ Abaixo da meta', 'var(--gold-light)'] }
+  };
+  const bars = $('#sim-bars'); for (let i = 0; i < 12; i++) bars.appendChild(document.createElement('i'));
+  function gauge(score) {
+    const g = $('#gauge'); g.setAttribute('stroke-dashoffset', 141.4 * (1 - score / 100));
+    g.setAttribute('stroke', score > 75 ? '#7DC885' : score > 60 ? '#D4AF6A' : '#E07070');
+    const t = $('#gauge-txt'), from = +t.textContent || 0, t0 = performance.now();
+    (function tick(now) { const k = Math.min(1, (now - t0) / 1100); t.textContent = Math.round(from + (score - from) * k); if (k < 1) requestAnimationFrame(tick); })(t0);
+    $('#float-score').textContent = score;
+  }
+  function tickMetrics() {
+    const keys = Object.keys(M), key = keys[(Math.random() * keys.length) | 0], m = M[key];
+    m.v = Math.max(m.min, Math.min(m.max, m.v + (Math.random() - .5) * 2 * m.step));
+    const el = $(`.sim-metric[data-m="${key}"]`);
+    el.querySelector('.sim-metric-val').textContent = m.f(m.v);
+    const [txt, col] = m.tr(m.v), tr = el.querySelector('.sim-metric-trend'); tr.textContent = txt; tr.style.color = col;
+    el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 700);
+    hist.push(hist[hist.length - 1] + (Math.random() - .38) * .07); hist.shift(); draw();
+    $$('i', bars).forEach(b => { const h = 20 + Math.random() * 80; b.style.height = h + '%'; b.style.background = h > 85 ? 'rgba(224,112,112,.7)' : 'rgba(196,151,63,.4)'; });
+    gauge(Math.round(70 + (M.ebitda.v - 16.5) * 4 - (M.churn.v - 2.6) * 4 + (M.ltv.v - 3.6) * 5));
+  }
+
+  // alertas rotativos
+  const alerts = [
+    ['warn', '⚠ Churn acelerado — coorte Q3'], ['ok', '✓ MRR dentro do forecast'], ['risk', '↓ CAC +8% MoM — canal pago'],
+    ['ok', '✓ Conversão EBITDA → caixa 91%'], ['warn', '⚠ Recebíveis +12% vs receita'], ['risk', '↓ LTV safra 2025 abaixo da média'],
+    ['ok', '✓ Covenants dentro do limite'], ['warn', '⚠ Concentração: top 5 clientes = 38%']
+  ];
+  const box = $('#sim-alerts'); let ai = 0, curA = null;
+  function nextAlert() {
+    const [cls, txt] = alerts[ai++ % alerts.length];
+    const el = document.createElement('div'); el.className = 'sim-alert ' + cls;
+    el.innerHTML = `${txt}<small>${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
+    box.appendChild(el);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+    if (curA) { const old = curA; old.classList.add('out'); setTimeout(() => old.remove(), 600); }
+    curA = el;
+  }
+  // destaque sequencial das funcionalidades
+  const feats = $$('.sim-feat'); let fi = 0;
+  function nextFeat() { feats.forEach((f, k) => f.classList.toggle('hl', k === fi)); fi = (fi + 1) % feats.length; }
+
+  let timers = [];
+  new IntersectionObserver(([e]) => {
+    timers.forEach(clearInterval); timers = [];
+    if (!e.isIntersecting) return;
+    if (!curA) nextAlert();
+    tickMetrics();
+    if (reduce) return;
+    timers.push(setInterval(tickMetrics, 1800), setInterval(nextAlert, 3000), setInterval(nextFeat, 2600));
+  }, { threshold: .25 }).observe($('#simulator'));
+})();
+
+/* ── Livro 3D: segue o mouse ── */
+(function () {
+  const stage = $('#book-stage'), book = $('#book');
+  if (reduce) return;
+  stage.addEventListener('mousemove', e => {
+    const r = stage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+    book.style.transform = `rotateY(${26 + x * 34}deg) rotateX(${4 - y * 16}deg)`;
+  });
+  stage.addEventListener('mouseleave', () => { book.style.transform = ''; });
+  // giro suave ao entrar na tela
+  new IntersectionObserver(([e], o) => {
+    if (!e.isIntersecting) return; o.disconnect();
+    book.animate([{ transform: 'rotateY(-160deg) rotateX(4deg)' }, { transform: 'rotateY(26deg) rotateX(4deg)' }], { duration: 1800, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  }, { threshold: .4 }).observe(stage);
+})();
+
+/* ── Citações do livro em rotação ── */
+(function () {
+  const items = $$('.livro-quote-item'); let qi = 0;
+  if (reduce || items.length < 2) return;
+  setInterval(() => { items[qi].classList.remove('on'); qi = (qi + 1) % items.length; items[qi].classList.add('on'); }, 6000);
+})();
+
+/* ── Cartões de palestra: brilho seguindo o mouse ── */
+$$('.pal-card').forEach(c => c.addEventListener('mousemove', e => {
+  const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+}));
+
+/* ── Prévia da apresentação: chuva de dados ── */
+(function () {
+  const cv = $('#deck-fx'), ctx = cv.getContext('2d'); let W, H, drops, fs = 14;
+  function size() { const r = cv.getBoundingClientRect(); W = cv.width = r.width; H = cv.height = r.height; drops = Array.from({ length: Math.ceil(W / fs) }, () => Math.random() * -40); ctx.fillStyle = '#06110E'; ctx.fillRect(0, 0, W, H); }
+  size(); addEventListener('resize', size);
+  const glyphs = '01R$%LTVCACEBITDA0123456789';
+  let visible = false; new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(cv);
+  let last = 0;
+  function frame(t) {
+    if (visible && t - last > 60) {
+      last = t;
+      ctx.fillStyle = 'rgba(6,17,14,.12)'; ctx.fillRect(0, 0, W, H);
+      ctx.font = '600 13px "Courier New", monospace';
+      drops.forEach((d, i) => {
+        if (i % 7 === 3) return; // colunas vazias: o que não foi capturado
+        const r = Math.random(); ctx.fillStyle = r < .04 ? '#F3B94D' : '#36E07F';
+        ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * fs, d * fs);
+        if (d * fs > H && Math.random() > .97) drops[i] = 0; drops[i]++;
+      });
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ── Formulário ── */
+const form = $('.contato-form'), note = $('#cf-note');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('#cf-nome', form).value.trim();
+  note.textContent = 'Enviando...';
+  try {
+    const response = await fetch(form.action, { method: form.method, body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    if (response.ok) { note.textContent = `Obrigado, ${name || 'visitante'}! Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.`; form.reset(); }
+    else note.textContent = 'Não foi possível enviar sua mensagem. Tente novamente.';
+  } catch (error) { note.textContent = 'Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.'; }
+});
+})();
 </script>
 </body>
 </html>
