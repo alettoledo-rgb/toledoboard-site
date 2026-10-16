@@ -272,8 +272,6 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 .navbtn:hover{border-color:var(--matrix)}
 #count{font:600 13px var(--mono);color:var(--muted);padding:0 6px;font-variant-numeric:tabular-nums}
 #prog{position:absolute;left:0;top:0;height:3px;background:var(--matrix);z-index:20;transition:width .4s}
-#notes{position:absolute;left:14px;right:14px;bottom:62px;max-height:38%;overflow:auto;background:rgba(6,17,14,.96);border:1px solid var(--gold);border-radius:10px;padding:18px 22px;font:400 16px/1.55 var(--body);color:var(--ink);z-index:21}
-#notes b{display:block;font:600 12px var(--mono);letter-spacing:.14em;color:var(--gold);margin-bottom:8px}
 #hint{position:absolute;left:14px;bottom:20px;font:500 12px var(--mono);color:var(--muted);z-index:20}
 #back{position:fixed;left:max(24px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 24px);z-index:30;display:inline-flex;align-items:center;gap:8px;font:600 13px var(--mono);letter-spacing:.06em;color:var(--ink);text-decoration:none;background:rgba(11,27,22,.92);border:1px solid var(--line);border-radius:999px;padding:10px 16px;transition:border-color .2s,color .2s,transform .2s}
 #back:hover{border-color:var(--matrix);color:var(--matrix);transform:translateX(-3px)}
@@ -291,7 +289,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 <div id="stage">
 
 <!-- 1 CAPA -->
-<section class="slide" id="s-capa" data-fx="matrix" data-notes="[0:00–1:00] Abertura. Agradecer o convite. Provocação: todo conselho governa a partir de relatórios, e todo relatório é o resultado de escolhas sobre o que capturar, o que cruzar e o que deixar de fora. Hoje vamos falar da parte que fica fora, e de quanto ela custa em mercado, capital de giro e caixa.">
+<section class="slide" id="s-capa" data-fx="matrix">
   <canvas class="fx"></canvas>
   <div class="shade"></div>
   <div class="eyebrow">Grupo de Inovação <b>·</b> Conselheiros</div>
@@ -303,7 +301,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 2 DADOS -->
-<section class="slide" id="s-dados" data-fx="particles" data-notes="[1:00–2:30] As empresas nunca tiveram tantos dados: cadastro, faturamento, recebimentos, contabilidade, custos comerciais, operação, atendimento. O problema não é falta de dado. É que ele está espalhado em bases que não conversam, em formatos diferentes, sem dono. Os pontos verdes da tela são o que existe; os dourados, o que de fato chega organizado para uma decisão.">
+<section class="slide" id="s-dados" data-fx="particles">
   <canvas class="fx"></canvas>
   <div class="shade"></div>
   <div class="eyebrow r">O ponto de partida</div>
@@ -313,7 +311,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 3 CADEIA -->
-<section class="slide" id="s-cadeia" data-fx="flow" data-notes="[2:30–4:00] A cadeia do dado. Em cada passagem, algo se perde: entre o cadastro e o faturamento ficam os clientes inativos, duplicados e as gratuidades; entre o faturamento e o recebimento, o que foi faturado e não recebido, e as renegociações que não aparecem no aging; entre o gerencial e o contábil, divergências que 'sempre existiram'. O conselho só vê a última ponta.">
+<section class="slide" id="s-cadeia" data-fx="flow">
   <canvas class="fx"></canvas>
   <div class="hd">
     <div class="eyebrow r">A cadeia do dado</div>
@@ -330,7 +328,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 4 TESE -->
-<section class="slide" id="s-tese" data-notes="[4:00–5:30] A tese da palestra em uma linha. Dado descartado gera indicador distorcido; indicador distorcido gera decisão errada; decisão errada aparece como caixa que não chega. Três lugares onde isso dói: perda de mercado (investimos no cliente e no canal errados), capital de giro (receita que não vira recebimento) e EBITDA que não converte em caixa.">
+<section class="slide" id="s-tese">
   <div class="hd">
     <div class="eyebrow r">A tese</div>
     <h2 class="r" style="--d:1">Do dado ao caixa, o erro se acumula</h2>
@@ -349,7 +347,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 5 MAPA -->
-<section class="slide" id="s-mapa" data-notes="[5:30–6:30] Três formas de a informação não chegar. Descartados: o dado existia, mas foi filtrado, agregado ou classificado de forma que some. Nunca capturados: ninguém decidiu medir. Silêncio: a ausência de informação também comunica. Vamos passar por casos de cada tipo, financeiros e não financeiros.">
+<section class="slide" id="s-mapa">
   <div class="hd">
     <div class="eyebrow r">O mapa do não medido</div>
     <h2 class="r" style="--d:1">Três formas de a informação não chegar</h2>
@@ -377,7 +375,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 6 CASO A -->
-<section class="slide" id="s-base" data-notes="[6:30–8:30] Caso ilustrativo de uma empresa de assinaturas (pode ser telecom, mídia, educação ou saúde). A gestão reporta 100 mil assinantes. Ao cruzar o cadastro com o faturamento mês a mês, aparecem clientes inativos há meses, duplicados e com gratuidade. O efeito: o plano de negócios e o valuation multiplicam a base reportada pelo tíquete, e superestimam a receita futura. Churn, ARPU e LTV ficam todos distorcidos. A pergunta do conselheiro: qual critério define um cliente ativo, e quem definiu?">
+<section class="slide" id="s-base">
   <div class="hd">
     <div class="eyebrow r">01 · Dados descartados <b>·</b> assinaturas</div>
     <h2 class="r" style="--d:1">A base que não existe</h2>
@@ -403,7 +401,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 7 CASO B -->
-<section class="slide" id="s-receb" data-fx="coins" data-notes="[8:30–10:00] Faturou, mas não recebeu. O faturamento cresce; quando cruzamos o faturado com o recebido cliente a cliente, aparece a diferença. Parte são renegociações que não entram no aging porque o registro é impreciso. Parte é divergência entre o número gerencial e o contábil. A receita é uma opinião; o caixa é um fato. Pergunta: qual a diferença entre faturado e recebido, por segmento, e quem reconcilia?">
+<section class="slide" id="s-receb" data-fx="coins">
   <canvas class="fx"></canvas>
   <div class="hd">
     <div class="eyebrow r">01 · Dados descartados <b>·</b> receita × caixa</div>
@@ -425,7 +423,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 8 PONTE EBITDA -->
-<section class="slide" id="s-ebitda" data-notes="[10:00–11:30] A ponte do EBITDA ao caixa. EBITDA reportado de 50 milhões. Dentro dele, 6 milhões de mensalidades com mais de 60 dias de atraso que não foram recebidas em 3 meses; parte já estava provisionada (2 milhões). Renegociações fora do aging tiram mais 3. O aumento dos recebíveis consome 5. O caixa operacional fica em 38: conversão de 76%. Nada disso aparece no EBITDA, e tudo isso aparece no caixa.">
+<section class="slide" id="s-ebitda">
   <div class="hd">
     <div class="eyebrow r">01 · Dados descartados <b>·</b> EBITDA × caixa</div>
     <h2 class="r" style="--d:1">O EBITDA que não chega ao banco</h2>
@@ -467,7 +465,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 9 PESSOAS -->
-<section class="slide" id="s-pessoas" data-notes="[11:30–12:45] Fora do financeiro. A empresa mede o turnover geral, que está dentro da meta. Mas não separa quem queria manter de quem queria que saísse. As entrevistas de desligamento são feitas e arquivadas, nunca lidas em conjunto. Um dia descobre-se que os melhores de uma equipe saíram todos depois da troca do mesmo gestor. Impacto: conhecimento que vai embora, sucessão frágil, custo de reposição que ninguém mede.">
+<section class="slide" id="s-pessoas">
   <div class="hd">
     <div class="eyebrow r">01 · Dados descartados <b>·</b> pessoas</div>
     <h2 class="r" style="--d:1">Quem saiu, e por quê</h2>
@@ -494,7 +492,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 10 INOVAÇÃO -->
-<section class="slide" id="s-inov" data-notes="[12:45–14:00] Para o grupo de inovação. Ideias rejeitadas, pilotos que falharam, projetos interrompidos: nada é documentado. O aprendizado sai com a equipe. Três anos depois, outra área testa a mesma ideia e erra no mesmo ponto. O funil de inovação mede o que entrou e o que foi lançado, mas não o que se aprendeu com o que ficou pelo caminho.">
+<section class="slide" id="s-inov">
   <div class="hd">
     <div class="eyebrow r">01 · Dados descartados <b>·</b> inovação</div>
     <h2 class="r" style="--d:1">O projeto engavetado</h2>
@@ -518,7 +516,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 11 CAC -->
-<section class="slide" id="s-cac" data-notes="[14:00–15:45] Nunca capturado: o custo de aquisição completo. Em muitos projetos, a análise de CAC esbarra numa condição: a administração precisa identificar os custos de aquisição. E eles estão espalhados entre marketing, comissões, equipe comercial e descontos de entrada. O CAC reportado costuma ser só mídia. Com o custo completo, a relação LTV/CAC cai de 4,0x para 2,3x. E quase ninguém mede o CAC dos clientes que cancelam antes do payback.">
+<section class="slide" id="s-cac">
   <div class="hd">
     <div class="eyebrow r">02 · Nunca capturados <b>·</b> CAC e LTV</div>
     <h2 class="r" style="--d:1">O CAC que ninguém sabe calcular</h2>
@@ -548,7 +546,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 12 COORTES -->
-<section class="slide" id="s-coorte" data-notes="[15:45–17:00] A média que esconde a coorte. A base total cresce todo ano, e o LTV médio parece estável porque as safras antigas, mais valiosas, sustentam a média. Olhando por safra de aquisição, cada safra nova vale menos que a anterior. A empresa está comprando crescimento cada vez mais caro, e só vai descobrir quando o caixa não acompanhar a receita.">
+<section class="slide" id="s-coorte">
   <div class="hd">
     <div class="eyebrow r">02 · Nunca capturados <b>·</b> churn e coortes</div>
     <h2 class="r" style="--d:1">A média que esconde a coorte</h2>
@@ -592,7 +590,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 13 SUPERMERCADO -->
-<section class="slide" id="s-super" data-notes="[17:00–19:00] A venda que não aconteceu. O sistema do varejo registra o que passou no caixa. O que não passou desaparece: o cliente que parou diante da gôndola, pegou o produto, leu o preço e devolveu; a ruptura que fez o cliente ir embora. Hoje, com câmeras de visão computacional, sensores de prateleira e leitura de expressão, o supermercado consegue registrar interesse, hesitação e rejeição, e acumular isso para medir a aceitação de um produto, de um preço ou de uma posição na gôndola. Ponto de governança: imagem facial é dado biométrico, sensível pela LGPD. Capturar exige base legal, transparência e governança. O conselho precisa perguntar as duas coisas: estamos capturando? e estamos capturando do jeito certo?">
+<section class="slide" id="s-super">
   <div class="hd">
     <div class="eyebrow r">02 · Nunca capturados <b>·</b> varejo</div>
     <h2 class="r" style="--d:1">A venda que não aconteceu</h2>
@@ -616,7 +614,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 14 CLIENTE -->
-<section class="slide" id="s-cliente" data-notes="[19:00–20:15] O atrito que não vira reclamação. O SAC mede as reclamações registradas. Boa parte dos problemas é resolvida por telefone, na loja ou pelo vendedor, sem registro. Na jornada digital, ninguém mede em que tela o cliente desiste. E a reclamação de verdade está nas redes sociais e nos sites de avaliação, que não entram em nenhum relatório ao conselho.">
+<section class="slide" id="s-cliente">
   <div class="hd">
     <div class="eyebrow r">02 · Nunca capturados <b>·</b> jornada do cliente</div>
     <h2 class="r" style="--d:1">O atrito que não vira reclamação</h2>
@@ -643,7 +641,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 15 SILÊNCIO -->
-<section class="slide" id="s-silencio" data-fx="quiet" data-notes="[20:15–21:15] Mudar o tom, falar mais devagar. O silêncio também é um dado. O cliente que não reclama, mas também não paga. O que não cancela, mas também não usa. A coorte diluída na média. A divergência gerencial × contábil que sempre existiu. A PDD nunca comparada com a curva real de recuperação. Cada um desses silêncios tem duas leituras, uma tranquila e uma preocupante. O papel do conselheiro é pedir a evidência de qual delas é a verdadeira.">
+<section class="slide" id="s-silencio" data-fx="quiet">
   <canvas class="fx"></canvas>
   <div class="eyebrow r">03 · O silêncio como sinal</div>
   <p class="quiet r" style="--d:1">O silêncio também<br>é um dado.<span class="cur"></span></p>
@@ -658,7 +656,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 16 SEGURANÇA -->
-<section class="slide" id="s-seguranca" data-notes="[21:15–22:30] Segurança do trabalho. A área reporta zero acidentes com afastamento há 18 meses; o indicador está verde. Mas também não há nenhum quase-acidente registrado. Isso não é segurança: é ausência de registro. Os estudos clássicos de Heinrich, dos anos 1930, mostram a lógica da pirâmide: para cada acidente grave há dezenas de leves e centenas de quase-acidentes. Quem não registra a base da pirâmide só descobre o topo.">
+<section class="slide" id="s-seguranca">
   <div class="hd">
     <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> segurança</div>
     <h2 class="r" style="--d:1">O quase-acidente que ninguém anotou</h2>
@@ -693,7 +691,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 17 CIBER -->
-<section class="slide" id="s-ciber" data-notes="[22:30–23:30] Cibersegurança e terceiros. O time recebe milhares de alertas por mês e fecha a maioria automaticamente. O relatório ao conselho diz zero incidentes relevantes. Ninguém sabe quantos fornecedores têm acesso aos sistemas, nem quando esses acessos foram revisados. Zero incidentes pode querer dizer zero ocorrências, ou zero detecções.">
+<section class="slide" id="s-ciber">
   <div class="logbg" aria-hidden="true"><pre id="logbg"></pre></div>
   <div class="hd">
     <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> cibersegurança</div>
@@ -719,7 +717,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 18 SAÚDE -->
-<section class="slide" id="s-saude" data-notes="[23:30–24:45] Carteira de saúde. Faturas médicas, histórico de utilização, OPME, medicamentos, perfil etário e região ficam em bases separadas. Cada uma, sozinha, não diz muito. Integradas, mostram padrões ocultos: poucos contratos concentram o custo assistencial com margem negativa, e o envelhecimento da carteira corrói a margem. Sem esse cruzamento, a operadora também não tem evidência para negociar reajuste com o contratante.">
+<section class="slide" id="s-saude">
   <div class="hd">
     <div class="eyebrow r">03 · O silêncio como sinal <b>·</b> saúde</div>
     <h2 class="r" style="--d:1">A margem que só aparece quando os dados se cruzam</h2>
@@ -744,7 +742,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 19 IA -->
-<section class="slide" id="s-ia" data-fx="matrixgaps" data-notes="[24:45–25:45] A ponte com a inovação. Todo modelo de IA, seja de crédito, churn ou preço, aprende só com os dados que foram capturados. Repare nas colunas vazias da tela: os clientes recusados, os inativos, quem desistiu antes de comprar. Se a base está inflada, duplicada ou ignora quem ficou de fora, o modelo automatiza o erro, em escala e com aparência de precisão.">
+<section class="slide" id="s-ia" data-fx="matrixgaps">
   <canvas class="fx"></canvas>
   <div class="shade" style="position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(6,17,14,.97) 0%,rgba(6,17,14,.9) 50%,rgba(6,17,14,.2) 100%)"></div>
   <div class="hd" style="max-width:860px">
@@ -760,7 +758,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 20 SÍNTESE -->
-<section class="slide" id="s-sintese" data-notes="[25:45–26:45] Síntese. Cada linha conecta um dado perdido a um indicador e a um impacto. Repare que o impacto não é só financeiro: mercado, capital de giro e caixa, mas também pessoas e risco.">
+<section class="slide" id="s-sintese">
   <div class="hd">
     <div class="eyebrow r">Síntese</div>
     <h2 class="r" style="--d:1">Do dado perdido ao impacto</h2>
@@ -782,7 +780,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 21 PERGUNTAS -->
-<section class="slide" id="s-perguntas" data-notes="[26:45–28:30] Perguntas para levar à administração. Clique nos temas para mudar o grupo de perguntas. Tom de curiosidade, não de acusação. Sugestão prática: escolher duas ou três por reunião e registrá-las em ata, com prazo de resposta. O objetivo é que a administração passe a trazer espontaneamente o que hoje fica de fora.">
+<section class="slide" id="s-perguntas">
   <div class="hd">
     <div class="eyebrow r">Para levar à administração</div>
     <h2 class="r" style="--d:1">Perguntas que o conselheiro pode fazer</h2>
@@ -792,7 +790,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 22 EXERCÍCIO -->
-<section class="slide" id="s-exercicio" data-notes="[28:30–29:15] Ferramenta prática para o próximo comitê: pedir à administração uma reconciliação de ponta a ponta, da base de clientes à contabilidade, com as diferenças de cada passagem explicadas. O mais revelador é quando a administração não consegue montar o quadro: isso mostra exatamente onde o conselho está governando no escuro.">
+<section class="slide" id="s-exercicio">
   <div class="hd">
     <div class="eyebrow r">Para o próximo comitê</div>
     <h2 class="r" style="--d:1">Peça uma reconciliação de ponta a ponta</h2>
@@ -810,7 +808,7 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 </section>
 
 <!-- 23 FECHO -->
-<section class="slide" id="s-fecho" data-fx="money" data-notes="[29:15–30:00] Fechamento. O EBITDA conta a história que a empresa quer contar; o caixa conta a que aconteceu. Convite: na próxima reunião de conselho, faça pelo menos uma pergunta sobre o que não está no relatório. Abrir para perguntas.">
+<section class="slide" id="s-fecho" data-fx="money">
   <canvas class="fx"></canvas>
   <div class="shade"></div>
   <div class="eyebrow r">Para levar</div>
@@ -823,14 +821,12 @@ table.syn{width:100%;border-collapse:collapse;font:400 20px/1.35 var(--body)}
 
 </div><!-- stage -->
 
-<div id="notes" hidden></div>
-<div id="hint">← → navegar · N notas · F tela cheia</div>
+<div id="hint">← → navegar · F tela cheia</div>
 <div id="nav">
   <a class="navbtn" href="../index.html" style="text-decoration:none">← Site</a>
   <button class="navbtn" id="bPrev" aria-label="Slide anterior">←</button>
   <span id="count">1 / 23</span>
   <button class="navbtn" id="bNext" aria-label="Próximo slide">→</button>
-  <button class="navbtn" id="bNotes" aria-pressed="false">Notas</button>
   <button class="navbtn" id="bFull">Tela cheia</button>
 </div>
 </div>
@@ -1161,7 +1157,7 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 
-const prog = document.getElementById('prog'), count = document.getElementById('count'), notes = document.getElementById('notes');
+const prog = document.getElementById('prog'), count = document.getElementById('count');
 function go(n){
   n = Math.max(0, Math.min(slides.length - 1, n));
   timers.forEach(id => { clearTimeout(id); clearInterval(id); }); timers = [];
@@ -1176,14 +1172,10 @@ function go(n){
   if (hooks[s.id]) hooks[s.id](s);
   prog.style.width = ((cur + 1) / slides.length * 100) + '%';
   count.textContent = `${cur + 1} / ${slides.length}`;
-  notes.innerHTML = `<b>NOTAS · SLIDE ${cur + 1}</b>${s.dataset.notes || ''}`;
   try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e) {}
 }
 document.getElementById('bPrev').addEventListener('click', () => go(cur - 1));
 document.getElementById('bNext').addEventListener('click', () => go(cur + 1));
-const bNotes = document.getElementById('bNotes');
-function toggleNotes(){ notes.hidden = !notes.hidden; bNotes.setAttribute('aria-pressed', String(!notes.hidden)); }
-bNotes.addEventListener('click', toggleNotes);
 function toggleFull(){
   try {
     if (document.fullscreenElement) document.exitFullscreen();
@@ -1197,7 +1189,6 @@ addEventListener('keydown', e => {
   else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
   else if (e.key === 'Home') go(0);
   else if (e.key === 'End') go(slides.length - 1);
-  else if (e.key.toLowerCase() === 'n') toggleNotes();
   else if (e.key.toLowerCase() === 'f') toggleFull();
 });
 let tx = null;
