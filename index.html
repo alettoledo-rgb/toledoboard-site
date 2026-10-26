@@ -76,6 +76,13 @@ nav.scrolled { background: rgba(7,15,26,0.94); backdrop-filter: blur(16px); -web
 .nav-ico svg { width: 16px; height: 16px; fill: currentColor; }
 .nav-ico:hover { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); transform: translateY(-2px); }
 .nav-ico.wa:hover { background: var(--wa); border-color: var(--wa); color: #fff; }
+.lang-sw { display: flex; border: 1px solid rgba(196,151,63,0.35); height: 36px; }
+.lang-sw button { background: none; border: none; cursor: pointer; font: 600 10px var(--ff-ui); letter-spacing: .12em; color: rgba(248,246,241,.5); padding: 0 10px; transition: color .2s, background .2s; }
+.lang-sw button:hover { color: var(--gold-light); }
+.lang-sw button[aria-pressed="true"] { background: var(--gold); color: var(--navy-deep); }
+.lang-sw button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+body.switching .wrap, body.switching .hero-left { animation: langFade .45s ease; }
+@keyframes langFade { 0% { opacity: 1; } 35% { opacity: .25; } 100% { opacity: 1; } }
 .nav-burger { display: none; width: 40px; height: 40px; background: none; border: 1px solid rgba(196,151,63,0.35); cursor: pointer; position: relative; }
 .nav-burger span { position: absolute; left: 10px; right: 10px; height: 1px; background: var(--gold-light); transition: transform .3s, opacity .3s; }
 .nav-burger span:nth-child(1) { top: 14px; } .nav-burger span:nth-child(2) { top: 19px; } .nav-burger span:nth-child(3) { top: 24px; }
@@ -165,6 +172,7 @@ a:hover .arrow { transform: translateX(5px); }
 /* Jornada (trajetória dinâmica) */
 .journey { margin-top: 4.5rem; background: var(--navy-deep); padding: 2.6rem 2.6rem 2.2rem; position: relative; overflow: hidden; }
 .journey::before { content: 'TRAJETÓRIA'; position: absolute; right: -1rem; bottom: -2.2rem; font-family: var(--ff-display); font-size: 8rem; font-weight: 600; color: rgba(196,151,63,.04); pointer-events: none; white-space: nowrap; }
+html[lang="en"] .journey::before { content: 'CAREER'; }
 .journey-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 2.2rem; flex-wrap: wrap; }
 .journey-title { font-family: var(--ff-display); font-size: 1.9rem; color: var(--white); font-weight: 400; line-height: 1.1; }
 .journey-title em { color: var(--gold-light); }
@@ -447,6 +455,10 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
   .footer-inner { flex-direction: column; text-align: center; gap: 1rem; }
   .marquee-track span { font-size: 1.2rem; }
 }
+@media (max-width: 520px) {
+  nav .nav-right .nav-ico { display: none; }
+  .nav-name-main { font-size: 13px; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; transition-delay: 0s !important; }
   .rv { opacity: 1; transform: none; }
@@ -482,6 +494,10 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
     <a class="nav-ico wa" href="https://wa.me/5511964737231?text=Ol%C3%A1%20Alexandre%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
       <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41z"/></svg>
     </a>
+    <div class="lang-sw" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
     <button class="nav-burger" id="nav-burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -495,7 +511,7 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
       <span class="line" data-split>Alexandre</span>
       <span class="line surname" data-split>Toledo</span>
     </h1>
-    <p class="hero-rotator" aria-live="polite">Governança que <em id="rotator">transforma dados em decisão</em></p>
+    <p class="hero-rotator" aria-live="polite"><span class="rot-pre">Governança que</span> <em id="rotator">transforma dados em decisão</em></p>
     <p class="hero-title">
       <strong>24 anos</strong> liderando governança, controles e inteligência de dados para instituições financeiras — do Brasil aos Estados Unidos. A combinação rara de <strong>Big Four, tecnologia e Conselho</strong>.
     </p>
@@ -816,6 +832,8 @@ footer { background: var(--navy-deep); padding: 3rem 5rem 2.5rem; border-top: 1p
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+let lang = 'pt';
+const loc = () => lang === 'en' ? 'en-US' : 'pt-BR';
 
 /* ── Nav: fundo ao rolar, barra de progresso, link ativo, menu mobile ── */
 const nav = $('#nav'), prog = $('#scroll-prog');
@@ -841,12 +859,16 @@ $$('[data-split]').forEach((el, li) => {
 });
 
 /* ── Frase rotativa (efeito digitação) ── */
-const phrases = ['transforma dados em decisão', 'antecipa riscos', 'protege o caixa', 'fortalece o Conselho', 'gera confiança'];
+const PHRASES = {
+  pt: ['transforma dados em decisão', 'antecipa riscos', 'protege o caixa', 'fortalece o Conselho', 'gera confiança'],
+  en: ['turns data into decisions', 'anticipates risk', 'protects cash', 'strengthens the Board', 'builds trust']
+};
 const rot = $('#rotator');
+let pi = 0, ci = PHRASES.pt[0].length, del = true;
+function resetRotator() { pi = 0; ci = PHRASES[lang][0].length; del = true; rot.textContent = PHRASES[lang][0]; }
 if (!reduce) {
-  let pi = 0, ci = phrases[0].length, del = true;
   setTimeout(function type() {
-    const p = phrases[pi];
+    const phrases = PHRASES[lang];
     if (del) { ci--; if (ci <= 0) { del = false; pi = (pi + 1) % phrases.length; } }
     else { ci++; if (ci >= phrases[pi].length) { del = true; rot.textContent = phrases[pi]; return setTimeout(type, 2200); } }
     rot.textContent = phrases[pi].slice(0, ci) || '​';
@@ -901,7 +923,15 @@ $$('.rv').forEach(el => io.observe(el));
 })();
 
 /* ── Jornada interativa ── */
-const steps = [
+const STEPS = {};
+STEPS.en = [
+  { role: 'Audit Senior — Deloitte', period: 'Aug 2002 — May 2005 · Brazil', text: 'Career start in Big Four audit — a solid grounding in audit techniques, controls and financial reporting that underpins the entire journey across the world’s leading firms.', tags: ['Audit', 'Big Four', 'Controls'] },
+  { role: 'Internal Controls Analyst — ABN AMRO Bank', period: 'May 2005 — Sep 2008 · Brazil', text: 'Designed internal controls across Treasury, ALM, M&A, Credit, Technology and Accounting at a multinational bank — the hands-on foundation of an integrated view of controls and governance.', tags: ['Internal Controls', 'Treasury', 'ALM'] },
+  { role: 'Senior Consultant — EY', period: 'Sep 2008 — Oct 2010 · Brazil', text: 'Strategic and financial advisory for financial institutions: diagnostics, valuation, M&A, due diligence and IFRS implementation in the banking sector.', tags: ['M&A', 'Due Diligence', 'Valuation', 'IFRS'] },
+  { role: 'Senior Manager → Managing Director — KPMG Brazil', period: 'Dec 2010 — Present · Brazil', text: 'Audits of major financial institutions (Bradesco, CCB, Haitong, Industry Bank), SEC clients, PCAOB and SOX. As Risk Management Partner: Second Line of Defense, forensic and due diligence. 2019 PCAOB inspection with no findings in the areas under his responsibility.', tags: ['PCAOB', 'SOX', 'Risk Management', 'Forensic'] },
+  { role: 'Managing Director — KPMG US (Rotation)', period: 'Apr 2024 — Present · United States', text: 'Team Captain for LATAM inspection reviews, leading multicultural teams in audit quality and financial reporting integrity — integrating analytics, automation and AI into governance processes.', tags: ['KPMG US', 'Inspection', 'LATAM', 'AI & Analytics'] }
+];
+const steps = STEPS.pt = [
   { role: 'Sênior de Auditoria — Deloitte', period: 'Ago 2002 — Mai 2005 · Brasil', text: 'Início de carreira em auditoria no Big Four — formação sólida em técnicas de auditoria, controles e reporting financeiro que sustenta toda a trajetória nas maiores firmas globais.', tags: ['Auditoria', 'Big Four', 'Controles'] },
   { role: 'Analista de Controles Internos — ABN AMRO Bank', period: 'Mai 2005 — Set 2008 · Brasil', text: 'Estruturação de controles internos nas áreas de Tesouraria, ALM, M&A, Crédito, Tecnologia e Contábil de um banco multinacional — base prática que moldou a visão integrada de controles e governança.', tags: ['Controles Internos', 'Tesouraria', 'ALM'] },
   { role: 'Consultor Sênior — EY', period: 'Set 2008 — Out 2010 · Brasil', text: 'Consultoria estratégica e financeira para instituições financeiras: diagnósticos, valuation, M&A, due diligence e implementação de IFRS no setor bancário.', tags: ['M&A', 'Due Diligence', 'Valuation', 'IFRS'] },
@@ -914,7 +944,7 @@ function showStep(i) {
   jIdx = i;
   stops.forEach((s, k) => { s.classList.toggle('lit', k <= i); s.classList.toggle('cur', k === i); });
   fill.style.width = (i / (stops.length - 1) * 100) + '%';
-  const s = steps[i];
+  const s = STEPS[lang][i];
   card.classList.remove('swap'); void card.offsetWidth; card.classList.add('swap');
   card.innerHTML = `<div><div class="jc-role">${s.role}</div><div class="jc-period">${s.period}</div></div><div><p class="jc-text">${s.text}</p><div class="jc-tags">${s.tags.map(t => `<span>${t}</span>`).join('')}</div></div>`;
 }
@@ -928,7 +958,7 @@ new IntersectionObserver(([e]) => {
 /* ── Board Intelligence: painel ao vivo ── */
 (function () {
   const clock = $('#sim-clock');
-  setInterval(() => { clock.textContent = new Date().toLocaleTimeString('pt-BR'); }, 1000);
+  setInterval(() => { clock.textContent = new Date().toLocaleTimeString(loc()); }, 1000);
 
   // gráfico
   const N = 26, hist = [], H = 120, Wd = 340, split = 17;
@@ -953,11 +983,15 @@ new IntersectionObserver(([e]) => {
 
   // métricas
   const M = {
-    mrr:    { v: 2.40, f: x => 'R$' + x.toFixed(2) + 'M', step: .03, min: 2.2, max: 2.7, tr: x => x >= 2.4 ? ['↑ +' + Math.round((x / 2.14 - 1) * 100) + '% vs anterior', 'var(--green)'] : ['↓ abaixo do plano', 'var(--red)'] },
-    churn:  { v: 3.8,  f: x => x.toFixed(1) + '%', step: .15, min: 2.6, max: 4.4, tr: x => x > 3.5 ? ['↑ Alerta ativo', 'var(--red)'] : ['↓ Sob controle', 'var(--green)'] },
-    ltv:    { v: 4.2,  f: x => x.toFixed(1) + 'x', step: .1, min: 3.6, max: 4.8, tr: x => x >= 4 ? ['↔ Estável', 'rgba(248,246,241,.4)'] : ['↓ Atenção CAC', 'var(--gold-light)'] },
-    ebitda: { v: 18.3, f: x => x.toFixed(1) + '%', step: .3, min: 16.5, max: 20, tr: x => x >= 18 ? ['↑ Meta atingida', 'var(--green)'] : ['↓ Abaixo da meta', 'var(--gold-light)'] }
+    mrr:    { v: 2.40, f: x => 'R$' + x.toFixed(2) + 'M', step: .03, min: 2.2, max: 2.7, tr: x => x >= 2.4 ? ['↑ +' + Math.round((x / 2.14 - 1) * 100) + '% vs anterior', '↑ +' + Math.round((x / 2.14 - 1) * 100) + '% vs prior', 'var(--green)'] : ['↓ abaixo do plano', '↓ below plan', 'var(--red)'] },
+    churn:  { v: 3.8,  f: x => x.toFixed(1) + '%', step: .15, min: 2.6, max: 4.4, tr: x => x > 3.5 ? ['↑ Alerta ativo', '↑ Active alert', 'var(--red)'] : ['↓ Sob controle', '↓ Under control', 'var(--green)'] },
+    ltv:    { v: 4.2,  f: x => x.toFixed(1) + 'x', step: .1, min: 3.6, max: 4.8, tr: x => x >= 4 ? ['↔ Estável', '↔ Stable', 'rgba(248,246,241,.4)'] : ['↓ Atenção CAC', '↓ Watch CAC', 'var(--gold-light)'] },
+    ebitda: { v: 18.3, f: x => x.toFixed(1) + '%', step: .3, min: 16.5, max: 20, tr: x => x >= 18 ? ['↑ Meta atingida', '↑ Target met', 'var(--green)'] : ['↓ Abaixo da meta', '↓ Below target', 'var(--gold-light)'] }
   };
+  window.refreshTrends = () => Object.keys(M).forEach(key => {
+    const [pt, en, col] = M[key].tr(M[key].v), tr = $(`.sim-metric[data-m="${key}"] .sim-metric-trend`);
+    tr.textContent = lang === 'en' ? en : pt; tr.style.color = col;
+  });
   const bars = $('#sim-bars'); for (let i = 0; i < 12; i++) bars.appendChild(document.createElement('i'));
   function gauge(score) {
     const g = $('#gauge'); g.setAttribute('stroke-dashoffset', 141.4 * (1 - score / 100));
@@ -971,7 +1005,7 @@ new IntersectionObserver(([e]) => {
     m.v = Math.max(m.min, Math.min(m.max, m.v + (Math.random() - .5) * 2 * m.step));
     const el = $(`.sim-metric[data-m="${key}"]`);
     el.querySelector('.sim-metric-val').textContent = m.f(m.v);
-    const [txt, col] = m.tr(m.v), tr = el.querySelector('.sim-metric-trend'); tr.textContent = txt; tr.style.color = col;
+    const [pt, en, col] = m.tr(m.v), tr = el.querySelector('.sim-metric-trend'); tr.textContent = lang === 'en' ? en : pt; tr.style.color = col;
     el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 700);
     hist.push(hist[hist.length - 1] + (Math.random() - .38) * .07); hist.shift(); draw();
     $$('i', bars).forEach(b => { const h = 20 + Math.random() * 80; b.style.height = h + '%'; b.style.background = h > 85 ? 'rgba(224,112,112,.7)' : 'rgba(196,151,63,.4)'; });
@@ -980,15 +1014,15 @@ new IntersectionObserver(([e]) => {
 
   // alertas rotativos
   const alerts = [
-    ['warn', '⚠ Churn acelerado — coorte Q3'], ['ok', '✓ MRR dentro do forecast'], ['risk', '↓ CAC +8% MoM — canal pago'],
-    ['ok', '✓ Conversão EBITDA → caixa 91%'], ['warn', '⚠ Recebíveis +12% vs receita'], ['risk', '↓ LTV safra 2025 abaixo da média'],
-    ['ok', '✓ Covenants dentro do limite'], ['warn', '⚠ Concentração: top 5 clientes = 38%']
+    ['warn', '⚠ Churn acelerado — coorte Q3', '⚠ Churn accelerating — Q3 cohort'], ['ok', '✓ MRR dentro do forecast', '✓ MRR on forecast'], ['risk', '↓ CAC +8% MoM — canal pago', '↓ CAC +8% MoM — paid channel'],
+    ['ok', '✓ Conversão EBITDA → caixa 91%', '✓ EBITDA → cash conversion 91%'], ['warn', '⚠ Recebíveis +12% vs receita', '⚠ Receivables +12% vs revenue'], ['risk', '↓ LTV safra 2025 abaixo da média', '↓ 2025 cohort LTV below average'],
+    ['ok', '✓ Covenants dentro do limite', '✓ Covenants within limits'], ['warn', '⚠ Concentração: top 5 clientes = 38%', '⚠ Concentration: top 5 clients = 38%']
   ];
   const box = $('#sim-alerts'); let ai = 0, curA = null;
   function nextAlert() {
-    const [cls, txt] = alerts[ai++ % alerts.length];
+    const [cls, pt, en] = alerts[ai++ % alerts.length];
     const el = document.createElement('div'); el.className = 'sim-alert ' + cls;
-    el.innerHTML = `${txt}<small>${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</small>`;
+    el.innerHTML = `${lang === 'en' ? en : pt}<small>${new Date().toLocaleTimeString(loc(), { hour: '2-digit', minute: '2-digit' })}</small>`;
     box.appendChild(el);
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
     if (curA) { const old = curA; old.classList.add('out'); setTimeout(() => old.remove(), 600); }
@@ -1067,13 +1101,138 @@ const form = $('.contato-form'), note = $('#cf-note');
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const name = $('#cf-nome', form).value.trim();
-  note.textContent = 'Enviando...';
+  const en = lang === 'en';
+  note.textContent = en ? 'Sending...' : 'Enviando...';
+  const data = new FormData(form); data.append('idioma', lang.toUpperCase());
   try {
-    const response = await fetch(form.action, { method: form.method, body: new FormData(form), headers: { 'Accept': 'application/json' } });
-    if (response.ok) { note.textContent = `Obrigado, ${name || 'visitante'}! Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.`; form.reset(); }
-    else note.textContent = 'Não foi possível enviar sua mensagem. Tente novamente.';
-  } catch (error) { note.textContent = 'Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.'; }
+    const response = await fetch(form.action, { method: form.method, body: data, headers: { 'Accept': 'application/json' } });
+    if (response.ok) { note.textContent = en ? `Thank you, ${name || 'visitor'}! Your message has been sent. I will be in touch shortly.` : `Obrigado, ${name || 'visitante'}! Sua mensagem foi enviada com sucesso. Em breve entraremos em contato.`; form.reset(); }
+    else note.textContent = en ? 'Your message could not be sent. Please try again.' : 'Não foi possível enviar sua mensagem. Tente novamente.';
+  } catch (error) { note.textContent = en ? 'Something went wrong. Please check your connection and try again.' : 'Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.'; }
 });
+
+/* ── Idioma PT / EN ──
+   O português fica no HTML; aqui está só a versão em inglês de cada trecho,
+   na mesma ordem em que os elementos aparecem na página. */
+const ARROW = ' <span class="arrow">→</span>';
+const EN = [
+  ['#nav-links a', ['Background', 'Board Intelligence', 'Book', 'Speaking', 'Presentation<span class="pill">NEW</span>', 'Contact']],
+  ['.nav-name-sub', ['Board · Governance · Data']],
+  ['.hero-eyebrow', ['Managing Director KPMG · 24 years Big Four · IBGC']],
+  ['.rot-pre', ['Governance that']],
+  ['.hero-title', ['<strong>24 years</strong> leading governance, controls and data intelligence for financial institutions — from Brazil to the United States. The rare combination of <strong>Big Four, technology and Board</strong>.']],
+  ['.hero-actions .btn-gold', ['Discuss opportunities' + ARROW]],
+  ['.hstat-label', ['Years Big Four', 'Global Firms', 'Global Reach']],
+  ['.scroll-cue', ['<i></i>Scroll to explore']],
+  ['#sobre .s-eye', ['Profile']],
+  ['.sobre-heading', ['A career<br>built in<br><em>depth</em>']],
+  ['.sobre-lead', ['Governance is not bureaucracy — it is the foundation that allows high-impact decisions to be made with confidence.']],
+  ['.sobre-bio p', [
+    '<strong>Managing Director at KPMG Brazil and KPMG US</strong> (Rotation Assignment), Alexandre Toledo brings <strong>more than 24 years</strong> of experience leading governance, internal controls, risk management and financial intelligence initiatives in highly regulated environments.',
+    'His career spans the world’s leading firms — <strong>Deloitte, EY and KPMG</strong> — working directly with banks, fintechs, investment funds and industrial companies in Brazil and the United States. Clients such as <strong>Bradesco, China Construction Bank, Haitong (BES) and UPL</strong> are part of his portfolio.',
+    'At KPMG US, he serves as <strong>Team Captain for LATAM inspection reviews</strong>, leading multicultural teams in audit quality initiatives for financial institutions and regulated sectors. He has taken part in PCAOB inspections and QPR reviews with <strong>no findings</strong>.',
+    'In recent years he has integrated <strong>analytics, automation and artificial intelligence</strong> into governance and inspection processes — building the Board Intelligence Simulator, a predictive platform that anticipates financial and operational deterioration for the Board.'
+  ]],
+  ['.counter-lbl', ['Years of experience', 'Big Four firms', 'Countries · BR and US', 'Audit standards']],
+  ['.cred-label', ['Degree', 'Postgraduate', 'Certifications', 'Audit Standards', 'Languages', 'Associations']],
+  ['.cred-val', [
+    'Accounting — FECAP', 'MBA Corporate Finance · MBA Business · MBA Valuation — SaintPaul', 'CRC · CNAI · IBRACON · IBGC (in progress)',
+    'PCAOB · ISA · IFRS · US GAAP · BACEN GAAP · BR GAAP', 'Portuguese (native) · English (fluent)', 'IBRACON · ABBI (Accounting, Risk and Regulatory Capital Committees)'
+  ]],
+  ['.tag', ['Governance', 'Internal Controls', 'PCAOB', 'SOX', 'Financial Institutions', 'Banks', 'Fintechs', 'Audit', 'Due Diligence', 'M&amp;A', 'Valuation', 'AI', 'IBGC', 'Risk Management']],
+  ['.journey-title', ['24 years at the world’s <em>leading firms</em>']],
+  ['.journey-hint', ['Click each stage']],
+  ['.sim-badge', ['<span class="live-dot"></span> Featured Project']],
+  ['.sim-text', ['A predictive governance platform built to turn operational and financial data into actionable intelligence for the Board of Directors — before problems show up in the results.']],
+  ['.sim-feat-text', [
+    '<strong>Predictive models with Prophet and scikit-learn</strong> — forecasts of LTV, churn, CAC, MRR and EBITDA 60–90 days ahead',
+    '<strong>Interactive dashboards with Plotly</strong> — executive view of critical indicators for the Board and senior management',
+    '<strong>Predictive deterioration alerts</strong> — early detection of operational, financial and risk signals before a crisis',
+    '<strong>Automated data pipeline</strong> — SQL Server → Parquet → Cloud integration with continuous updates',
+    '<strong>Pilot validated with a SaaS company</strong> — simulated metrics such as Microsoft Contoso plus real client data'
+  ]],
+  ['.sim-content .sim-cta', ['Explore the Project' + ARROW]],
+  ['.sim-float', ['Lead time<b>60–90 days</b>', 'Health Score<b id="float-score">82</b>']],
+  ['.sim-live', ['<i></i>Live']],
+  ['.sim-chart-label span', ['90-day forecast — predictive MRR']],
+  ['.book-ribbon', ['Published']],
+  ['#livro .s-eye', ['Book']],
+  ['.livro-subtitle', ['The Biblical Standard for Corporate and Ministry Leaders <span style="opacity:.6">(in Portuguese)</span>']],
+  ['.livro-text p', [
+    'In <strong>Chamado ao Caráter</strong> (“Called to Character”), Alexandre Toledo explores the credibility of the intentional leader, connecting biblical leadership standards to the modern corporate environment with depth and rigor.',
+    'The book treats leadership not as a matter of technical competence, but of character. Toledo argues that the governance crisis in organizations is, at its root, a crisis of integrity — and that truly effective leaders build authority on the foundation of character, not skill alone.',
+    'Essential reading for executives, board members and leaders who want to unite professional excellence with personal integrity.'
+  ]],
+  ['.livro-quote', ['“We are living through a leadership crisis disguised as a competence crisis. Alexandre Toledo unmasks this illusion with theological rigor and practical application.”', '“The intentional leader impacts generations and transforms lives.”']],
+  ['.livro-quote-attr', ['Edgard Falcão · Mentor and researcher of human behavior', 'Alexandre Toledo']],
+  ['.livro-cta', ['Talk about the book' + ARROW]],
+  ['#palestras .s-eye', ['Speaking &amp; Teaching']],
+  ['.pal-title', ['Topics I teach for<br><em>Boards, executives and academic institutions</em>']],
+  ['.pal-subtitle', ['Content built on 24 years of hands-on experience in the Big Four, governance and financial institutions, translated into accessible language for Boards, executive teams and classrooms.']],
+  ['.pal-card-title', ['Corporate Governance for the 21st Century', 'Valuation', 'Risk Management and Internal Controls', 'Data Intelligence for Senior Management', 'Leading with Character in the Corporate World']],
+  ['.pal-card-text', [
+    'How data and automation are redefining the role of the Board.',
+    'How the Board assesses assumptions, risks and value creation in investments, M&amp;A and business plans.',
+    'From the Second Line to the Board — how to structure the defense.',
+    'AI, automation and dashboards the Board actually uses.',
+    'What “Chamado ao Caráter” teaches executives and board members.'
+  ]],
+  ['.deck-eye', ['<i></i>Presentation']],
+  ['.deck-title', ['What isn’t measured<br><span>also governs</span>']],
+  ['.deck-meta', ['Presentation for the <b>Innovation Squad</b> · Oct 19, 2026 · in Portuguese<br>Discarded data, data never captured, and silence as a signal.']],
+  ['.deck-btn', ['View presentation' + ARROW]],
+  ['.pal-cta-row .sim-cta', ['Invite to Speak' + ARROW]],
+  ['#contato .s-eye', ['Contact']],
+  ['.contato-title', ['Shall we talk<br>about the <em>opportunity</em>?']],
+  ['.contato-text', ['I am available to discuss Board seats, Audit Committee roles and C-level opportunities at banks and fintechs in Brazil and internationally.']],
+  ['.ci-label', ['Email', 'Location', 'Certification']],
+  ['.contato-items > div:nth-child(2) .ci-val', ['Brazil · United States · Global']],
+  ['.contato-items > div:nth-child(3) .ci-val', ['IBGC — Certification in progress']],
+  ['.cf-title', ['Send a message']],
+  ['.cf-row label', ['Name', 'Company', 'Email', 'Subject', 'Message']],
+  ['#cf-assunto option', ['Select...', 'Board of Directors', 'Audit Committee', 'C-Level Opportunity (CFO / CRO / COO)', 'Advisory Board', 'Board Intelligence Simulator', 'Speaking / Teaching', 'Other']],
+  ['.cf-submit', ['Send →']],
+  ['.footer-slogan', ['Governance, Data and Decision.']],
+  ['.wa-tip', ['Message me on WhatsApp']]
+];
+const EN_ATTR = [
+  ['#cf-nome', 'placeholder', 'Your name'], ['#cf-empresa', 'placeholder', 'Organization'],
+  ['#cf-email', 'placeholder', 'you@email.com'], ['#cf-mensagem', 'placeholder', 'Describe the opportunity or context...']
+];
+const META = {
+  pt: { title: 'Alexandre Toledo — Governança, Controles e Decisão', wa: 'Olá Alexandre, vim pelo seu site.' },
+  en: { title: 'Alexandre Toledo — Governance, Controls and Decision', wa: 'Hello Alexandre, I found you through your website.' }
+};
+const ptStore = new Map();
+function applyLang(l, animate) {
+  lang = l;
+  document.documentElement.lang = l === 'en' ? 'en' : 'pt-BR';
+  document.title = META[l].title;
+  EN.forEach(([sel, list]) => $$(sel).forEach((el, i) => {
+    if (list[i] === undefined) return;
+    const key = sel + '|' + i;
+    if (!ptStore.has(key)) ptStore.set(key, el.innerHTML);
+    el.innerHTML = l === 'en' ? list[i] : ptStore.get(key);
+  }));
+  EN_ATTR.forEach(([sel, attr, val]) => {
+    const el = $(sel), key = sel + '@' + attr;
+    if (!ptStore.has(key)) ptStore.set(key, el.getAttribute(attr));
+    el.setAttribute(attr, l === 'en' ? val : ptStore.get(key));
+  });
+  $$('a[href^="https://wa.me/"]').forEach(a => { a.href = 'https://wa.me/5511964737231?text=' + encodeURIComponent(META[l].wa); });
+  $$('.lang-sw button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === l)));
+  resetRotator();
+  showStep(jIdx);
+  if (window.refreshTrends) refreshTrends();
+  if (animate && !reduce) { document.body.classList.remove('switching'); void document.body.offsetWidth; document.body.classList.add('switching'); }
+  try { localStorage.setItem('lang', l); } catch (e) {}
+}
+$$('.lang-sw button').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang !== lang) applyLang(b.dataset.lang, true); }));
+// Idioma inicial: ?lang=en no link > escolha salva > idioma do navegador
+let initial = new URLSearchParams(location.search).get('lang');
+if (!initial) { try { initial = localStorage.getItem('lang'); } catch (e) {} }
+if (!initial) initial = (navigator.language || 'pt').toLowerCase().startsWith('pt') ? 'pt' : 'en';
+if (initial === 'en') applyLang('en', false);
 })();
 </script>
 </body>
